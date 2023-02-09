@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "749632425380",
+    "project_id": "b2bmobile-b2ed8",
+    "storage_bucket": "b2bmobile-b2ed8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749632425380:android:8072af9f5c3cbb6e7bc531",
+        "android_client_info": {
+          "package_name": "com.example.b2bmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "749632425380-lpp3ng8je37dk9btl2k4p0u9v1e8bose.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADCVeLD0o5fhX2uFj6qfAnNzUlA96KJ1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "749632425380-lpp3ng8je37dk9btl2k4p0u9v1e8bose.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "749632425380-rgfri0q1kuobuib8m6aomnfe2doa60m1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.b2bmobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
