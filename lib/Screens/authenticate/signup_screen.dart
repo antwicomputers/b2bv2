@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:b2bmobile/Screens/authenticate/login_screen.dart';
 import 'package:b2bmobile/resources/auth_methods.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
@@ -7,6 +8,10 @@ import 'package:b2bmobile/widgets/text_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../responsive/mobile_screen_layout.dart';
+import '../../responsive/responsive_layout_screen.dart';
+import '../../responsive/web_screen_layout.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -57,12 +62,31 @@ class _LoginScreenState extends State<SignupScreen> {
       username: _userName.text,
       file: _image!,
     );
-    if (res != 'success') {
-      showSnackBar(res, context);
-    }
+
     setState(() {
       _isLoading = false;
     });
+
+    if (res != 'success') {
+      showSnackBar(res, context);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
+    }
+  }
+
+  void navigateToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
   }
 
   @override
@@ -209,7 +233,7 @@ class _LoginScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: navigateToLogin,
                     child: Container(
                       child: const Text(
                         "Sign In",

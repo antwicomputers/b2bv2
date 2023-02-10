@@ -4,11 +4,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:b2bmobile/models/users.dart' as model;
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  //get user data
+  Future<model.User> getUserData() async {
+    User currentUser = _auth.currentUser!;
+    DocumentSnapshot snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+
+    return model.User.fromSnap(snap);
+  }
 
   //sign up a user
 
@@ -37,13 +46,18 @@ class AuthMethods {
           .uploadImageToStoage('profilePics', file, false);
 
       //add user to database
-      await _firestore.collection('users').doc(cred.user!.uid).set({
-        'username': username,
-        'uid': cred.user!.uid,
-        'email': email,
-        'fullname': fullname,
-        'photoUrl': photoUrl
-      });
+
+      model.User user = model.User(
+          username: username,
+          uid: cred.user!.uid,
+          email: email,
+          fullname: fullname,
+          photoUrl: photoUrl);
+
+      await _firestore
+          .collection('users')
+          .doc(cred.user!.uid)
+          .set(user.toJson());
       res = "success";
     } catch (err) {
       res = err.toString();
