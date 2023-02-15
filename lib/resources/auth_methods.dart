@@ -1,10 +1,9 @@
 import 'package:b2bmobile/resources/storage_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:b2bmobile/models/users.dart' as model;
+import 'package:b2bmobile/models/business.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -85,4 +84,54 @@ class AuthMethods {
     }
     return res;
   }
+
+  // // register business
+  // Future<String> businessRegistration({
+  //   required businessName,
+  //   required country,
+  //   required city,
+  //   required category,
+  //   required address,
+  //   twitter,
+  //   linkedIn,
+  //   instagram,
+  //   facebook,
+  //   required businessDescription,
+  //   required podcast,
+  // }) async {
+  //   String res = "Some error occured";
+
+  //   try {
+  //     if (businessName.isNotEmpty ||
+  //         country.isNotEmpty ||
+  //         city.isNotEmpty ||
+  //         category.isNotEmpty ||
+  //         address.isNotEmpty ||
+  //         businessDescription.isNotEmpty) ;
+
+  //     //register business in the database
+  //     Business business = new Business(
+  //         businessName: businessName,
+  //         uid: cred.user!.uid,
+  //         country: country,
+  //         city: city,
+  //         category: category,
+  //         address: address,
+  //         businessDescription: businessDescription,
+  //         twitter: twitter,
+  //         linkedIn: linkedIn,
+  //         instagram: instagram,
+  //         facebook: facebook,
+  //         podcast: podcast);
+
+  //          await _firestore
+  //         .collection('businesses')
+  //         .doc(cred.user!.uid)
+  //         .set(business.toJson());
+  //     res = "success";
+  //   } catch (err) {
+  //     res = err.toString();
+  //   }
+  //   return res;
+  // }
 }

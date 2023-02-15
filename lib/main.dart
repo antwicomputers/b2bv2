@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:provider/provider.dart';
-import 'Screens/authenticate/signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

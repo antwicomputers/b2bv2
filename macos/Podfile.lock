@@ -603,9 +603,10 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
   - cloud_firestore (4.3.1):
-    - Firebase/Firestore (= 10.3.0)
+    - Firebase/CoreOnly (~> 10.3.0)
+    - Firebase/Firestore (~> 10.3.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Firebase/Auth (10.3.0):
     - Firebase/CoreOnly
@@ -619,16 +620,18 @@ PODS:
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.3.0)
   - firebase_auth (4.2.5):
-    - Firebase/Auth (= 10.3.0)
+    - Firebase/Auth (~> 10.3.0)
+    - Firebase/CoreOnly (~> 10.3.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - firebase_core (2.4.1):
-    - Firebase/CoreOnly (= 10.3.0)
-    - Flutter
+    - Firebase/CoreOnly (~> 10.3.0)
+    - FlutterMacOS
   - firebase_storage (11.0.10):
-    - Firebase/Storage (= 10.3.0)
+    - Firebase/CoreOnly (~> 10.3.0)
+    - Firebase/Storage (~> 10.3.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - FirebaseAppCheckInterop (10.4.0)
   - FirebaseAuth (10.3.0):
     - FirebaseCore (~> 10.0)
@@ -663,9 +666,9 @@ PODS:
     - FirebaseCore (~> 10.0)
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - Flutter (1.0.0)
+  - FlutterMacOS (1.0.0)
   - geolocator_apple (1.2.0):
-    - Flutter
+    - FlutterMacOS
   - GoogleUtilities/AppDelegateSwizzler (7.11.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -733,8 +736,6 @@ PODS:
     - Libuv-gRPC (= 0.0.10)
   - gRPC-Core/Interface (1.44.0)
   - GTMSessionFetcher/Core (3.1.0)
-  - image_picker_ios (0.0.1):
-    - Flutter
   - leveldb-library (1.22.1)
   - Libuv-gRPC (0.0.10):
     - Libuv-gRPC/Implementation (= 0.0.10)
@@ -750,13 +751,12 @@ PODS:
   - PromisesObjC (2.1.1)
 
 DEPENDENCIES:
-  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
-  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
-  - Flutter (from `Flutter`)
-  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
-  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
+  - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
+  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
+  - firebase_storage (from `Flutter/ephemeral/.symlinks/plugins/firebase_storage/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - geolocator_apple (from `Flutter/ephemeral/.symlinks/plugins/geolocator_apple/macos`)
 
 SPEC REPOS:
   trunk:
@@ -782,28 +782,26 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   cloud_firestore:
-    :path: ".symlinks/plugins/cloud_firestore/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
   firebase_auth:
-    :path: ".symlinks/plugins/firebase_auth/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
   firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   firebase_storage:
-    :path: ".symlinks/plugins/firebase_storage/ios"
-  Flutter:
-    :path: Flutter
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_storage/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
   geolocator_apple:
-    :path: ".symlinks/plugins/geolocator_apple/ios"
-  image_picker_ios:
-    :path: ".symlinks/plugins/image_picker_ios/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/geolocator_apple/macos
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  cloud_firestore: 5e5bb98722f66e820bf1aa7b3c98ffc9b2450ffb
+  cloud_firestore: 3e5af176ee7502d00c95e031a06d6728ac0dc39b
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
-  firebase_auth: 3bab991fe1df91c2f948156e9dee976e01a19ab9
-  firebase_core: bf59c32d2e53814f558efa20840c1902fa2fe461
-  firebase_storage: 8b85bf19de50a1886f9387924fbddf066a718965
+  firebase_auth: c6e7c32d1b546266e34a991986e3abf546a31638
+  firebase_core: 651a84636254f758b9b9367f27bef0801a3855a2
+  firebase_storage: feb362378dda87269e17c761e00cab73b684ece4
   FirebaseAppCheckInterop: ef074633831a90cf6c10e8f2c1e1f8b7842a446a
   FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
   FirebaseAuthInterop: fef284922da3c350f846ff85cc0dfd5186448e49
@@ -812,18 +810,17 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: e301297f4c15a17489e48ed722d733b1578e0c02
   FirebaseFirestore: 244f71ff14ef44f39e00b44d356eac708ce03103
   FirebaseStorage: 0efbff0ac978981866d89804191688ae50d64033
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  geolocator_apple: 72a78ae3f3e4ec0db62117bd93e34523f5011d58
   GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: c9e714f7eec91a55641e2bab9f45fd83a219b882
-  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
 
-PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+PODFILE CHECKSUM: 353c8bcc5d5b0994e508d035b5431cfe18c1dea7
 
 COCOAPODS: 1.11.3
