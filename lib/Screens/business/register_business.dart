@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:b2bmobile/Screens/authenticate/login_screen.dart';
+import 'package:b2bmobile/resources/auth_methods.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/text_field_input.dart';
@@ -8,14 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../responsive/mobile_screen_layout.dart';
+import '../../responsive/responsive_layout_screen.dart';
+import '../../responsive/web_screen_layout.dart';
+
 class RegisterBusiness extends StatefulWidget {
   const RegisterBusiness({super.key});
 
   @override
-  State<RegisterBusiness> createState() => _LoginScreenState();
+  State<RegisterBusiness> createState() => _RegisterBusinessState();
 }
 
-class _LoginScreenState extends State<RegisterBusiness> {
+class _RegisterBusinessState extends State<RegisterBusiness> {
   TextEditingController _businessName = TextEditingController();
   TextEditingController _country = TextEditingController();
   TextEditingController _city = TextEditingController();
@@ -50,26 +55,10 @@ class _LoginScreenState extends State<RegisterBusiness> {
     _podcast.dispose();
   }
 
-  selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
-  }
-
-  void navigateToLogin() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
@@ -80,12 +69,12 @@ class _LoginScreenState extends State<RegisterBusiness> {
                 child: Container(),
                 flex: 2,
               ),
-              // SvgPicture.asset(
-              //   'assets/ic_b2b1.svg',
-              //   color: primaryColor,
-              // ),
-              // const SizedBox(height: 64),
-              //circular widget to accpt and show our selected file
+// SvgPicture.asset(
+// 'assets/ic_b2b1.svg',
+// color: primaryColor,
+// ),
+// const SizedBox(height: 64),
+//circular widget to accpt and show our selected file
               Stack(
                 children: [
                   _image != null
@@ -104,7 +93,7 @@ class _LoginScreenState extends State<RegisterBusiness> {
                     bottom: -10,
                     left: 80,
                     child: IconButton(
-                      onPressed: selectImage,
+                      onPressed: () {},
                       icon: const Icon(Icons.add_a_photo),
                     ),
                   ),
@@ -113,7 +102,7 @@ class _LoginScreenState extends State<RegisterBusiness> {
               const SizedBox(
                 height: 25,
               ),
-              //text field input for username
+//text field input for username
               TextFieldInput(
                 hintText: 'Enter Business Name',
                 textInputType: TextInputType.text,
@@ -130,7 +119,7 @@ class _LoginScreenState extends State<RegisterBusiness> {
               const SizedBox(
                 height: 24,
               ),
-              //username text box
+//username text box
               TextFieldInput(
                 hintText: 'Enter Business Country',
                 textInputType: TextInputType.text,
@@ -139,7 +128,7 @@ class _LoginScreenState extends State<RegisterBusiness> {
               const SizedBox(
                 height: 24,
               ),
-              //text field input for email
+//text field input for email
               TextFieldInput(
                 hintText: 'Enter Business City',
                 textInputType: TextInputType.text,
@@ -205,7 +194,7 @@ class _LoginScreenState extends State<RegisterBusiness> {
                 height: 24,
               ),
 
-              //button for login
+//button for login
               InkWell(
                 onTap: () {},
                 child: _isLoading

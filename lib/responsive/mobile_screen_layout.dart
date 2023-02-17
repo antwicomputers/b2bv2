@@ -37,13 +37,13 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     model.User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade800,
+        backgroundColor: Colors.black,
         title: InkWell(
-          child: Text('Back2Black Mobile'),
+          child: Text('B2BMobile: Black Excellence'),
           onLongPress: () {},
         ),
         leading: InkWell(
-          onLongPress: () {},
+          onTap: () {},
           child: Icon(Icons.menu),
         ),
       ),
@@ -69,8 +69,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               text: 'FAVS',
             ),
             GButton(
-              icon: Icons.more_horiz_rounded,
-              text: 'Settings',
+              icon: Icons.category_sharp,
+              text: 'Categories',
             ),
           ],
         ),
