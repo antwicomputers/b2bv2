@@ -13,21 +13,24 @@ class Business {
   final String facebook;
   final String businessDescription;
   final String podcast;
+  final bool isBlack;
+  final bool women;
 
-  const Business({
-    required this.businessName,
-    required this.uid,
-    required this.country,
-    required this.city,
-    required this.category,
-    required this.address,
-    required this.businessDescription,
-    required this.twitter,
-    required this.linkedIn,
-    required this.instagram,
-    required this.facebook,
-    required this.podcast,
-  });
+  const Business(
+      {required this.businessName,
+      required this.uid,
+      required this.country,
+      required this.city,
+      required this.category,
+      required this.address,
+      required this.businessDescription,
+      required this.twitter,
+      required this.linkedIn,
+      required this.instagram,
+      required this.facebook,
+      required this.podcast,
+      required this.isBlack,
+      required this.women});
 
   Map<String, dynamic> toJson() => {
         'businessName': businessName,
@@ -42,24 +45,27 @@ class Business {
         'facebook': facebook,
         'businessDescription': businessDescription,
         'podcast': podcast,
+        'isBlack': isBlack,
+        'women': women
       };
 
   static Business fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return Business(
-      businessName: snapshot['businessName'],
-      uid: snapshot['uid'],
-      country: snapshot['country'],
-      city: snapshot['city'],
-      category: snapshot['category'],
-      address: snapshot['address'],
-      twitter: snapshot['twitter'],
-      linkedIn: snapshot['linkedIn'],
-      instagram: snapshot['instagram'],
-      facebook: snapshot['facebook'],
-      businessDescription: snapshot['businessDescription'],
-      podcast: snapshot['podcast'],
-    );
+        businessName: snapshot['businessName'],
+        uid: snapshot['uid'],
+        country: snapshot['country'],
+        city: snapshot['city'],
+        category: snapshot['category'],
+        address: snapshot['address'],
+        twitter: snapshot['twitter'],
+        linkedIn: snapshot['linkedIn'],
+        instagram: snapshot['instagram'],
+        facebook: snapshot['facebook'],
+        businessDescription: snapshot['businessDescription'],
+        podcast: snapshot['podcast'],
+        isBlack: snapshot['isBlack'],
+        women: snapshot['women']);
   }
 }

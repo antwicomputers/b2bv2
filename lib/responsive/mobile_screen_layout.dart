@@ -1,4 +1,9 @@
+import 'package:b2bmobile/Screens/pages/favorites.dart';
+import 'package:b2bmobile/Screens/pages/home.dart';
+import 'package:b2bmobile/Screens/pages/maps.dart';
+import 'package:b2bmobile/Screens/pages/settings.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -12,29 +17,43 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+  int _selectedIndex = 0;
+
+  void navigateBottomBar(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  final List<Widget> _pages = [
+    const Home(),
+    const Maps(),
+    const Favorites(),
+    const MoreOptions(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     model.User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade800,
-        title: Text('Back2Black Mobile'),
+        title: InkWell(
+          child: Text('Back2Black Mobile'),
+          onLongPress: () {},
+        ),
         leading: InkWell(
           onLongPress: () {},
           child: Icon(Icons.menu),
         ),
       ),
-      body: Center(
-        child: Text(user.username),
-      ),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GNav(
           tabBackgroundColor: Colors.grey.shade800,
           gap: 8,
-          onTabChange: (index) {
-            print(index);
-          },
+          onTabChange: navigateBottomBar,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           tabs: const [
             GButton(
