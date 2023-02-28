@@ -44,6 +44,7 @@ dependencies:
   image_picker: ^0.8.6+1
   provider: ^6.0.5
   scroll_snap_list: ^0.9.1
+  shrink_sidemenu: ^2.0.0+2-null-safety
 
 dev_dependencies:
   flutter_lints: ^2.0.0

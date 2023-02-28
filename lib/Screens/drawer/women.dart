@@ -10,8 +10,11 @@ class Women extends StatefulWidget {
 class _AboutUsState extends State<Women> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Women Empowerment'),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text('Women Empowerment'),
+      ),
     );
   }
 }
