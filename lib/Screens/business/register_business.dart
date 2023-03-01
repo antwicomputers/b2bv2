@@ -65,7 +65,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
         child: Column(
           children: [
             const SizedBox(
-              height: 25,
+              height: 300,
             ),
             //text field input for username
             TextFieldInput(

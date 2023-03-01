@@ -66,6 +66,9 @@ flutter:
     - assets/ic_b2b.svg
     - assets/ic_b2b1.svg
     - assets/neeshy.jpg
+    - assets/womenHeader.jpeg
+    - assets/aboutusHeader.jpeg
+    - assets/health.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

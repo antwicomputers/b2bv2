@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-class WomenBusiness extends StatefulWidget {
+class MentalHealth extends StatefulWidget {
+  const MentalHealth({super.key});
+
   @override
-  _WomenBusinessState createState() => _WomenBusinessState();
+  State<MentalHealth> createState() => _MentalHealthState();
 }
 
-class _WomenBusinessState extends State<WomenBusiness> {
+class _MentalHealthState extends State<MentalHealth> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -23,8 +25,9 @@ class _WomenBusinessState extends State<WomenBusiness> {
             width: MediaQuery.of(context).size.width,
             child: const Center(
                 child: Text(
-              "Click to Explore Women Owned Businesses",
+              "Click to Explore Essential Services",
               style: TextStyle(
+                fontWeight: FontWeight.bold,
                 fontSize: 20,
                 color: Colors.white,
               ),
@@ -34,7 +37,7 @@ class _WomenBusinessState extends State<WomenBusiness> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          iconTheme: const IconThemeData(
+          iconTheme: IconThemeData(
             color: Colors.black,
           ),
           elevation: 0,
@@ -42,25 +45,26 @@ class _WomenBusinessState extends State<WomenBusiness> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Image.asset("assets/womenHeader.jpeg"),
+              Image.asset("assets/health.jpeg"),
               const SizedBox(
-                height: 60,
+                height: 20,
               ),
               const Text(
-                "One For Our Black Queens",
+                "Mental Health",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 25,
                 ),
               ),
-              const SizedBox(
-                height: 40,
+              SizedBox(
+                height: 20,
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "Black Queens. You are strong, fierce and resilient. You are determined and dedicate yourselves to everything you do.  You are a force to be reckoned with and we want you to know that we see you, admire you, love you, support you and thank you. We are giving you your own section in Back2Black Mobile to make it easy for others who want to support you and your businesses. We salute you!",
+                  "mental health is a critical issue for African Americans, and the impact of mental health disorders on our population is significant. To address these issues, B2B will dedicate a section of the app to connect our kings and queens with the best ressources avaialble to assist with mental health issues. Together, we will help save our community!",
                   textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: 15),
                 ),
               ),
               const SizedBox(

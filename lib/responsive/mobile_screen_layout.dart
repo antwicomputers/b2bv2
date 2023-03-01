@@ -1,9 +1,12 @@
 import 'dart:ffi';
 
+import 'package:b2bmobile/Screens/admin_panel/admin.dart';
 import 'package:b2bmobile/Screens/business/register_business.dart';
+import 'package:b2bmobile/Screens/drawer/about_us.dart';
 import 'package:b2bmobile/Screens/drawer/alerts.dart';
 import 'package:b2bmobile/Screens/drawer/essential.dart';
 import 'package:b2bmobile/Screens/drawer/events.dart';
+import 'package:b2bmobile/Screens/drawer/mental_health.dart';
 import 'package:b2bmobile/Screens/drawer/register_event.dart';
 import 'package:b2bmobile/Screens/drawer/women.dart';
 import 'package:b2bmobile/Screens/pages/favorites.dart';
@@ -15,6 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:b2bmobile/models/users.dart' as model;
+
+import '../Screens/authenticate/login_screen.dart';
+import '../resources/auth_methods.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -42,10 +48,22 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
     model.User user = Provider.of<UserProvider>(context).getUser;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Back2Black Mobile'),
+        title: InkWell(
+          child: Text('Back2Black Mobile'),
+          onLongPress: () {
+            if (user.email == 'admin@b2bmobile.com') {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AdminPanel(),
+                ),
+              );
+            }
+          },
+        ),
         centerTitle: true,
       ),
       drawer: Drawer(
@@ -57,21 +75,28 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               icon: Icons.woman_rounded,
               title: 'Women Empowerment',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Women()),
+                MaterialPageRoute(builder: (context) => WomenBusiness()),
               ),
             ),
             _buildItem(
               icon: Icons.emergency,
               title: 'Essential Services',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Essential()),
+                MaterialPageRoute(builder: (context) => MentalHealth()),
+              ),
+            ),
+            _buildItem(
+              icon: Icons.start,
+              title: 'The Black KickStart',
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => WomenBusiness()),
               ),
             ),
             _buildItem(
               icon: Icons.loyalty,
               title: 'B2B Loyalty Card',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Women()),
+                MaterialPageRoute(builder: (context) => WomenBusiness()),
               ),
             ),
             _buildItem(
@@ -104,9 +129,23 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               ),
             ),
             _buildItem(
+              icon: Icons.info_rounded,
+              title: 'About Us',
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AboutUs()),
+              ),
+            ),
+            _buildItem(
               icon: Icons.logout,
               title: 'Logout',
-              onTap: () {},
+              onTap: () async {
+                await AuthMethods().signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -160,6 +199,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             height: 20,
           ),
           Text('Black Queen'),
+          Text('black.queens@godsplan.com'),
         ],
       ),
     );
