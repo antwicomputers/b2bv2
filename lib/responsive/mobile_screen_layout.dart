@@ -12,8 +12,9 @@ import 'package:b2bmobile/Screens/drawer/women.dart';
 import 'package:b2bmobile/Screens/pages/favorites.dart';
 import 'package:b2bmobile/Screens/pages/home.dart';
 import 'package:b2bmobile/Screens/pages/maps.dart';
-import 'package:b2bmobile/Screens/pages/settings.dart';
+import 'package:b2bmobile/Screens/pages/categories.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     const Home(),
     const Maps(),
     const Favorites(),
-    const MoreOptions(),
+    const Categories(),
   ];
 
   @override
@@ -53,7 +54,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: InkWell(
-          child: Text('Back2Black Mobile'),
+          child: const Text('Back2Black Mobile'),
           onLongPress: () {
             if (user.email == 'admin@b2bmobile.com') {
               Navigator.of(context).push(
@@ -73,21 +74,21 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             _buildHeader(),
             _buildItem(
               icon: Icons.woman_rounded,
-              title: 'Women Empowerment',
+              title: 'B2B Women Empowerment',
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => WomenBusiness()),
               ),
             ),
             _buildItem(
               icon: Icons.emergency,
-              title: 'Essential Services',
+              title: 'B2B Essential Services',
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => MentalHealth()),
               ),
             ),
             _buildItem(
               icon: Icons.start,
-              title: 'The Black KickStart',
+              title: 'B2B The Black KickStart',
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => WomenBusiness()),
               ),
@@ -130,7 +131,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             ),
             _buildItem(
               icon: Icons.info_rounded,
-              title: 'About Us',
+              title: 'About',
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AboutUs()),
+              ),
+            ),
+            _buildItem(
+              icon: Icons.info_rounded,
+              title: 'Feedback & Suggestions',
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => AboutUs()),
               ),
@@ -172,8 +180,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               text: 'FAVS',
             ),
             GButton(
-              icon: Icons.search,
-              text: 'Search',
+              icon: Icons.category,
+              text: 'Find',
             ),
           ],
         ),
