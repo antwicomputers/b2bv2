@@ -17,7 +17,7 @@ class _AdminPanelState extends State<AdminPanel> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text("Admin Panel"),
+        title: const Text("Admin Panel"),
       ),
       body: Wrap(
         //  shrinkWrap: true,

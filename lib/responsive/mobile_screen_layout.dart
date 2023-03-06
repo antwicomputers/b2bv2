@@ -1,11 +1,10 @@
-import 'dart:ffi';
-
 import 'package:b2bmobile/Screens/admin_panel/admin.dart';
 import 'package:b2bmobile/Screens/business/register_business.dart';
 import 'package:b2bmobile/Screens/drawer/about_us.dart';
 import 'package:b2bmobile/Screens/drawer/alerts.dart';
-import 'package:b2bmobile/Screens/drawer/essential.dart';
+import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
 import 'package:b2bmobile/Screens/drawer/events.dart';
+import 'package:b2bmobile/Screens/drawer/help_us.dart';
 import 'package:b2bmobile/Screens/drawer/mental_health.dart';
 import 'package:b2bmobile/Screens/drawer/register_event.dart';
 import 'package:b2bmobile/Screens/drawer/women.dart';
@@ -14,7 +13,6 @@ import 'package:b2bmobile/Screens/pages/home.dart';
 import 'package:b2bmobile/Screens/pages/maps.dart';
 import 'package:b2bmobile/Screens/pages/categories.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +88,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               icon: Icons.start,
               title: 'B2B The Black KickStart',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => WomenBusiness()),
+                MaterialPageRoute(builder: (context) => BlackKickStart()),
               ),
             ),
             _buildItem(
@@ -140,7 +138,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               icon: Icons.info_rounded,
               title: 'Feedback & Suggestions',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => AboutUs()),
+                MaterialPageRoute(builder: (context) => SupportUs()),
               ),
             ),
             _buildItem(
