@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:b2bmobile/models/users.dart' as model;
+import 'package:b2bmobile/models/business.dart' as model;
 import 'package:b2bmobile/models/business.dart';
 
 class AuthMethods {
@@ -89,53 +90,50 @@ class AuthMethods {
     return res;
   }
 
-  // // register business
-  // Future<String> businessRegistration({
-  //   required businessName,
-  //   required country,
-  //   required city,
-  //   required category,
-  //   required address,
-  //   twitter,
-  //   linkedIn,
-  //   instagram,
-  //   facebook,
-  //   required businessDescription,
-  //   required podcast,
-  // }) async {
-  //   String res = "Some error occured";
+  //resgister user
+  Future<String> registerBusiness({
+    required String businessName,
+    required String businessDescription,
+    required String businessAddress,
+    required String businessCategory,
+    required String phone,
+    required String email,
+    required String website,
+    required String twitter,
+    required String facebook,
+    required String linkedIn,
+    required String instagram,
+    required String tiktok,
+    required String twitch,
+    required String podcast,
+  }) async {
+    String message = 'some error occured';
 
-  //   try {
-  //     if (businessName.isNotEmpty ||
-  //         country.isNotEmpty ||
-  //         city.isNotEmpty ||
-  //         category.isNotEmpty ||
-  //         address.isNotEmpty ||
-  //         businessDescription.isNotEmpty) ;
+    model.Business business = model.Business(
+        businessName: businessName,
+        businessDescription: businessDescription,
+        businessAddress: businessAddress,
+        businessCategory: businessCategory,
+        phone: phone,
+        email: email,
+        website: website,
+        twitter: twitter,
+        facebook: facebook,
+        linkedIn: linkedIn,
+        instagram: instagram,
+        tiktok: tiktok,
+        twitch: twitch,
+        podcast: podcast);
 
-  //     //register business in the database
-  //     Business business = new Business(
-  //         businessName: businessName,
-  //         uid: cred.user!.uid,
-  //         country: country,
-  //         city: city,
-  //         category: category,
-  //         address: address,
-  //         businessDescription: businessDescription,
-  //         twitter: twitter,
-  //         linkedIn: linkedIn,
-  //         instagram: instagram,
-  //         facebook: facebook,
-  //         podcast: podcast);
+    try {
+      final collection = FirebaseFirestore.instance.collection('businesses');
 
-  //          await _firestore
-  //         .collection('businesses')
-  //         .doc(cred.user!.uid)
-  //         .set(business.toJson());
-  //     res = "success";
-  //   } catch (err) {
-  //     res = err.toString();
-  //   }
-  //   return res;
-  // }
+      await collection.doc().set(
+            business.toJson(),
+          );
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
 }

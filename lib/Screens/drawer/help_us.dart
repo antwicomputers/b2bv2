@@ -10,7 +10,7 @@ class SupportUs extends StatefulWidget {
 }
 
 class _SupportUsState extends State<SupportUs> {
-  final TextEditingController _feedback = new TextEditingController();
+  final TextEditingController _feedback = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
@@ -36,7 +36,7 @@ class _SupportUsState extends State<SupportUs> {
           textInputAction: TextInputAction.done,
           validator: (String? text) {
             if (text == null || text.isEmpty) {
-              return 'We love to hear from you! Please provide your feedback';
+              return 'Cannot be empty';
             }
             return null;
           },
