@@ -6,7 +6,6 @@ import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
 import 'package:b2bmobile/Screens/drawer/events.dart';
 import 'package:b2bmobile/Screens/drawer/help_us.dart';
 import 'package:b2bmobile/Screens/drawer/mental_health.dart';
-import 'package:b2bmobile/Screens/drawer/register_event.dart';
 import 'package:b2bmobile/Screens/drawer/women.dart';
 import 'package:b2bmobile/Screens/pages/favorites.dart';
 import 'package:b2bmobile/Screens/pages/home.dart';
@@ -17,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:b2bmobile/models/users.dart' as model;
-
 import '../Screens/authenticate/login_screen.dart';
 import '../resources/auth_methods.dart';
 
@@ -117,7 +115,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               icon: Icons.calendar_today,
               title: 'View All Events',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Events()),
+                MaterialPageRoute(builder: (context) => const RegisterEvent()),
               ),
             ),
             _buildItem(

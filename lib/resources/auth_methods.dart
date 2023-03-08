@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:b2bmobile/models/users.dart' as model;
 import 'package:b2bmobile/models/business.dart' as model;
-import 'package:b2bmobile/models/business.dart';
+import 'package:b2bmobile/models/events.dart' as model;
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -90,7 +90,7 @@ class AuthMethods {
     return res;
   }
 
-  //resgister user
+  //resgister business
   Future<String> registerBusiness({
     required String businessName,
     required String businessDescription,
@@ -127,6 +127,53 @@ class AuthMethods {
 
     try {
       final collection = FirebaseFirestore.instance.collection('businesses');
+
+      await collection.doc().set(
+            business.toJson(),
+          );
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
+
+  //register event
+  Future<String> registerEvent({
+    required String eventName,
+    required String eventDescription,
+    required String eventAddress,
+    required String eventCategory,
+    required String phone,
+    required String email,
+    required String website,
+    required String twitter,
+    required String facebook,
+    required String linkedIn,
+    required String instagram,
+    required String tiktok,
+    required String twitch,
+    required String podcast,
+  }) async {
+    String message = 'some error occured';
+
+    model.Events business = model.Events(
+        eventName: eventName,
+        eventDescription: eventDescription,
+        eventAddress: eventAddress,
+        eventCategory: eventCategory,
+        phone: phone,
+        email: email,
+        website: website,
+        twitter: twitter,
+        facebook: facebook,
+        linkedIn: linkedIn,
+        instagram: instagram,
+        tiktok: tiktok,
+        twitch: twitch,
+        podcast: podcast);
+
+    try {
+      final collection = FirebaseFirestore.instance.collection('events');
 
       await collection.doc().set(
             business.toJson(),
