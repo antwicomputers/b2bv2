@@ -1,13 +1,15 @@
 import 'package:b2bmobile/resources/auth_methods.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';
-import '../../utils/colors.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterBusiness extends StatefulWidget {
   const RegisterBusiness({super.key});
@@ -31,6 +33,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   final TextEditingController _tiktok = TextEditingController();
   final TextEditingController _twitch = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
+  Uint8List? _image;
   final bool isBlack = false;
   final bool isEssential = false;
   bool _isLoading = false;
@@ -55,6 +58,14 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     super.dispose();
   }
 
+  selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
   final _formsKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -76,6 +87,63 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
               autovalidateMode: AutovalidateMode.always,
               child: Column(
                 children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    //color: Colors.white,
+                    child: Center(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: _image != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: _image == null
+                                          ? Container(
+                                              height: 150,
+                                              width: 50,
+                                              child:
+                                                  const CircularProgressIndicator(),
+                                            )
+                                          : Container(
+                                              height: 250,
+                                              width: 250,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                image: DecorationImage(
+                                                  image: MemoryImage(_image!),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            ))
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 150,
+                                        width: 150,
+                                        child: IconButton(
+                                          icon: const Icon(
+                                            Icons.add_a_photo,
+                                          ),
+                                          iconSize: 50,
+                                          onPressed: selectImage,
+                                        ),
+                                      ),
+                                    )),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
                   TextFormField(
                     controller: _businessName,
                     keyboardType: TextInputType.text,
@@ -149,14 +217,15 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                     keyboardType: TextInputType.emailAddress,
                     controller: _email,
                     decoration: const InputDecoration(
-                        label: Text('email'), prefixIcon: Icon(Icons.email)),
+                        label: Text('email'),
+                        prefixIcon: Icon(FontAwesomeIcons.at)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _website,
                     decoration: const InputDecoration(
                         label: Text('Website'),
-                        prefixIcon: Icon(FontAwesomeIcons.info)),
+                        prefixIcon: Icon(FontAwesomeIcons.intercom)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
@@ -209,6 +278,11 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   const SizedBox(
                     height: 20,
                   ),
+                  // ElevatedButton(
+                  //   onPressed: selectImages,
+                  //   child: const Text('Select 3 Images'),
+                  // ),
+
                   ElevatedButton(
                     onPressed: registerBusiness,
                     child: _isLoading
@@ -233,20 +307,21 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
       _isLoading = true;
     });
     String message = await AuthMethods().registerBusiness(
-        businessName: _businessName.text,
-        businessDescription: _businessDescription.text,
-        businessAddress: _businessAddress.text,
-        businessCategory: _businessCategory.text,
-        phone: _phone.text,
-        email: _email.text,
-        website: _website.text,
-        twitter: _twitter.text,
-        facebook: _facebook.text,
-        linkedIn: _linkedIn.text,
-        instagram: _instagram.text,
-        tiktok: _tiktok.text,
-        twitch: _twitch.text,
-        podcast: _podcast.text);
+      businessName: _businessName.text,
+      businessDescription: _businessDescription.text,
+      businessAddress: _businessAddress.text,
+      businessCategory: _businessCategory.text,
+      phone: _phone.text,
+      email: _email.text,
+      website: _website.text,
+      twitter: _twitter.text,
+      facebook: _facebook.text,
+      linkedIn: _linkedIn.text,
+      instagram: _instagram.text,
+      tiktok: _tiktok.text,
+      twitch: _twitch.text,
+      podcast: _podcast.text,
+    );
 
     setState(() {
       _isLoading = false;

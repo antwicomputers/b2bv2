@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  carousel_slider: ^4.2.1
   cloud_firestore: ^4.3.1
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.2.5
@@ -36,6 +37,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.0+1
+  flutter_swiper_null_safety: ^1.0.2
   font_awesome_flutter: ^10.4.0
   geolocator: ^9.0.2
   geopoint: ^1.0.0
