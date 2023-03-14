@@ -307,21 +307,21 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
       _isLoading = true;
     });
     String message = await AuthMethods().registerBusiness(
-      businessName: _businessName.text,
-      businessDescription: _businessDescription.text,
-      businessAddress: _businessAddress.text,
-      businessCategory: _businessCategory.text,
-      phone: _phone.text,
-      email: _email.text,
-      website: _website.text,
-      twitter: _twitter.text,
-      facebook: _facebook.text,
-      linkedIn: _linkedIn.text,
-      instagram: _instagram.text,
-      tiktok: _tiktok.text,
-      twitch: _twitch.text,
-      podcast: _podcast.text,
-    );
+        businessName: _businessName.text,
+        businessDescription: _businessDescription.text,
+        businessAddress: _businessAddress.text,
+        businessCategory: _businessCategory.text,
+        phone: _phone.text,
+        email: _email.text,
+        website: _website.text,
+        twitter: _twitter.text,
+        facebook: _facebook.text,
+        linkedIn: _linkedIn.text,
+        instagram: _instagram.text,
+        tiktok: _tiktok.text,
+        twitch: _twitch.text,
+        podcast: _podcast.text,
+        businessFile: _image!);
 
     setState(() {
       _isLoading = false;

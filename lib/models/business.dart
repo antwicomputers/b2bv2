@@ -15,22 +15,25 @@ class Business {
   final String tiktok;
   final String twitch;
   final String podcast;
+  final String businessUrl;
 
-  const Business(
-      {required this.businessName,
-      required this.businessDescription,
-      required this.businessAddress,
-      required this.businessCategory,
-      required this.phone,
-      required this.email,
-      required this.website,
-      required this.twitter,
-      required this.facebook,
-      required this.linkedIn,
-      required this.instagram,
-      required this.tiktok,
-      required this.twitch,
-      required this.podcast});
+  const Business({
+    required this.businessName,
+    required this.businessDescription,
+    required this.businessAddress,
+    required this.businessCategory,
+    required this.phone,
+    required this.email,
+    required this.website,
+    required this.twitter,
+    required this.facebook,
+    required this.linkedIn,
+    required this.instagram,
+    required this.tiktok,
+    required this.twitch,
+    required this.podcast,
+    required this.businessUrl,
+  });
 
   Map<String, dynamic> toJson() => {
         'timestamp': FieldValue.serverTimestamp(),
@@ -48,6 +51,7 @@ class Business {
         'tikTok': tiktok,
         'twitch': twitch,
         'podcast': podcast,
+        'businessUrl': businessUrl
       };
 
   static Business fromSnap(DocumentSnapshot snap) {
@@ -68,6 +72,7 @@ class Business {
       tiktok: snapshot['tiktok'],
       twitch: snapshot['twitch'],
       podcast: snapshot['podcast'],
+      businessUrl: snapshot['businessUrl'],
     );
   }
 }

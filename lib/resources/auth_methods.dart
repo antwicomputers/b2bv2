@@ -91,23 +91,26 @@ class AuthMethods {
   }
 
   //resgister business
-  Future<String> registerBusiness({
-    required String businessName,
-    required String businessDescription,
-    required String businessAddress,
-    required String businessCategory,
-    required String phone,
-    required String email,
-    required String website,
-    required String twitter,
-    required String facebook,
-    required String linkedIn,
-    required String instagram,
-    required String tiktok,
-    required String twitch,
-    required String podcast,
-  }) async {
+  Future<String> registerBusiness(
+      {required String businessName,
+      required String businessDescription,
+      required String businessAddress,
+      required String businessCategory,
+      required String phone,
+      required String email,
+      required String website,
+      required String twitter,
+      required String facebook,
+      required String linkedIn,
+      required String instagram,
+      required String tiktok,
+      required String twitch,
+      required String podcast,
+      required Uint8List businessFile}) async {
     String message = 'some error occured';
+
+    String businessUrl = await StorageMethods()
+        .uploadImageToStoage('businessPics', businessFile, false);
 
     model.Business business = model.Business(
         businessName: businessName,
@@ -123,7 +126,8 @@ class AuthMethods {
         instagram: instagram,
         tiktok: tiktok,
         twitch: twitch,
-        podcast: podcast);
+        podcast: podcast,
+        businessUrl: businessUrl);
 
     try {
       final collection = FirebaseFirestore.instance.collection('businesses');
