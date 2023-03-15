@@ -3,7 +3,6 @@ import 'package:b2bmobile/Screens/business/register_business.dart';
 import 'package:b2bmobile/Screens/drawer/about_us.dart';
 import 'package:b2bmobile/Screens/drawer/alerts.dart';
 import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
-import 'package:b2bmobile/Screens/drawer/events.dart';
 import 'package:b2bmobile/Screens/drawer/help_us.dart';
 import 'package:b2bmobile/Screens/drawer/mental_health.dart';
 import 'package:b2bmobile/Screens/drawer/women.dart';
@@ -18,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:b2bmobile/models/users.dart' as model;
 import '../Screens/authenticate/login_screen.dart';
 import '../resources/auth_methods.dart';
+import 'package:b2bmobile/Screens/drawer/register_event.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -55,7 +55,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             if (user.email == 'admin@b2bmobile.com') {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => AdminPanel(),
+                  builder: (context) => const AdminPanel(),
                 ),
               );
             }

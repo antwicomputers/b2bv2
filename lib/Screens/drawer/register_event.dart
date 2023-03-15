@@ -4,6 +4,7 @@ import 'package:b2bmobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';
@@ -30,6 +31,7 @@ class _RegisterEventState extends State<RegisterEvent> {
   final TextEditingController _tiktok = TextEditingController();
   final TextEditingController _twitch = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
+  Uint8List? _image;
   final bool isBlack = false;
   final bool isEssential = false;
   bool _isLoading = false;
@@ -54,6 +56,14 @@ class _RegisterEventState extends State<RegisterEvent> {
     super.dispose();
   }
 
+  selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
   final _formsKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -75,6 +85,63 @@ class _RegisterEventState extends State<RegisterEvent> {
               autovalidateMode: AutovalidateMode.always,
               child: Column(
                 children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    //color: Colors.white,
+                    child: Center(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: _image != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: _image == null
+                                          ? Container(
+                                              height: 150,
+                                              width: 50,
+                                              child:
+                                                  const CircularProgressIndicator(),
+                                            )
+                                          : Container(
+                                              height: 250,
+                                              width: 250,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                image: DecorationImage(
+                                                  image: MemoryImage(_image!),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            ))
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 150,
+                                        width: 150,
+                                        child: IconButton(
+                                          icon: const Icon(
+                                            Icons.add_a_photo,
+                                          ),
+                                          iconSize: 50,
+                                          onPressed: selectImage,
+                                        ),
+                                      ),
+                                    )),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
                   TextFormField(
                     controller: _eventName,
                     keyboardType: TextInputType.text,
@@ -101,19 +168,19 @@ class _RegisterEventState extends State<RegisterEvent> {
                       return null;
                     },
                   ),
-                  // TextFormField(
-                  //   keyboardType: TextInputType.text,
-                  //   decoration: const InputDecoration(
-                  //       label: Text('Business Country'),
-                  //       prefixIcon: Icon(Icons.location_city)),
-                  // ),
-                  // TextFormField(
-                  //   keyboardType: TextInputType.text,
-                  //   decoration: const InputDecoration(
-                  //     label: Text('Business City'),
-                  //     prefixIcon: Icon(Icons.location_city),
-                  //   ),
-                  // ),
+// TextFormField(
+// keyboardType: TextInputType.text,
+// decoration: const InputDecoration(
+// label: Text('Business Country'),
+// prefixIcon: Icon(Icons.location_city)),
+// ),
+// TextFormField(
+// keyboardType: TextInputType.text,
+// decoration: const InputDecoration(
+// label: Text('Business City'),
+// prefixIcon: Icon(Icons.location_city),
+// ),
+// ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _eventAddress,
@@ -245,7 +312,8 @@ class _RegisterEventState extends State<RegisterEvent> {
         instagram: _instagram.text,
         tiktok: _tiktok.text,
         twitch: _twitch.text,
-        podcast: _podcast.text);
+        podcast: _podcast.text,
+        eventFile: _image!);
 
     setState(() {
       _isLoading = false;

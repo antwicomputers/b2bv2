@@ -15,6 +15,7 @@ class Events {
   final String tiktok;
   final String twitch;
   final String podcast;
+  final String eventUrl;
 
   const Events(
       {required this.eventName,
@@ -30,7 +31,8 @@ class Events {
       required this.instagram,
       required this.tiktok,
       required this.twitch,
-      required this.podcast});
+      required this.podcast,
+      required this.eventUrl});
 
   Map<String, dynamic> toJson() => {
         'timestamp': FieldValue.serverTimestamp(),
@@ -48,26 +50,27 @@ class Events {
         'tikTok': tiktok,
         'twitch': twitch,
         'podcast': podcast,
+        'eventUrl': eventUrl
       };
 
   static Events fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return Events(
-      eventName: snapshot['eventName'],
-      eventDescription: snapshot['eventDescription'],
-      eventAddress: snapshot['eventAddress'],
-      eventCategory: snapshot['eventCategory'],
-      phone: snapshot['phone'],
-      email: snapshot['email'],
-      website: snapshot['website'],
-      twitter: snapshot['twitter'],
-      facebook: snapshot['facebook'],
-      linkedIn: snapshot['linkedIn'],
-      instagram: snapshot['instagram'],
-      tiktok: snapshot['tiktok'],
-      twitch: snapshot['twitch'],
-      podcast: snapshot['podcast'],
-    );
+        eventName: snapshot['eventName'],
+        eventDescription: snapshot['eventDescription'],
+        eventAddress: snapshot['eventAddress'],
+        eventCategory: snapshot['eventCategory'],
+        phone: snapshot['phone'],
+        email: snapshot['email'],
+        website: snapshot['website'],
+        twitter: snapshot['twitter'],
+        facebook: snapshot['facebook'],
+        linkedIn: snapshot['linkedIn'],
+        instagram: snapshot['instagram'],
+        tiktok: snapshot['tiktok'],
+        twitch: snapshot['twitch'],
+        podcast: snapshot['podcast'],
+        eventUrl: snapshot['eventUrl']);
   }
 }

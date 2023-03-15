@@ -142,23 +142,26 @@ class AuthMethods {
   }
 
   //register event
-  Future<String> registerEvent({
-    required String eventName,
-    required String eventDescription,
-    required String eventAddress,
-    required String eventCategory,
-    required String phone,
-    required String email,
-    required String website,
-    required String twitter,
-    required String facebook,
-    required String linkedIn,
-    required String instagram,
-    required String tiktok,
-    required String twitch,
-    required String podcast,
-  }) async {
+  Future<String> registerEvent(
+      {required String eventName,
+      required String eventDescription,
+      required String eventAddress,
+      required String eventCategory,
+      required String phone,
+      required String email,
+      required String website,
+      required String twitter,
+      required String facebook,
+      required String linkedIn,
+      required String instagram,
+      required String tiktok,
+      required String twitch,
+      required String podcast,
+      required Uint8List eventFile}) async {
     String message = 'some error occured';
+
+    String eventUrl = await StorageMethods()
+        .uploadImageToStoage('eventPics', eventFile, false);
 
     model.Events business = model.Events(
         eventName: eventName,
@@ -174,7 +177,8 @@ class AuthMethods {
         instagram: instagram,
         tiktok: tiktok,
         twitch: twitch,
-        podcast: podcast);
+        podcast: podcast,
+        eventUrl: eventUrl);
 
     try {
       final collection = FirebaseFirestore.instance.collection('events');
