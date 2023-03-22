@@ -41,6 +41,7 @@ dependencies:
   font_awesome_flutter: ^10.4.0
   geolocator: ^9.0.2
   geopoint: ^1.0.0
+  google_fonts: ^4.0.3
   google_maps_flutter: ^2.2.3
   google_nav_bar: ^5.0.6
   hidden_drawer_menu: ^3.0.1
@@ -74,6 +75,7 @@ flutter:
     - assets/health.jpeg
     - assets/bks.jpeg
     - assets/feedback.jpeg
+    - assets/logo.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

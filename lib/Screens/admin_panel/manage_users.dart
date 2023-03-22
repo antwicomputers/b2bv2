@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 
-class AllFeedback extends StatefulWidget {
-  const AllFeedback({Key? key}) : super(key: key);
+class ManageUsers extends StatefulWidget {
+  const ManageUsers({Key? key}) : super(key: key);
 
   @override
-  State<AllFeedback> createState() => _ManageUsersState();
+  State<ManageUsers> createState() => _ManageUsersState();
 }
 
-class _ManageUsersState extends State<AllFeedback> {
+class _ManageUsersState extends State<ManageUsers> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -24,7 +25,7 @@ class _ManageUsersState extends State<AllFeedback> {
           : AppBar(
               backgroundColor: mobileBackgroundColor,
               centerTitle: false,
-              title: Text('All Feedback')
+              title: Text('All Users')
               // actions: [
               //   IconButton(
               //     icon: const Icon(
@@ -36,10 +37,7 @@ class _ManageUsersState extends State<AllFeedback> {
               // ],
               ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('feedback')
-            .orderBy('timestamp', descending: true)
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -66,7 +64,7 @@ class _ManageUsersState extends State<AllFeedback> {
                 title: Row(
                   children: [
                     Text(
-                      (snapshot.data! as dynamic).docs[index]['feedback'],
+                      (snapshot.data! as dynamic).docs[index]['fullname'],
                     ),
                     const SizedBox(
                       width: 10,
@@ -77,6 +75,9 @@ class _ManageUsersState extends State<AllFeedback> {
                   Icons.more_vert,
                 ),
                 onTap: () => print('you pressed more'),
+                subtitle: Text(
+                  (snapshot.data! as dynamic).docs[index]['email'],
+                ),
               ),
             ),
           );

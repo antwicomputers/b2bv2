@@ -1,17 +1,148 @@
+import 'package:b2bmobile/utils/b2b_spotlight.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<Home> createState() => _FavoritesState();
+  State<HomePage> createState() => _FavoritesState();
 }
 
-class _FavoritesState extends State<Home> {
+class _FavoritesState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('This is the Home page'),
+    return Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 25.0,
+            ),
+            child: Text(
+              'Shop Black Owned Businesses!',
+              style: GoogleFonts.bebasNeue(
+                fontSize: 56,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 25,
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                hintText: 'What are you looking for... ',
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade600)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            child: Text(
+              'Back2Black Mobile Featured Brands',
+              textAlign: TextAlign.left,
+              style: GoogleFonts.bebasNeue(
+                fontSize: 20,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('businesses')
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (ctx, index) => SingleChildScrollView(
+                    child: Container(
+                      width: 275,
+                      height: 340,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 10,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(children: [
+                          Container(
+                            child: Image(
+                              image: NetworkImage((snapshot.data! as dynamic)
+                                  .docs[index]['businessUrl']),
+                            ),
+                          ),
+                          Text(
+                            (snapshot.data! as dynamic).docs[index]
+                                ['businessName'],
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            (snapshot.data! as dynamic).docs[index]
+                                ['businessCategory'],
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Ink(
+                                  child: Icon(
+                                Icons.thumb_up,
+                              )),
+                              Icon(Icons.favorite),
+                            ],
+                          )
+                        ]),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
-import 'package:b2bmobile/models/business.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:b2bmobile/Screens/admin_panel/all_feedback.dart';
+import 'package:b2bmobile/Screens/admin_panel/manage_users.dart';
 import 'package:flutter/material.dart';
+import 'package:b2bmobile/Screens/admin_panel/all_businesses.dart';
 
 class AdminPanel extends StatefulWidget {
   const AdminPanel({super.key});
@@ -39,7 +40,7 @@ class _AdminPanelState extends State<AdminPanel> {
           InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => AllBusinesses(),
+                builder: (context) => const BusinessAll(),
               ));
             },
             child: Container(
@@ -97,7 +98,11 @@ class _AdminPanelState extends State<AdminPanel> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ManageUsers(),
+              ),
+            ),
             child: Container(
               width: width * 0.4,
               height: height * 0.15,
@@ -125,7 +130,11 @@ class _AdminPanelState extends State<AdminPanel> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const AllFeedback(),
+              ),
+            ),
             child: Container(
               width: width * 0.4,
               height: height * 0.15,

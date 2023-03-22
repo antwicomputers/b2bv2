@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 
-class AllFeedback extends StatefulWidget {
-  const AllFeedback({Key? key}) : super(key: key);
+class BusinessAll extends StatefulWidget {
+  const BusinessAll({Key? key}) : super(key: key);
 
   @override
-  State<AllFeedback> createState() => _ManageUsersState();
+  State<BusinessAll> createState() => _ManageUsersState();
 }
 
-class _ManageUsersState extends State<AllFeedback> {
+class _ManageUsersState extends State<BusinessAll> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -24,7 +23,7 @@ class _ManageUsersState extends State<AllFeedback> {
           : AppBar(
               backgroundColor: mobileBackgroundColor,
               centerTitle: false,
-              title: Text('All Feedback')
+              title: Text('All Businesses')
               // actions: [
               //   IconButton(
               //     icon: const Icon(
@@ -36,10 +35,7 @@ class _ManageUsersState extends State<AllFeedback> {
               // ],
               ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('feedback')
-            .orderBy('timestamp', descending: true)
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection('businesses').snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -66,7 +62,7 @@ class _ManageUsersState extends State<AllFeedback> {
                 title: Row(
                   children: [
                     Text(
-                      (snapshot.data! as dynamic).docs[index]['feedback'],
+                      (snapshot.data! as dynamic).docs[index]['businessName'],
                     ),
                     const SizedBox(
                       width: 10,
@@ -77,6 +73,9 @@ class _ManageUsersState extends State<AllFeedback> {
                   Icons.more_vert,
                 ),
                 onTap: () => print('you pressed more'),
+                subtitle: Text(
+                  (snapshot.data! as dynamic).docs[index]['phone'],
+                ),
               ),
             ),
           );

@@ -36,7 +36,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   }
 
   final List<Widget> _pages = [
-    const Home(),
+    const HomePage(),
     const Maps(),
     const Favorites(),
     const Categories(),
@@ -136,7 +136,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               icon: Icons.info_rounded,
               title: 'Feedback & Suggestions',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SupportUs()),
+                MaterialPageRoute(builder: (context) => const SupportUs()),
               ),
             ),
             _buildItem(
