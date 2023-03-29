@@ -24,7 +24,7 @@ class _FavoritesState extends State<HomePage> {
             child: Text(
               'Shop Black Owned Businesses!',
               style: GoogleFonts.bebasNeue(
-                fontSize: 56,
+                fontSize: 39,
               ),
             ),
           ),
@@ -80,60 +80,83 @@ class _FavoritesState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (ctx, index) => SingleChildScrollView(
-                    child: Container(
-                      width: 275,
-                      height: 340,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 3,
-                            blurRadius: 10,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(children: [
-                          Container(
-                            child: Image(
-                              image: NetworkImage((snapshot.data! as dynamic)
-                                  .docs[index]['businessUrl']),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                        width: 175,
+                        height: 280,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              offset: Offset(0, 3),
                             ),
-                          ),
-                          Text(
-                            (snapshot.data! as dynamic).docs[index]
-                                ['businessName'],
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            (snapshot.data! as dynamic).docs[index]
-                                ['businessCategory'],
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          ],
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
                             children: [
-                              Ink(
-                                  child: Icon(
-                                Icons.thumb_up,
-                              )),
-                              Icon(Icons.favorite),
+                              Column(
+                                children: [
+                                  Image(
+                                    image: NetworkImage(
+                                      (snapshot.data! as dynamic).docs[index]
+                                          ['businessUrl'],
+                                    ),
+                                    width: 250,
+                                    height: 150,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                (snapshot.data! as dynamic).docs[index]
+                                    ['businessName'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                (snapshot.data! as dynamic).docs[index]
+                                    ['businessCategory'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    child: Icon(Icons.thumb_up),
+                                    onTap: () {
+                                      print('you pressed thumbs up');
+                                    },
+                                  ),
+                                  InkWell(
+                                    child: Icon(Icons.favorite),
+                                    onTap: () {
+                                      print('You pressed favorite');
+                                    },
+                                  ),
+                                ],
+                              )
                             ],
-                          )
-                        ]),
+                          ),
+                        ),
                       ),
                     ),
                   ),
