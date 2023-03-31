@@ -10,7 +10,7 @@ class Alerts extends StatefulWidget {
 class _AlertsState extends State<Alerts> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('This is the alerts page'),
     );
   }

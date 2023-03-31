@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AboutUs extends StatefulWidget {
+  const AboutUs({super.key});
+
   @override
   _AboutUsState createState() => _AboutUsState();
 }
@@ -10,7 +12,6 @@ class _AboutUsState extends State<AboutUs> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: const Text("About"),
           backgroundColor: Colors.transparent,
@@ -33,7 +34,7 @@ class _AboutUsState extends State<AboutUs> {
                   fontSize: 20,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25.0,
               ),
               const Padding(

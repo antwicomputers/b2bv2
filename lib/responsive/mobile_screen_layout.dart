@@ -72,36 +72,35 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               icon: Icons.woman_rounded,
               title: 'B2B Women Empowerment',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => WomenBusiness()),
+                MaterialPageRoute(builder: (context) => const WomenBusiness()),
               ),
             ),
             _buildItem(
               icon: Icons.emergency,
               title: 'B2B Essential Services',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => MentalHealth()),
+                MaterialPageRoute(builder: (context) => const MentalHealth()),
               ),
             ),
             _buildItem(
               icon: Icons.start,
               title: 'B2B The Black KickStart',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => BlackKickStart()),
+                MaterialPageRoute(builder: (context) => const BlackKickStart()),
               ),
             ),
             _buildItem(
               icon: Icons.loyalty,
               title: 'B2B Loyalty Card',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => WomenBusiness()),
+                MaterialPageRoute(builder: (context) => const WomenBusiness()),
               ),
             ),
             _buildItem(
               icon: Icons.monetization_on_rounded,
               title: 'Register Business',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const RegisterBusiness()),
+                MaterialPageRoute(builder: (context) => const RegisterBusiness()),
               ),
             ),
             _buildItem(
@@ -129,7 +128,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               icon: Icons.info_rounded,
               title: 'About',
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => AboutUs()),
+                MaterialPageRoute(builder: (context) => const AboutUs()),
               ),
             ),
             _buildItem(
@@ -209,10 +208,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     );
   }
 
-  Widget _buildItem(
-      {required IconData icon,
-      required String title,
-      required GestureTapCallback onTap}) {
+  Widget _buildItem({required IconData icon, required String title, required GestureTapCallback onTap}) {
     return ListTile(
       leading: Icon(icon),
       minLeadingWidth: 5,

@@ -11,7 +11,7 @@ class BusinessTile extends StatelessWidget {
         bottom: 200,
       ),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         width: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
@@ -28,8 +28,7 @@ class BusinessTile extends StatelessWidget {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [

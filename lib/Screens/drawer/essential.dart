@@ -10,7 +10,7 @@ class Essential extends StatefulWidget {
 class _AboutUsState extends State<Essential> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Essential'),
     );
   }

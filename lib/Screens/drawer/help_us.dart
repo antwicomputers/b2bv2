@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SupportUs extends StatefulWidget {
   const SupportUs({super.key});
@@ -55,8 +54,7 @@ class _SupportUsState extends State<SupportUs> {
               String message;
 
               try {
-                final collection =
-                    FirebaseFirestore.instance.collection('feedback');
+                final collection = FirebaseFirestore.instance.collection('feedback');
 
                 await collection.doc().set(
                   {

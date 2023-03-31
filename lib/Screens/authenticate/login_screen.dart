@@ -33,8 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthMethods().loginUser(
-        email: _emailController.text, password: _passwordController.text);
+    String res = await AuthMethods().loginUser(email: _emailController.text, password: _passwordController.text);
 
     if (res == 'success') {
       Navigator.of(context).pushReplacement(
@@ -72,8 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               // svg image
               SvgPicture.asset(
@@ -110,7 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       )
                     : Container(
-                        child: const Text('Login'),
                         width: double.infinity,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -122,33 +120,34 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           color: blueColor,
                         ),
+                        child: const Text('Login'),
                       ),
               ),
               const SizedBox(
                 height: 12,
               ),
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               //Transition to sign up
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: const Text("Don't have an account?  "),
                     padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text("Don't have an account?  "),
                   ),
                   GestureDetector(
                     onTap: navigateToSignUp,
                     child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                   ),
                 ],
