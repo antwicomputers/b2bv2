@@ -12,6 +12,7 @@ import 'package:b2bmobile/Screens/pages/maps.dart';
 import 'package:b2bmobile/Screens/pages/categories.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:b2bmobile/models/users.dart' as model;
@@ -71,72 +72,102 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             _buildItem(
               icon: Icons.woman_rounded,
               title: 'B2B Women Empowerment',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const WomenBusiness()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const WomenBusiness()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.emergency,
               title: 'B2B Essential Services',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const MentalHealth()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MentalHealth()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.start,
               title: 'B2B The Black KickStart',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const BlackKickStart()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const BlackKickStart()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.loyalty,
               title: 'B2B Loyalty Card',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const WomenBusiness()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const WomenBusiness()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.monetization_on_rounded,
               title: 'Register Business',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const RegisterBusiness()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const RegisterBusiness()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.calendar_month,
               title: 'Register An Event',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const RegisterEvent()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const RegisterEvent()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.calendar_today,
               title: 'View All Events',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const RegisterEvent()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const RegisterEvent()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.notifications,
               title: 'Alerts',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Alerts()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Alerts()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.info_rounded,
               title: 'About',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AboutUs()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const AboutUs()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.info_rounded,
               title: 'Feedback & Suggestions',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const SupportUs()),
-              ),
+              onTap: () {
+                Get.back();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const SupportUs()),
+                );
+              },
             ),
             _buildItem(
               icon: Icons.logout,

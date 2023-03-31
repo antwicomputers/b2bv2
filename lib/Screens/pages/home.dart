@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:b2bmobile/Screens/business%20detal/business_detail_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:b2bmobile/models/business.dart';
@@ -90,6 +92,10 @@ class _FavoritesState extends State<HomePage> {
                     .collection('businesses')
                     .where('isFeatured', isEqualTo: true)
                     .where('isBlackOwned', isEqualTo: true)
+                    .where(
+                      'isVerified',
+                      isEqualTo: true,
+                    )
                     .limit(30)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -153,6 +159,10 @@ class _FavoritesState extends State<HomePage> {
                     .collection('businesses')
                     .where('isSponsored', isEqualTo: true)
                     .where('isBlackOwned', isEqualTo: true)
+                    .where(
+                      'isVerified',
+                      isEqualTo: true,
+                    )
                     .limit(30)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -273,6 +283,10 @@ class _FavoritesState extends State<HomePage> {
                 stream: FirebaseFirestore.instance
                     .collection('businesses')
                     .where('isBlackOwned', isEqualTo: true)
+                    .where(
+                      'isVerified',
+                      isEqualTo: true,
+                    )
                     .limit(30)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -312,6 +326,10 @@ class _FavoritesState extends State<HomePage> {
     return businessesRef
         .orderBy('businessName')
         .where('isBlackOwned', isEqualTo: true)
+        .where(
+          'isVerified',
+          isEqualTo: true,
+        )
         .startAt([random.nextInt(10000).toString()])
         .limit(5)
         .snapshots();
@@ -326,77 +344,82 @@ class HomeBusinessTile extends StatelessWidget {
   final Business business;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Container(
-        width: 175,
-        height: 280,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => BusinessDetailScreen(business: business));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
         child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Image(
-                image: NetworkImage(
-                  business.businessUrl,
-                ),
-                width: 250,
-                height: 150,
-                fit: BoxFit.fill,
+          width: 175,
+          height: 280,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 3,
+                blurRadius: 10,
+                offset: const Offset(0, 3),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                business.businessName,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                business.businessCategory,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    child: const Icon(Icons.thumb_up),
-                    onTap: () {
-                      if (kDebugMode) {
-                        print('you pressed thumbs up');
-                      }
-                    },
-                  ),
-                  InkWell(
-                    child: const Icon(Icons.favorite),
-                    onTap: () {
-                      if (kDebugMode) {
-                        print('You pressed favorite');
-                      }
-                    },
-                  ),
-                ],
-              )
             ],
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Image(
+                  image: NetworkImage(
+                    business.businessUrl,
+                  ),
+                  width: 250,
+                  height: 150,
+                  fit: BoxFit.fill,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  business.businessName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  business.businessCategory,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      child: const Icon(Icons.thumb_up),
+                      onTap: () {
+                        if (kDebugMode) {
+                          print('you pressed thumbs up');
+                        }
+                      },
+                    ),
+                    InkWell(
+                      child: const Icon(Icons.favorite),
+                      onTap: () {
+                        if (kDebugMode) {
+                          print('You pressed favorite');
+                        }
+                      },
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

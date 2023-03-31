@@ -90,7 +90,7 @@ class VerificationScreen extends StatelessWidget {
                               .doc(business.businessId)
                               .update({'isVerified': !business.isVerified});
                         },
-                        title: const Text('isBlackOwned'),
+                        title: const Text('isVerified'),
                       ),
                       SwitchListTile(
                         value: business.isBlackOwned,
@@ -100,7 +100,7 @@ class VerificationScreen extends StatelessWidget {
                               .doc(business.businessId)
                               .update({'isBlackOwned': !business.isBlackOwned});
                         },
-                        title: const Text('womenOriented'),
+                        title: const Text('isBlackOwned'),
                       ),
                       SwitchListTile(
                         value: business.womenOriented,
@@ -110,7 +110,7 @@ class VerificationScreen extends StatelessWidget {
                               .doc(business.businessId)
                               .update({'womenOriented': !business.womenOriented});
                         },
-                        title: const Text('isEsential'),
+                        title: const Text('womenOriented'),
                       ),
                       SwitchListTile(
                         value: business.isEsential,
@@ -120,7 +120,7 @@ class VerificationScreen extends StatelessWidget {
                               .doc(business.businessId)
                               .update({'isEsential': !business.isEsential});
                         },
-                        title: const Text('isFeatured'),
+                        title: const Text('isEsential'),
                       ),
                       SwitchListTile(
                         value: business.isFeatured,
@@ -130,7 +130,7 @@ class VerificationScreen extends StatelessWidget {
                               .doc(business.businessId)
                               .update({'isFeatured': !business.isFeatured});
                         },
-                        title: const Text('isSponsored'),
+                        title: const Text('isFeatured'),
                       ),
                       SwitchListTile(
                         value: business.isSponsored,
