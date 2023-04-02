@@ -17,6 +17,25 @@ class BusinessDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(business.businessName),
+        actions: [
+          InkWell(
+            onTap: () {},
+            child: Row(
+              children: const [
+                Text('Report'),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.report_gmailerrorred,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: SizedBox(
         height: double.infinity,
@@ -25,53 +44,100 @@ class BusinessDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: Image.network(
+              child: Container(
                 height: size.height * 0.2,
                 width: double.infinity,
-                fit: BoxFit.cover,
-                business.businessUrl,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      business.businessUrl,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0),
+                        Colors.black,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.thumb_up),
+                              onPressed: () {},
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.favorite),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
+            const SizedBox(
+              height: 10,
+            ),
             Padding(
-              padding: const EdgeInsets.all(20),
-              child: ListTile(
-                leading: const Icon(Icons.business),
-                title: Text(
-                  business.businessName,
-                  style: AppConstants.titleStyle,
-                ),
-                isThreeLine: true,
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.category,
-                      size: 15,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.location_on_outlined,
+                    size: 15,
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Address: ${business.businessAddress}',
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(business.businessCategory),
-                  ],
-                ),
-                dense: true,
-                subtitle: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 15,
-                    ),
-                    Text('Address: ${business.businessAddress}'),
-                  ],
+                  ),
+                  const Icon(
+                    Icons.category,
+                    size: 15,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(business.businessCategory),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                business.businessName,
+                style: AppConstants.titleStyle.copyWith(
+                  fontSize: 25,
                 ),
               ),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
-                'Description',
+                'Description:',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -90,12 +156,12 @@ class BusinessDetailScreen extends StatelessWidget {
             const SizedBox(
               height: 40,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                runAlignment: WrapAlignment.center,
+            Container(
+              height: size.height * 0.1,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
                 children: [
                   business.facebook[business.facebook.length - 1] == '/'
                       ? Container()
@@ -251,7 +317,7 @@ class BusinessDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
           ],
         ),

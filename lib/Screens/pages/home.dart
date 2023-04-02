@@ -1,12 +1,11 @@
 import 'dart:math';
 
-import 'package:b2bmobile/Screens/business%20detal/business_detail_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:b2bmobile/Screens/business%20detal/business_detail_screen.dart';
 import 'package:b2bmobile/models/business.dart';
 
 class HomePage extends StatefulWidget {
@@ -58,28 +57,31 @@ class _FavoritesState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Back2Black Mobile Featured Brands',
-                  style: GoogleFonts.bebasNeue(
-                    fontSize: 20,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    //ToDo
-                  },
-                  child: Text(
-                    'Show All',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Back2Black Mobile Featured Brands',
                     style: GoogleFonts.bebasNeue(
-                      fontSize: 20,
-                      color: Colors.blue,
+                      fontSize: 18,
                     ),
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      //ToDo
+                    },
+                    child: Text(
+                      'Show All',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -112,6 +114,7 @@ class _FavoritesState extends State<HomePage> {
                       Business business = Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
+                        size: size,
                       );
                     },
                   );
@@ -121,28 +124,31 @@ class _FavoritesState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Back2Black Sponsors',
-                  style: GoogleFonts.bebasNeue(
-                    fontSize: 20,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    //ToDo
-                  },
-                  child: Text(
-                    'Show All',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Back2Black Sponsors',
                     style: GoogleFonts.bebasNeue(
-                      fontSize: 20,
-                      color: Colors.blue,
+                      fontSize: 18,
                     ),
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      //ToDo
+                    },
+                    child: Text(
+                      'Show All',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -175,6 +181,7 @@ class _FavoritesState extends State<HomePage> {
                       Business business = Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
+                        size: size,
                       );
                     },
                   );
@@ -184,28 +191,31 @@ class _FavoritesState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Discover Back2Black Mobile',
-                  style: GoogleFonts.bebasNeue(
-                    fontSize: 20,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    //ToDo
-                  },
-                  child: Text(
-                    'Show All',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Discover Back2Black Mobile',
                     style: GoogleFonts.bebasNeue(
-                      fontSize: 20,
-                      color: Colors.blue,
+                      fontSize: 18,
                     ),
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      //ToDo
+                    },
+                    child: Text(
+                      'Show All',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -233,6 +243,7 @@ class _FavoritesState extends State<HomePage> {
                       Business business = Business.fromMap(snapshot.data!.docs[index].data() as Map<String, dynamic>);
                       return HomeBusinessTile(
                         business: business,
+                        size: size,
                       );
                     },
                   );
@@ -242,28 +253,31 @@ class _FavoritesState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Back2Black Mobile Recently Added',
-                  style: GoogleFonts.bebasNeue(
-                    fontSize: 20,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    //ToDo
-                  },
-                  child: Text(
-                    'Show All',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Back2Black Mobile Recently Added',
                     style: GoogleFonts.bebasNeue(
-                      fontSize: 20,
-                      color: Colors.blue,
+                      fontSize: 18,
                     ),
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      //ToDo
+                    },
+                    child: Text(
+                      'Show All',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -295,6 +309,7 @@ class _FavoritesState extends State<HomePage> {
                       Business business = Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
+                        size: size,
                       );
                     },
                   );
@@ -324,8 +339,10 @@ class HomeBusinessTile extends StatelessWidget {
   const HomeBusinessTile({
     Key? key,
     required this.business,
+    required this.size,
   }) : super(key: key);
   final Business business;
+  final Size size;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -335,8 +352,8 @@ class HomeBusinessTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          width: 175,
-          height: 280,
+          width: size.width * 0.4,
+          height: size.height * 0.35,
           decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(15),
@@ -357,51 +374,34 @@ class HomeBusinessTile extends StatelessWidget {
                   image: NetworkImage(
                     business.businessUrl,
                   ),
-                  width: 250,
-                  height: 150,
+                  width: size.width * 0.3,
+                  height: size.height * 0.2,
                   fit: BoxFit.fill,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  business.businessName,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    business.businessName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 1,
                   ),
                 ),
-                Text(
-                  business.businessCategory,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    business.businessCategory,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      child: const Icon(Icons.thumb_up),
-                      onTap: () {
-                        if (kDebugMode) {
-                          print('you pressed thumbs up');
-                        }
-                      },
-                    ),
-                    InkWell(
-                      child: const Icon(Icons.favorite),
-                      onTap: () {
-                        if (kDebugMode) {
-                          print('You pressed favorite');
-                        }
-                      },
-                    ),
-                  ],
-                )
               ],
             ),
           ),

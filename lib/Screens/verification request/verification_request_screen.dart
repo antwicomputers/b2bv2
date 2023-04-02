@@ -83,16 +83,6 @@ class VerificationScreen extends StatelessWidget {
                         ],
                       ),
                       SwitchListTile(
-                        value: business.isVerified,
-                        onChanged: (value) async {
-                          await FirebaseFirestore.instance
-                              .collection('businesses')
-                              .doc(business.businessId)
-                              .update({'isVerified': !business.isVerified});
-                        },
-                        title: const Text('isVerified'),
-                      ),
-                      SwitchListTile(
                         value: business.isBlackOwned,
                         onChanged: (value) async {
                           await FirebaseFirestore.instance
