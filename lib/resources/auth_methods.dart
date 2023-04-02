@@ -97,39 +97,36 @@ class AuthMethods {
     String businessUrl = await StorageMethods().uploadImageToStoage('businessPics', businessFile, false);
     final ref = FirebaseFirestore.instance.collection('businesses').doc().id;
     model.Business business = model.Business(
-        businessName: businessName,
-        businessId: ref,
-        businessDescription: businessDescription,
-        businessAddress: businessAddress,
-        isVerified: false,
-        userId: _auth.currentUser!.uid,
-        businessCategory: businessCategory,
-        createdAt: DateTime.now(),
-        phone: phone,
-        isBlackOwned: false,
-        isEsential: false,
-        isFeatured: false,
-        isSponsored: false,
-        womenOriented: false,
-        email: email,
-        website: website,
-        twitter: twitter,
-        facebook: facebook,
-        linkedIn: linkedIn,
-        instagram: instagram,
-        tiktok: tiktok,
-        twitch: twitch,
-        podcast: podcast,
-        businessUrl: businessUrl);
+      businessName: businessName,
+      businessId: ref,
+      businessDescription: businessDescription,
+      businessAddress: businessAddress,
+      isVerified: false,
+      userId: _auth.currentUser!.uid,
+      businessCategory: businessCategory,
+      createdAt: DateTime.now(),
+      phone: phone,
+      isBlackOwned: false,
+      isEsential: false,
+      isFeatured: false,
+      isSponsored: false,
+      womenOriented: false,
+      email: email,
+      website: website,
+      twitter: twitter,
+      facebook: facebook,
+      linkedIn: linkedIn,
+      instagram: instagram,
+      tiktok: tiktok,
+      twitch: twitch,
+      podcast: podcast,
+      businessUrl: businessUrl,
+    );
 
     try {
       await FirebaseFirestore.instance.collection('businesses').doc(ref).set(
             business.toMap(),
           );
-
-      // await collection.doc().set(
-      //       business.toMap(),
-      //     );
     } catch (err) {
       message = err.toString();
     }

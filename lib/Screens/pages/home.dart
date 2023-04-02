@@ -92,10 +92,6 @@ class _FavoritesState extends State<HomePage> {
                     .collection('businesses')
                     .where('isFeatured', isEqualTo: true)
                     .where('isBlackOwned', isEqualTo: true)
-                    .where(
-                      'isVerified',
-                      isEqualTo: true,
-                    )
                     .limit(30)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -159,10 +155,6 @@ class _FavoritesState extends State<HomePage> {
                     .collection('businesses')
                     .where('isSponsored', isEqualTo: true)
                     .where('isBlackOwned', isEqualTo: true)
-                    .where(
-                      'isVerified',
-                      isEqualTo: true,
-                    )
                     .limit(30)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -283,10 +275,6 @@ class _FavoritesState extends State<HomePage> {
                 stream: FirebaseFirestore.instance
                     .collection('businesses')
                     .where('isBlackOwned', isEqualTo: true)
-                    .where(
-                      'isVerified',
-                      isEqualTo: true,
-                    )
                     .limit(30)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -326,10 +314,6 @@ class _FavoritesState extends State<HomePage> {
     return businessesRef
         .orderBy('businessName')
         .where('isBlackOwned', isEqualTo: true)
-        .where(
-          'isVerified',
-          isEqualTo: true,
-        )
         .startAt([random.nextInt(10000).toString()])
         .limit(5)
         .snapshots();
