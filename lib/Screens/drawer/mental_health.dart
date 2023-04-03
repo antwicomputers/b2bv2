@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class MentalHealth extends StatefulWidget {
@@ -10,14 +11,16 @@ class MentalHealth extends StatefulWidget {
 class _MentalHealthState extends State<MentalHealth> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // double height = MediaQuery.of(context).size.height;
+    // double width = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
         bottomSheet: InkWell(
           onTap: () {
-            print('you clicked the bottom');
+            if (kDebugMode) {
+              print('you clicked the bottom');
+            }
           },
           child: Container(
             height: 50,
@@ -37,7 +40,7 @@ class _MentalHealthState extends State<MentalHealth> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: Colors.black,
           ),
           elevation: 0,
@@ -56,7 +59,7 @@ class _MentalHealthState extends State<MentalHealth> {
                   fontSize: 25,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               const Padding(

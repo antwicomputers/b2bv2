@@ -1,7 +1,9 @@
 import 'package:b2bmobile/Screens/admin_panel/all_feedback.dart';
 import 'package:b2bmobile/Screens/admin_panel/manage_users.dart';
+import 'package:b2bmobile/Screens/verification%20request/verification_request_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:b2bmobile/Screens/admin_panel/all_businesses.dart';
+import 'package:get/get.dart';
 
 class AdminPanel extends StatefulWidget {
   const AdminPanel({super.key});
@@ -24,8 +26,10 @@ class _AdminPanelState extends State<AdminPanel> {
         //  shrinkWrap: true,
         children: [
           InkWell(
-            onTap: () {},
-            child: Container(
+            onTap: () {
+              Get.to(() => const VerificationScreen());
+            },
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
@@ -43,10 +47,10 @@ class _AdminPanelState extends State<AdminPanel> {
                 builder: (context) => const BusinessAll(),
               ));
             },
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
-              child: Card(
+              child: const Card(
                 child: Center(
                     child: Text(
                   "All \nBusinesses",
@@ -57,7 +61,7 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
           InkWell(
             onTap: () {},
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
@@ -71,7 +75,7 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
           InkWell(
             onTap: () {},
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
@@ -85,7 +89,7 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
           InkWell(
             onTap: () {},
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
@@ -100,10 +104,10 @@ class _AdminPanelState extends State<AdminPanel> {
           InkWell(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => ManageUsers(),
+                builder: (context) => const ManageUsers(),
               ),
             ),
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
@@ -117,7 +121,7 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
           InkWell(
             onTap: () {},
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
@@ -135,10 +139,10 @@ class _AdminPanelState extends State<AdminPanel> {
                 builder: (context) => const AllFeedback(),
               ),
             ),
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
-              child: Card(
+              child: const Card(
                 child: Center(
                     child: Text(
                   "All Feedback",
@@ -149,10 +153,10 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
           InkWell(
             onTap: () {},
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
-              child: Card(
+              child: const Card(
                 child: Center(
                     child: Text(
                   "Send Alert",
@@ -163,10 +167,10 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
           InkWell(
             onTap: () {},
-            child: Container(
+            child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
-              child: Card(
+              child: const Card(
                 child: Center(
                     child: Text(
                   "Fix Locations",
@@ -182,6 +186,8 @@ class _AdminPanelState extends State<AdminPanel> {
 }
 
 class AllBusinesses extends StatefulWidget {
+  const AllBusinesses({super.key});
+
   @override
   _AllBusinessesState createState() => _AllBusinessesState();
 }
@@ -191,7 +197,7 @@ class _AllBusinessesState extends State<AllBusinesses> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "All Businesses",
         ),
       ),

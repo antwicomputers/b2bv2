@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class WomenBusiness extends StatefulWidget {
+  const WomenBusiness({super.key});
+
   @override
   _WomenBusinessState createState() => _WomenBusinessState();
 }
@@ -8,14 +11,16 @@ class WomenBusiness extends StatefulWidget {
 class _WomenBusinessState extends State<WomenBusiness> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // double height = MediaQuery.of(context).size.height;
+    // double width = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
         bottomSheet: InkWell(
           onTap: () {
-            print('you clicked the bottom');
+            if (kDebugMode) {
+              print('you clicked the bottom');
+            }
           },
           child: Container(
             height: 50,

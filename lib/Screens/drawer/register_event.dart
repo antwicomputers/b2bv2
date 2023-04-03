@@ -102,19 +102,17 @@ class _RegisterEventState extends State<RegisterEvent> {
                                   ? Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: _image == null
-                                          ? Container(
+                                          ? const SizedBox(
                                               height: 150,
                                               width: 50,
-                                              child:
-                                                  const CircularProgressIndicator(),
+                                              child: CircularProgressIndicator(),
                                             )
                                           : Container(
                                               height: 250,
                                               width: 250,
                                               decoration: BoxDecoration(
                                                 border: Border.all(),
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
+                                                borderRadius: BorderRadius.circular(15),
                                                 image: DecorationImage(
                                                   image: MemoryImage(_image!),
                                                   fit: BoxFit.fill,
@@ -123,7 +121,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                                             ))
                                   : Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Container(
+                                      child: SizedBox(
                                         height: 150,
                                         width: 150,
                                         child: IconButton(
@@ -145,9 +143,8 @@ class _RegisterEventState extends State<RegisterEvent> {
                   TextFormField(
                     controller: _eventName,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                        label: Text('Enter Event Name'),
-                        prefixIcon: Icon(Icons.monetization_on)),
+                    decoration:
+                        const InputDecoration(label: Text('Enter Event Name'), prefixIcon: Icon(Icons.monetization_on)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Event name is required';
@@ -158,9 +155,8 @@ class _RegisterEventState extends State<RegisterEvent> {
                   TextFormField(
                     controller: _eventDescription,
                     keyboardType: TextInputType.multiline,
-                    decoration: const InputDecoration(
-                        label: Text('Enter Event Description'),
-                        prefixIcon: Icon(Icons.info)),
+                    decoration:
+                        const InputDecoration(label: Text('Enter Event Description'), prefixIcon: Icon(Icons.info)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'event description is required';
@@ -184,16 +180,13 @@ class _RegisterEventState extends State<RegisterEvent> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _eventAddress,
-                    decoration: const InputDecoration(
-                        label: Text('Event Address'),
-                        prefixIcon: Icon(Icons.location_city)),
+                    decoration:
+                        const InputDecoration(label: Text('Event Address'), prefixIcon: Icon(Icons.location_city)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _eventCategory,
-                    decoration: const InputDecoration(
-                        label: Text('event Category'),
-                        prefixIcon: Icon(Icons.category)),
+                    decoration: const InputDecoration(label: Text('event Category'), prefixIcon: Icon(Icons.category)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'category is required';
@@ -204,73 +197,58 @@ class _RegisterEventState extends State<RegisterEvent> {
                   TextFormField(
                     controller: _phone,
                     keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    decoration: const InputDecoration(
-                        label: Text('Phone Number'),
-                        prefixIcon: Icon(Icons.phone)),
+                    inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                    decoration: const InputDecoration(label: Text('Phone Number'), prefixIcon: Icon(Icons.phone)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     controller: _email,
-                    decoration: const InputDecoration(
-                        label: Text('email'), prefixIcon: Icon(Icons.email)),
+                    decoration: const InputDecoration(label: Text('email'), prefixIcon: Icon(Icons.email)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _website,
-                    decoration: const InputDecoration(
-                        label: Text('Website'),
-                        prefixIcon: Icon(FontAwesomeIcons.info)),
+                    decoration: const InputDecoration(label: Text('Website'), prefixIcon: Icon(FontAwesomeIcons.info)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _twitter,
-                    decoration: const InputDecoration(
-                        label: Text('Twitter'),
-                        prefixIcon: Icon(FontAwesomeIcons.twitter)),
+                    decoration:
+                        const InputDecoration(label: Text('Twitter'), prefixIcon: Icon(FontAwesomeIcons.twitter)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _facebook,
-                    decoration: const InputDecoration(
-                        label: Text('Facebook'),
-                        prefixIcon: Icon(FontAwesomeIcons.facebook)),
+                    decoration:
+                        const InputDecoration(label: Text('Facebook'), prefixIcon: Icon(FontAwesomeIcons.facebook)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _linkedIn,
-                    decoration: const InputDecoration(
-                        label: Text('LinkedIn'),
-                        prefixIcon: Icon(FontAwesomeIcons.linkedin)),
+                    decoration:
+                        const InputDecoration(label: Text('LinkedIn'), prefixIcon: Icon(FontAwesomeIcons.linkedin)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _instagram,
-                    decoration: const InputDecoration(
-                        label: Text('Instagram'),
-                        prefixIcon: Icon(FontAwesomeIcons.instagram)),
+                    decoration:
+                        const InputDecoration(label: Text('Instagram'), prefixIcon: Icon(FontAwesomeIcons.instagram)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _tiktok,
-                    decoration: const InputDecoration(
-                        label: Text('Tik Tok'), prefixIcon: Icon(Icons.tiktok)),
+                    decoration: const InputDecoration(label: Text('Tik Tok'), prefixIcon: Icon(Icons.tiktok)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _twitch,
-                    decoration: const InputDecoration(
-                        label: Text('Twitch'),
-                        prefixIcon: Icon(FontAwesomeIcons.twitch)),
+                    decoration: const InputDecoration(label: Text('Twitch'), prefixIcon: Icon(FontAwesomeIcons.twitch)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _podcast,
-                    decoration: const InputDecoration(
-                        label: Text('Podcast'),
-                        prefixIcon: Icon(FontAwesomeIcons.podcast)),
+                    decoration:
+                        const InputDecoration(label: Text('Podcast'), prefixIcon: Icon(FontAwesomeIcons.podcast)),
                   ),
                   const SizedBox(
                     height: 20,

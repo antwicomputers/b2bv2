@@ -10,7 +10,7 @@ class Categories extends StatefulWidget {
 class _SettingsState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('This is the categories page'),
     );
   }

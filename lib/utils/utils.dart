@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
+  final ImagePicker imagePicker = ImagePicker();
 
-  XFile? _file = await _imagePicker.pickImage(source: source);
+  XFile? file = await imagePicker.pickImage(source: source);
 
-  if (_file != null) {
-    return await _file.readAsBytes();
+  if (file != null) {
+    return await file.readAsBytes();
   }
   print('No Image selected');
 }
 
 pickVideo(ImageSource src, BuildContext context) async {
-  final _video = await ImagePicker().pickVideo(source: src);
+  final video = await ImagePicker().pickVideo(source: src);
 
-  if (_video != null) {
-    return await _video.readAsBytes();
+  if (video != null) {
+    return await video.readAsBytes();
   }
 }
 

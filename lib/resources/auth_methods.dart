@@ -13,8 +13,7 @@ class AuthMethods {
   //get user data
   Future<model.User> getUserData() async {
     User currentUser = _auth.currentUser!;
-    DocumentSnapshot snap =
-        await _firestore.collection('users').doc(currentUser.uid).get();
+    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
 
     return model.User.fromSnap(snap);
   }
@@ -35,33 +34,21 @@ class AuthMethods {
     String res = "Some error occured";
 
     try {
-      if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          fullname.isNotEmpty ||
-          username.isNotEmpty) ;
-      // file != null) ;
-      //register the user
-      UserCredential cred = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      print(cred.user!.uid);
-
-      String photoUrl = await StorageMethods()
-          .uploadImageToStoage('profilePics', file, false);
-
+      if (email.isNotEmpty || password.isNotEmpty || fullname.isNotEmpty || username.isNotEmpty) {}
+      UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      if (kDebugMode) {
+        print(cred.user!.uid);
+      }
+      String photoUrl = await StorageMethods().uploadImageToStoage('profilePics', file, false);
       //add user to database
-
       model.User user = model.User(
-          username: username,
-          uid: cred.user!.uid,
-          email: email,
-          fullname: fullname,
-          photoUrl: photoUrl);
-
-      await _firestore
-          .collection('users')
-          .doc(cred.user!.uid)
-          .set(user.toJson());
+        username: username,
+        uid: cred.user!.uid,
+        email: email,
+        fullname: fullname,
+        photoUrl: photoUrl,
+      );
+      await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
       res = "success";
     } catch (err) {
       res = err.toString();
@@ -75,11 +62,9 @@ class AuthMethods {
     required String password,
   }) async {
     String res = 'Some error occurred';
-
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
         res = 'success';
       } else {
         res = 'Please enter all the fields';
@@ -109,31 +94,38 @@ class AuthMethods {
       required Uint8List businessFile}) async {
     String message = 'some error occured';
 
-    String businessUrl = await StorageMethods()
-        .uploadImageToStoage('businessPics', businessFile, false);
-
+    String businessUrl = await StorageMethods().uploadImageToStoage('businessPics', businessFile, false);
+    final ref = FirebaseFirestore.instance.collection('businesses').doc().id;
     model.Business business = model.Business(
-        businessName: businessName,
-        businessDescription: businessDescription,
-        businessAddress: businessAddress,
-        businessCategory: businessCategory,
-        phone: phone,
-        email: email,
-        website: website,
-        twitter: twitter,
-        facebook: facebook,
-        linkedIn: linkedIn,
-        instagram: instagram,
-        tiktok: tiktok,
-        twitch: twitch,
-        podcast: podcast,
-        businessUrl: businessUrl);
+      businessName: businessName,
+      businessId: ref,
+      businessDescription: businessDescription,
+      businessAddress: businessAddress,
+      isVerified: false,
+      userId: _auth.currentUser!.uid,
+      businessCategory: businessCategory,
+      createdAt: DateTime.now(),
+      phone: phone,
+      isBlackOwned: false,
+      isEsential: false,
+      isFeatured: false,
+      isSponsored: false,
+      womenOriented: false,
+      email: email,
+      website: website,
+      twitter: twitter,
+      facebook: facebook,
+      linkedIn: linkedIn,
+      instagram: instagram,
+      tiktok: tiktok,
+      twitch: twitch,
+      podcast: podcast,
+      businessUrl: businessUrl,
+    );
 
     try {
-      final collection = FirebaseFirestore.instance.collection('businesses');
-
-      await collection.doc().set(
-            business.toJson(),
+      await FirebaseFirestore.instance.collection('businesses').doc(ref).set(
+            business.toMap(),
           );
     } catch (err) {
       message = err.toString();
@@ -160,8 +152,7 @@ class AuthMethods {
       required Uint8List eventFile}) async {
     String message = 'some error occured';
 
-    String eventUrl = await StorageMethods()
-        .uploadImageToStoage('eventPics', eventFile, false);
+    String eventUrl = await StorageMethods().uploadImageToStoage('eventPics', eventFile, false);
 
     model.Events business = model.Events(
         eventName: eventName,
