@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+          lazy: false,
         ),
       ],
       child: GetMaterialApp(
