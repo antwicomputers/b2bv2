@@ -42,11 +42,11 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     const Favorites(),
     const Categories(),
   ];
+  late model.User user;
 
   @override
   Widget build(BuildContext context) {
-    model.User user = Provider.of<UserProvider>(context).getUser;
-
+    user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,

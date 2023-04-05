@@ -163,7 +163,7 @@ class BusinessDetailScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  business.facebook[business.facebook.length - 1] == '/'
+                  business.facebook.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
