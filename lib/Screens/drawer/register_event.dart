@@ -1,13 +1,12 @@
-import 'package:b2bmobile/resources/auth_methods.dart';
+import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../responsive/mobile_screen_layout.dart';
-import '../../responsive/responsive_layout_screen.dart';
-import '../../responsive/web_screen_layout.dart';
+import 'package:provider/provider.dart';
 
 class RegisterEvent extends StatefulWidget {
   const RegisterEvent({super.key});
@@ -64,16 +63,14 @@ class _RegisterEventState extends State<RegisterEvent> {
     });
   }
 
+  bool isOnline = false;
   final _formsKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: const Icon(
-          Icons.arrow_back,
-        ),
-        title: const Text('Register Business'),
+        title: const Text('Register Event'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -88,53 +85,52 @@ class _RegisterEventState extends State<RegisterEvent> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    //color: Colors.white,
-                    child: Center(
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: _image != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: _image == null
-                                          ? const SizedBox(
-                                              height: 150,
-                                              width: 50,
-                                              child: CircularProgressIndicator(),
-                                            )
-                                          : Container(
-                                              height: 250,
-                                              width: 250,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(),
-                                                borderRadius: BorderRadius.circular(15),
-                                                image: DecorationImage(
-                                                  image: MemoryImage(_image!),
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            ))
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SizedBox(
-                                        height: 150,
-                                        width: 150,
-                                        child: IconButton(
-                                          icon: const Icon(
-                                            Icons.add_a_photo,
+                  Center(
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: _image != null
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: _image == null
+                                      ? const SizedBox(
+                                          height: 150,
+                                          width: 50,
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      : Container(
+                                          height: 250,
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(),
+                                            borderRadius: BorderRadius.circular(15),
+                                            image: DecorationImage(
+                                              image: MemoryImage(_image!),
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
-                                          iconSize: 50,
-                                          onPressed: selectImage,
                                         ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 150,
+                                    width: 150,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.add_a_photo,
                                       ),
-                                    )),
-                        ],
-                      ),
+                                      iconSize: 50,
+                                      onPressed: selectImage,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(
@@ -143,8 +139,12 @@ class _RegisterEventState extends State<RegisterEvent> {
                   TextFormField(
                     controller: _eventName,
                     keyboardType: TextInputType.text,
-                    decoration:
-                        const InputDecoration(label: Text('Enter Event Name'), prefixIcon: Icon(Icons.monetization_on)),
+                    decoration: const InputDecoration(
+                      label: Text('Enter Event Name'),
+                      prefixIcon: Icon(
+                        Icons.monetization_on,
+                      ),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Event name is required';
@@ -155,8 +155,12 @@ class _RegisterEventState extends State<RegisterEvent> {
                   TextFormField(
                     controller: _eventDescription,
                     keyboardType: TextInputType.multiline,
-                    decoration:
-                        const InputDecoration(label: Text('Enter Event Description'), prefixIcon: Icon(Icons.info)),
+                    decoration: const InputDecoration(
+                      label: Text('Enter Event Description'),
+                      prefixIcon: Icon(
+                        Icons.info,
+                      ),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'event description is required';
@@ -164,29 +168,31 @@ class _RegisterEventState extends State<RegisterEvent> {
                       return null;
                     },
                   ),
-// TextFormField(
-// keyboardType: TextInputType.text,
-// decoration: const InputDecoration(
-// label: Text('Business Country'),
-// prefixIcon: Icon(Icons.location_city)),
-// ),
-// TextFormField(
-// keyboardType: TextInputType.text,
-// decoration: const InputDecoration(
-// label: Text('Business City'),
-// prefixIcon: Icon(Icons.location_city),
-// ),
-// ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _eventAddress,
-                    decoration:
-                        const InputDecoration(label: Text('Event Address'), prefixIcon: Icon(Icons.location_city)),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'event Address is required';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      label: Text('Event Address'),
+                      prefixIcon: Icon(
+                        Icons.location_city,
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _eventCategory,
-                    decoration: const InputDecoration(label: Text('event Category'), prefixIcon: Icon(Icons.category)),
+                    decoration: const InputDecoration(
+                      label: Text('event Category'),
+                      prefixIcon: Icon(
+                        Icons.category,
+                      ),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'category is required';
@@ -194,55 +200,116 @@ class _RegisterEventState extends State<RegisterEvent> {
                       return null;
                     },
                   ),
+                  SwitchListTile(
+                    value: isOnline,
+                    contentPadding: EdgeInsets.zero,
+                    onChanged: (val) {
+                      isOnline = val;
+                      setState(() {});
+                    },
+                    title: const Text('Online event'),
+                  ),
+                  Divider(
+                    color: Theme.of(context).hintColor,
+                    thickness: 1,
+                  ),
                   TextFormField(
                     controller: _phone,
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                    decoration: const InputDecoration(label: Text('Phone Number'), prefixIcon: Icon(Icons.phone)),
+                    decoration: const InputDecoration(
+                      label: Text('Phone Number'),
+                      prefixIcon: Icon(
+                        Icons.phone,
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     controller: _email,
-                    decoration: const InputDecoration(label: Text('email'), prefixIcon: Icon(Icons.email)),
+                    decoration: const InputDecoration(
+                      label: Text('email'),
+                      prefixIcon: Icon(
+                        Icons.email,
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _website,
-                    decoration: const InputDecoration(label: Text('Website'), prefixIcon: Icon(FontAwesomeIcons.info)),
+                    decoration: const InputDecoration(
+                      label: Text('Website'),
+                      prefixIcon: Icon(FontAwesomeIcons.intercom),
+                      prefix: Text(
+                        'https://www.',
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _twitter,
-                    decoration:
-                        const InputDecoration(label: Text('Twitter'), prefixIcon: Icon(FontAwesomeIcons.twitter)),
+                    decoration: const InputDecoration(
+                      label: Text('Twitter'),
+                      prefixIcon: Icon(FontAwesomeIcons.twitter),
+                      prefix: Text(
+                        'https://twitter.com/',
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _facebook,
-                    decoration:
-                        const InputDecoration(label: Text('Facebook'), prefixIcon: Icon(FontAwesomeIcons.facebook)),
+                    decoration: const InputDecoration(
+                      label: Text('Facebook'),
+                      prefixIcon: Icon(FontAwesomeIcons.facebook),
+                      prefix: Text(
+                        'https://www.facebook.com/',
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _linkedIn,
-                    decoration:
-                        const InputDecoration(label: Text('LinkedIn'), prefixIcon: Icon(FontAwesomeIcons.linkedin)),
+                    decoration: const InputDecoration(
+                      label: Text('LinkedIn'),
+                      prefixIcon: Icon(FontAwesomeIcons.linkedin),
+                      prefix: Text(
+                        'https://www.linkedin.com/in/',
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _instagram,
-                    decoration:
-                        const InputDecoration(label: Text('Instagram'), prefixIcon: Icon(FontAwesomeIcons.instagram)),
+                    decoration: const InputDecoration(
+                      label: Text('Instagram'),
+                      prefixIcon: Icon(FontAwesomeIcons.instagram),
+                      prefix: Text(
+                        'https://www.instagram.com/',
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _tiktok,
-                    decoration: const InputDecoration(label: Text('Tik Tok'), prefixIcon: Icon(Icons.tiktok)),
+                    decoration: const InputDecoration(
+                      label: Text('Tik Tok'),
+                      prefixIcon: Icon(Icons.tiktok),
+                      prefix: Text(
+                        'https://www.tiktok.com/',
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _twitch,
-                    decoration: const InputDecoration(label: Text('Twitch'), prefixIcon: Icon(FontAwesomeIcons.twitch)),
+                    decoration: const InputDecoration(
+                      label: Text('Twitch'),
+                      prefixIcon: Icon(FontAwesomeIcons.twitch),
+                      prefix: Text(
+                        'https://www.twitch.tv/',
+                      ),
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
@@ -253,15 +320,48 @@ class _RegisterEventState extends State<RegisterEvent> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: RegisterEvent,
-                    child: _isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: primaryColor,
-                            ),
-                          )
-                        : const Text('Register Business'),
+                  Consumer<UserProvider>(
+                    builder: (context, value, child) => ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        String message = await value.registerEvent(
+                          eventName: _eventName.text,
+                          eventDescription: _eventDescription.text,
+                          eventAddress: _eventAddress.text,
+                          eventCategory: _eventCategory.text,
+                          phone: _phone.text,
+                          email: _email.text,
+                          isOnline: isOnline,
+                          website: _website.text,
+                          twitter: _twitter.text,
+                          facebook: _facebook.text,
+                          linkedIn: _linkedIn.text,
+                          instagram: _instagram.text,
+                          tiktok: _tiktok.text,
+                          twitch: _twitch.text,
+                          podcast: _podcast.text,
+                          eventFile: _image!,
+                        );
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        if (message == 'success') {
+                          // ignore: use_build_context_synchronously
+                          showSnackBar(message, context);
+                        } else {
+                          Get.back();
+                        }
+                      },
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
+                            )
+                          : const Text('Register Business'),
+                    ),
                   )
                 ],
               ),
@@ -270,44 +370,5 @@ class _RegisterEventState extends State<RegisterEvent> {
         ),
       ),
     );
-  }
-
-  void RegisterEvent() async {
-    setState(() {
-      _isLoading = true;
-    });
-    String message = await AuthMethods().registerEvent(
-        eventName: _eventName.text,
-        eventDescription: _eventDescription.text,
-        eventAddress: _eventAddress.text,
-        eventCategory: _eventCategory.text,
-        phone: _phone.text,
-        email: _email.text,
-        website: _website.text,
-        twitter: _twitter.text,
-        facebook: _facebook.text,
-        linkedIn: _linkedIn.text,
-        instagram: _instagram.text,
-        tiktok: _tiktok.text,
-        twitch: _twitch.text,
-        podcast: _podcast.text,
-        eventFile: _image!);
-
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (message == 'success') {
-      showSnackBar(message, context);
-    } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            mobileScreenLayout: MobileScreenLayout(),
-            webScreenLayout: WebScreenLayout(),
-          ),
-        ),
-      );
-    }
   }
 }

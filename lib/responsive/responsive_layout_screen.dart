@@ -1,7 +1,5 @@
-import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/dimensions.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ResponsiveLayout extends StatefulWidget {
   final Widget webScreenLayout;
@@ -17,13 +15,13 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
   @override
   void initState() {
     super.initState();
-    addData();
+    // addData();
   }
 
-  addData() async {
-    UserProvider userProvider = Provider.of(context, listen: false);
-    await userProvider.refreshUser();
-  }
+  // addData() async {
+  //   UserProvider userProvider = Provider.of(context, listen: false);
+  //   await userProvider.refreshUser();
+  // }
 
   @override
   Widget build(BuildContext context) {
