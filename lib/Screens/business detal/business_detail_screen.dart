@@ -200,11 +200,11 @@ class BusinessDetailScreen extends StatelessWidget {
                             size: 40,
                           ),
                         ),
-                  business.phone.isEmpty
+                  business.website.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
-                            await _launchUrl(Uri.parse('https://www./${business.website}'));
+                            await _launchUrl(Uri.parse('https://www.${business.website}'));
                           },
                           icon: const Icon(
                             Icons.language,

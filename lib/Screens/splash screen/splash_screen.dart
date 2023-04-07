@@ -6,11 +6,22 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Image.asset(
-          'assets/logo.jpeg',
-          height: 150,
-          width: 150,
+      body: SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logoNew.jpg',
+              height: 250,
+              width: 250,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text('Back2blackmobile: Growing Together')
+          ],
         ),
       ),
     );

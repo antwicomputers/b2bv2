@@ -10,6 +10,7 @@ import 'package:b2bmobile/Screens/pages/favorites.dart';
 import 'package:b2bmobile/Screens/pages/home.dart';
 import 'package:b2bmobile/Screens/pages/maps.dart';
 import 'package:b2bmobile/Screens/pages/categories.dart';
+import 'package:b2bmobile/Screens/vew%20all%20events/view_all_events_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -133,9 +134,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               title: 'View All Events',
               onTap: () {
                 Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const RegisterEvent()),
-                );
+                Get.to(() => const ViewAllEventsScreen());
               },
             ),
             _buildItem(

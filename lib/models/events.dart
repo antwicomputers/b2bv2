@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 class Events {
   final String eventName;
@@ -18,8 +19,13 @@ class Events {
   final String instagram;
   final String tiktok;
   final String twitch;
+  final DateTime createdAt;
+  final DateTime eventDate;
   final String podcast;
   final String eventUrl;
+  final bool isSponsered;
+  final bool isWomenOriented;
+  final DateTime? asTimeStamp;
   Events({
     required this.eventName,
     required this.eventDescription,
@@ -38,8 +44,13 @@ class Events {
     required this.instagram,
     required this.tiktok,
     required this.twitch,
+    required this.createdAt,
+    required this.eventDate,
     required this.podcast,
     required this.eventUrl,
+    required this.isSponsered,
+    required this.isWomenOriented,
+    this.asTimeStamp,
   });
 
   Events copyWith({
@@ -60,8 +71,13 @@ class Events {
     String? instagram,
     String? tiktok,
     String? twitch,
+    DateTime? createdAt,
+    DateTime? eventDate,
     String? podcast,
     String? eventUrl,
+    bool? isSponsered,
+    bool? isWomenOriented,
+    DateTime? asTimeStamp,
   }) {
     return Events(
       eventName: eventName ?? this.eventName,
@@ -81,8 +97,13 @@ class Events {
       instagram: instagram ?? this.instagram,
       tiktok: tiktok ?? this.tiktok,
       twitch: twitch ?? this.twitch,
+      createdAt: createdAt ?? this.createdAt,
+      eventDate: eventDate ?? this.eventDate,
       podcast: podcast ?? this.podcast,
       eventUrl: eventUrl ?? this.eventUrl,
+      isSponsered: isSponsered ?? this.isSponsered,
+      isWomenOriented: isWomenOriented ?? this.isWomenOriented,
+      asTimeStamp: asTimeStamp ?? this.asTimeStamp,
     );
   }
 
@@ -105,8 +126,13 @@ class Events {
       'instagram': instagram,
       'tiktok': tiktok,
       'twitch': twitch,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+      'eventDate': eventDate.millisecondsSinceEpoch,
       'podcast': podcast,
       'eventUrl': eventUrl,
+      'isSponsered': isSponsered,
+      'isWomenOriented': isWomenOriented,
+      'asTimeStamp': asTimeStamp,
     };
   }
 
@@ -129,8 +155,12 @@ class Events {
       instagram: map['instagram'] ?? '',
       tiktok: map['tiktok'] ?? '',
       twitch: map['twitch'] ?? '',
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      eventDate: DateTime.fromMillisecondsSinceEpoch(map['eventDate']),
       podcast: map['podcast'] ?? '',
       eventUrl: map['eventUrl'] ?? '',
+      isSponsered: map['isSponsered'] ?? false,
+      isWomenOriented: map['isWomenOriented'] ?? false,
     );
   }
 
@@ -140,55 +170,65 @@ class Events {
 
   @override
   String toString() {
-    return 'Events(eventName: $eventName, eventDescription: $eventDescription, eventAddress: $eventAddress, eventCategory: $eventCategory, phone: $phone, userId: $userId, isOnlineEvent: $isOnlineEvent, email: $email, isVerified: $isVerified, website: $website, twitter: $twitter, eventId: $eventId, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, eventUrl: $eventUrl)';
+    return 'Events(eventName: $eventName, eventDescription: $eventDescription, eventAddress: $eventAddress, eventCategory: $eventCategory, phone: $phone, userId: $userId, isOnlineEvent: $isOnlineEvent, email: $email, isVerified: $isVerified, website: $website, twitter: $twitter, eventId: $eventId, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, createdAt: $createdAt, eventDate: $eventDate, podcast: $podcast, eventUrl: $eventUrl, isSponsered: $isSponsered, isWomenOriented: $isWomenOriented, asTimeStamp: $asTimeStamp)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Events &&
-      other.eventName == eventName &&
-      other.eventDescription == eventDescription &&
-      other.eventAddress == eventAddress &&
-      other.eventCategory == eventCategory &&
-      other.phone == phone &&
-      other.userId == userId &&
-      other.isOnlineEvent == isOnlineEvent &&
-      other.email == email &&
-      other.isVerified == isVerified &&
-      other.website == website &&
-      other.twitter == twitter &&
-      other.eventId == eventId &&
-      other.facebook == facebook &&
-      other.linkedIn == linkedIn &&
-      other.instagram == instagram &&
-      other.tiktok == tiktok &&
-      other.twitch == twitch &&
-      other.podcast == podcast &&
-      other.eventUrl == eventUrl;
+        other.eventName == eventName &&
+        other.eventDescription == eventDescription &&
+        other.eventAddress == eventAddress &&
+        other.eventCategory == eventCategory &&
+        other.phone == phone &&
+        other.userId == userId &&
+        other.isOnlineEvent == isOnlineEvent &&
+        other.email == email &&
+        other.isVerified == isVerified &&
+        other.website == website &&
+        other.twitter == twitter &&
+        other.eventId == eventId &&
+        other.facebook == facebook &&
+        other.linkedIn == linkedIn &&
+        other.instagram == instagram &&
+        other.tiktok == tiktok &&
+        other.twitch == twitch &&
+        other.createdAt == createdAt &&
+        other.eventDate == eventDate &&
+        other.podcast == podcast &&
+        other.eventUrl == eventUrl &&
+        other.isSponsered == isSponsered &&
+        other.isWomenOriented == isWomenOriented &&
+        other.asTimeStamp == asTimeStamp;
   }
 
   @override
   int get hashCode {
     return eventName.hashCode ^
-      eventDescription.hashCode ^
-      eventAddress.hashCode ^
-      eventCategory.hashCode ^
-      phone.hashCode ^
-      userId.hashCode ^
-      isOnlineEvent.hashCode ^
-      email.hashCode ^
-      isVerified.hashCode ^
-      website.hashCode ^
-      twitter.hashCode ^
-      eventId.hashCode ^
-      facebook.hashCode ^
-      linkedIn.hashCode ^
-      instagram.hashCode ^
-      tiktok.hashCode ^
-      twitch.hashCode ^
-      podcast.hashCode ^
-      eventUrl.hashCode;
+        eventDescription.hashCode ^
+        eventAddress.hashCode ^
+        eventCategory.hashCode ^
+        phone.hashCode ^
+        userId.hashCode ^
+        isOnlineEvent.hashCode ^
+        email.hashCode ^
+        isVerified.hashCode ^
+        website.hashCode ^
+        twitter.hashCode ^
+        eventId.hashCode ^
+        facebook.hashCode ^
+        linkedIn.hashCode ^
+        instagram.hashCode ^
+        tiktok.hashCode ^
+        twitch.hashCode ^
+        createdAt.hashCode ^
+        eventDate.hashCode ^
+        podcast.hashCode ^
+        eventUrl.hashCode ^
+        isSponsered.hashCode ^
+        isWomenOriented.hashCode ^
+        asTimeStamp.hashCode;
   }
 }

@@ -16,14 +16,10 @@ class _ManageUsersState extends State<BusinessAll> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor:
-          width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
+      backgroundColor: width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
       appBar: width > webScreenSize
           ? null
-          : AppBar(
-              backgroundColor: mobileBackgroundColor,
-              centerTitle: false,
-              title: Text('All Businesses')
+          : AppBar(backgroundColor: mobileBackgroundColor, centerTitle: false, title: Text('All Businesses')
               // actions: [
               //   IconButton(
               //     icon: const Icon(
@@ -36,8 +32,7 @@ class _ManageUsersState extends State<BusinessAll> {
               ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('businesses').snapshots(),
-        builder: (context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),

@@ -3,9 +3,11 @@ import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class RegisterEvent extends StatefulWidget {
@@ -64,6 +66,7 @@ class _RegisterEventState extends State<RegisterEvent> {
   }
 
   bool isOnline = false;
+  DateTime eventDate = DateTime.now();
   final _formsKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -202,16 +205,66 @@ class _RegisterEventState extends State<RegisterEvent> {
                   ),
                   SwitchListTile(
                     value: isOnline,
-                    contentPadding: EdgeInsets.zero,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                     onChanged: (val) {
                       isOnline = val;
                       setState(() {});
                     },
-                    title: const Text('Online event'),
+                    title: Row(
+                      children: [
+                        Icon(Icons.ondemand_video_outlined, color: Theme.of(context).hintColor.withOpacity(0.7)),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Online event',
+                          style: TextStyle(color: Theme.of(context).hintColor.withOpacity(0.7)),
+                        ),
+                      ],
+                    ),
                   ),
                   Divider(
                     color: Theme.of(context).hintColor,
                     thickness: 1,
+                    height: 8,
+                  ),
+                  ListTile(
+                    onTap: () async {
+                      DateTime? selectedDate = await DatePicker.showDateTimePicker(
+                        context,
+                        theme: const DatePickerTheme(
+                          backgroundColor: Colors.black,
+                          itemStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                      if (selectedDate != null) {
+                        eventDate = selectedDate;
+                        setState(() {});
+                      }
+                    },
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                    leading: Icon(Icons.calendar_month, color: Theme.of(context).hintColor.withOpacity(0.7)),
+                    horizontalTitleGap: -5,
+                    title: Text(
+                      'Event Date',
+                      style: TextStyle(color: Theme.of(context).hintColor.withOpacity(0.7)),
+                    ),
+                    subtitle: Text(
+                      DateFormat('dd/MMM/yyyy hh:mm a').format(
+                        eventDate,
+                      ),
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor.withOpacity(0.7),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Theme.of(context).hintColor,
+                    thickness: 1,
+                    height: 8,
                   ),
                   TextFormField(
                     controller: _phone,
@@ -333,6 +386,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                           eventCategory: _eventCategory.text,
                           phone: _phone.text,
                           email: _email.text,
+                          eventDate: eventDate,
                           isOnline: isOnline,
                           website: _website.text,
                           twitter: _twitter.text,

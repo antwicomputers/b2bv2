@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:b2bmobile/models/business.dart';
@@ -28,7 +29,9 @@ class VerificationScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            print(snapshot.data?.docs.length ?? 'noe');
+            if (kDebugMode) {
+              print(snapshot.data?.docs.length ?? 'noe');
+            }
             if (snapshot.data?.docs.isEmpty ?? true) {
               return const Center(
                 child: Text('No Businesses available'),
