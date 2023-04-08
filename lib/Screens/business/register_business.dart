@@ -31,6 +31,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   final TextEditingController _instagram = TextEditingController();
   final TextEditingController _tiktok = TextEditingController();
   final TextEditingController _twitch = TextEditingController();
+  final TextEditingController _youtube = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
   Uint8List? _image;
   final bool isBlack = false;
@@ -52,6 +53,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     _instagram.dispose();
     _tiktok.dispose();
     _twitch.dispose();
+    _youtube.dispose();
     _podcast.dispose();
 
     super.dispose();
@@ -223,6 +225,14 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
+                    controller: _youtube,
+                    decoration: const InputDecoration(
+                      label: Text('Youtube'),
+                      prefixIcon: Icon(FontAwesomeIcons.youtube),
+                    ),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
                     controller: _linkedIn,
                     decoration: const InputDecoration(
                       label: Text('LinkedIn'),
@@ -291,6 +301,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                           businessAddress: _businessAddress.text,
                           businessCategory: _businessCategory.text,
                           phone: _phone.text,
+                          youtube: _youtube.text,
                           email: _email.text,
                           website: _website.text,
                           twitter: _twitter.text,

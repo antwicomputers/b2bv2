@@ -140,6 +140,7 @@ class UserProvider with ChangeNotifier {
       required String tiktok,
       required String twitch,
       required String podcast,
+      required String youtube,
       required Uint8List businessFile}) async {
     String message = 'some error occured';
     String businessUrl = await StorageMethods().uploadImageToStoage('businessPics', businessFile, false);
@@ -154,6 +155,7 @@ class UserProvider with ChangeNotifier {
       businessCategory: businessCategory,
       createdAt: DateTime.now(),
       phone: phone,
+      youtube: youtube,
       isBlackOwned: false,
       isEsential: false,
       isFeatured: false,
@@ -197,6 +199,7 @@ class UserProvider with ChangeNotifier {
       required String tiktok,
       required DateTime eventDate,
       required String twitch,
+      required String youtube,
       required bool isOnline,
       required String podcast,
       required Uint8List eventFile}) async {
@@ -206,6 +209,7 @@ class UserProvider with ChangeNotifier {
     model.Events business = model.Events(
       eventName: eventName,
       eventId: ref,
+      youtube: youtube,
       isSponsered: false,
       asTimeStamp: eventDate,
       isWomenOriented: false,

@@ -29,6 +29,7 @@ class _RegisterEventState extends State<RegisterEvent> {
   final TextEditingController _facebook = TextEditingController();
   final TextEditingController _linkedIn = TextEditingController();
   final TextEditingController _instagram = TextEditingController();
+  final TextEditingController _youtube = TextEditingController();
   final TextEditingController _tiktok = TextEditingController();
   final TextEditingController _twitch = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
@@ -44,6 +45,7 @@ class _RegisterEventState extends State<RegisterEvent> {
     _eventAddress.dispose();
     _eventCategory.dispose();
     _phone.dispose();
+    _youtube.dispose();
     _email.dispose();
     _website.dispose();
     _twitter.dispose();
@@ -322,6 +324,14 @@ class _RegisterEventState extends State<RegisterEvent> {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
+                    controller: _youtube,
+                    decoration: const InputDecoration(
+                      label: Text('Youtube'),
+                      prefixIcon: Icon(FontAwesomeIcons.youtube),
+                    ),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
                     controller: _linkedIn,
                     decoration: const InputDecoration(
                       label: Text('LinkedIn'),
@@ -390,6 +400,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                           isOnline: isOnline,
                           website: _website.text,
                           twitter: _twitter.text,
+                          youtube: _youtube.text,
                           facebook: _facebook.text,
                           linkedIn: _linkedIn.text,
                           instagram: _instagram.text,

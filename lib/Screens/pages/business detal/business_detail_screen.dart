@@ -3,6 +3,7 @@ import 'package:b2bmobile/utils/images.dart';
 import 'package:flutter/material.dart';
 
 import 'package:b2bmobile/models/business.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BusinessDetailScreen extends StatelessWidget {
@@ -45,7 +46,7 @@ class BusinessDetailScreen extends StatelessWidget {
           children: [
             Center(
               child: Container(
-                height: size.height * 0.2,
+                height: size.height * 0.25,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -127,9 +128,7 @@ class BusinessDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 business.businessName,
-                style: AppConstants.titleStyle.copyWith(
-                  fontSize: 25,
-                ),
+                style: AppConstants.titleStyle.copyWith(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ),
             const Padding(
@@ -243,6 +242,16 @@ class BusinessDetailScreen extends StatelessWidget {
                               color: Colors.white,
                               size: 40,
                             ),
+                          ),
+                        ),
+                  business.youtube.isEmpty
+                      ? Container()
+                      : IconButton(
+                          onPressed: () async {
+                            await _launchUrl(Uri.parse(business.youtube));
+                          },
+                          icon: const Icon(
+                            FontAwesomeIcons.youtube,
                           ),
                         ),
                   business.tiktok.isEmpty

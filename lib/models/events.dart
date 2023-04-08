@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 class Events {
   final String eventName;
@@ -24,10 +23,12 @@ class Events {
   final String podcast;
   final String eventUrl;
   final bool isSponsered;
+  final String youtube;
   final bool isWomenOriented;
   final DateTime? asTimeStamp;
   Events({
     required this.eventName,
+    required this.youtube,
     required this.eventDescription,
     required this.eventAddress,
     required this.eventCategory,
@@ -61,6 +62,7 @@ class Events {
     String? phone,
     String? userId,
     bool? isOnlineEvent,
+    String? youtube,
     String? email,
     bool? isVerified,
     String? website,
@@ -86,6 +88,7 @@ class Events {
       eventCategory: eventCategory ?? this.eventCategory,
       phone: phone ?? this.phone,
       userId: userId ?? this.userId,
+      youtube: youtube ?? this.youtube,
       isOnlineEvent: isOnlineEvent ?? this.isOnlineEvent,
       email: email ?? this.email,
       isVerified: isVerified ?? this.isVerified,
@@ -124,6 +127,7 @@ class Events {
       'facebook': facebook,
       'linkedIn': linkedIn,
       'instagram': instagram,
+      'youtube': youtube,
       'tiktok': tiktok,
       'twitch': twitch,
       'createdAt': createdAt.millisecondsSinceEpoch,
@@ -143,6 +147,7 @@ class Events {
       eventAddress: map['eventAddress'] ?? '',
       eventCategory: map['eventCategory'] ?? '',
       phone: map['phone'] ?? '',
+      youtube: map['youtube'] ?? '',
       userId: map['userId'] ?? '',
       isOnlineEvent: map['isOnlineEvent'] ?? false,
       email: map['email'] ?? '',
@@ -170,7 +175,7 @@ class Events {
 
   @override
   String toString() {
-    return 'Events(eventName: $eventName, eventDescription: $eventDescription, eventAddress: $eventAddress, eventCategory: $eventCategory, phone: $phone, userId: $userId, isOnlineEvent: $isOnlineEvent, email: $email, isVerified: $isVerified, website: $website, twitter: $twitter, eventId: $eventId, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, createdAt: $createdAt, eventDate: $eventDate, podcast: $podcast, eventUrl: $eventUrl, isSponsered: $isSponsered, isWomenOriented: $isWomenOriented, asTimeStamp: $asTimeStamp)';
+    return 'Events(eventName: $eventName, youtube: $youtube,eventDescription: $eventDescription, eventAddress: $eventAddress, eventCategory: $eventCategory, phone: $phone, userId: $userId, isOnlineEvent: $isOnlineEvent, email: $email, isVerified: $isVerified, website: $website, twitter: $twitter, eventId: $eventId, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, createdAt: $createdAt, eventDate: $eventDate, podcast: $podcast, eventUrl: $eventUrl, isSponsered: $isSponsered, isWomenOriented: $isWomenOriented, asTimeStamp: $asTimeStamp)';
   }
 
   @override
@@ -193,6 +198,7 @@ class Events {
         other.facebook == facebook &&
         other.linkedIn == linkedIn &&
         other.instagram == instagram &&
+        other.youtube == youtube &&
         other.tiktok == tiktok &&
         other.twitch == twitch &&
         other.createdAt == createdAt &&
@@ -210,6 +216,7 @@ class Events {
         eventDescription.hashCode ^
         eventAddress.hashCode ^
         eventCategory.hashCode ^
+        youtube.hashCode ^
         phone.hashCode ^
         userId.hashCode ^
         isOnlineEvent.hashCode ^
