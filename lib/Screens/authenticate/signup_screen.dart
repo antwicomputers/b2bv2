@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:b2bmobile/Screens/authenticate/login_screen.dart';
-import 'package:b2bmobile/resources/auth_methods.dart';
+import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/text_field_input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
@@ -25,8 +25,7 @@ class _LoginScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _verifyEmailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _verifyPasswordController =
-      TextEditingController();
+  final TextEditingController _verifyPasswordController = TextEditingController();
   final TextEditingController _userName = TextEditingController();
   Uint8List? _image;
   bool _isLoading = false;
@@ -51,36 +50,6 @@ class _LoginScreenState extends State<SignupScreen> {
     });
   }
 
-  void signUpUser() async {
-    setState(() {
-      _isLoading = true;
-    });
-    String res = await AuthMethods().signUpUser(
-      email: _emailController.text,
-      password: _passwordController.text,
-      fullname: _fullName.text,
-      username: _userName.text,
-      file: _image!,
-    );
-
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (res != 'success') {
-      showSnackBar(res, context);
-    } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            mobileScreenLayout: MobileScreenLayout(),
-            webScreenLayout: WebScreenLayout(),
-          ),
-        ),
-      );
-    }
-  }
-
   void navigateToLogin() {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -100,8 +69,8 @@ class _LoginScreenState extends State<SignupScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               // SvgPicture.asset(
               //   'assets/ic_b2b1.svg',
@@ -193,55 +162,84 @@ class _LoginScreenState extends State<SignupScreen> {
                 height: 24,
               ),
               //button for login
-              InkWell(
-                onTap: signUpUser,
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
-                        ),
-                      )
-                    : Container(
-                        child:
-                            const Text('Sign Up and Support Black Excellence'),
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: const ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
+              Consumer<UserProvider>(
+                builder: (context, value, child) => InkWell(
+                  onTap: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    String res = await value.signUpUser(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                      fullname: _fullName.text,
+                      username: _userName.text,
+                      file: _image!,
+                    );
+
+                    setState(() {
+                      _isLoading = false;
+                    });
+
+                    if (res != 'success') {
+                      showSnackBar(res, context);
+                    } else {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const ResponsiveLayout(
+                            mobileScreenLayout: MobileScreenLayout(),
+                            webScreenLayout: WebScreenLayout(),
                           ),
-                          color: blueColor,
                         ),
-                      ),
+                      );
+                    }
+                  },
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: const ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
+                            ),
+                            color: blueColor,
+                          ),
+                          child: const Text('Sign Up and Support Black Excellence'),
+                        ),
+                ),
               ),
               const SizedBox(
                 height: 12,
               ),
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               //Transition to sign up
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: const Text("Already have an account?  "),
                     padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text("Already have an account?  "),
                   ),
                   GestureDetector(
                     onTap: navigateToLogin,
                     child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(
                         "Sign In",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                   ),
                 ],

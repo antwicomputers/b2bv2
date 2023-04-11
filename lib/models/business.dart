@@ -20,6 +20,7 @@ class Business {
   final String podcast;
   final String businessUrl;
   final bool isBlackOwned;
+  final String youtube;
   final bool womenOriented;
   final bool isVerified;
   final bool isEsential;
@@ -33,6 +34,7 @@ class Business {
     required this.businessCategory,
     required this.createdAt,
     required this.phone,
+    required this.youtube,
     required this.isVerified,
     required this.businessId,
     required this.userId,
@@ -53,47 +55,6 @@ class Business {
     required this.isSponsored,
   });
 
-  // Map<String, dynamic> toJson() => {
-  //       'timestamp': FieldValue.serverTimestamp(),
-  //       'businessName': businessName,
-  //       'businessDescription': businessDescription,
-  //       'businessAddress': businessAddress,
-  //       'businessCategory': businessCategory,
-  //       'phone': phone,
-  //       'email': email,
-  //       'website': website,
-  //       'twitter': twitter,
-  //       'facebook': facebook,
-  //       'linkedIn': linkedIn,
-  //       'instagram': instagram,
-  //       'tikTok': tiktok,
-  //       'twitch': twitch,
-  //       'podcast': podcast,
-  //       'businessUrl': businessUrl
-  //     };
-
-  // static Business fromSnap(DocumentSnapshot snap) {
-  //   var snapshot = snap.data() as Map<String, dynamic>;
-
-  //   return Business(
-  //     businessName: snapshot['businessName'],
-  //     businessDescription: snapshot['businessDescription'],
-  //     businessAddress: snapshot['businessAddress'],
-  //     businessCategory: snapshot['businessCategory'],
-  //     phone: snapshot['phone'],
-  //     email: snapshot['email'],
-  //     website: snapshot['website'],
-  //     twitter: snapshot['twitter'],
-  //     facebook: snapshot['facebook'],
-  //     linkedIn: snapshot['linkedIn'],
-  //     instagram: snapshot['instagram'],
-  //     tiktok: snapshot['tiktok'],
-  //     twitch: snapshot['twitch'],
-  //     podcast: snapshot['podcast'],
-  //     businessUrl: snapshot['businessUrl'],
-  //   );
-  // }
-
   Business copyWith({
     String? businessName,
     String? businessDescription,
@@ -102,6 +63,7 @@ class Business {
     DateTime? createdAt,
     String? phone,
     String? email,
+    String? youtube,
     String? website,
     String? twitter,
     String? facebook,
@@ -128,6 +90,7 @@ class Business {
       createdAt: createdAt ?? this.createdAt,
       isVerified: isVerified ?? this.isVerified,
       phone: phone ?? this.phone,
+      youtube: youtube ?? this.youtube,
       businessId: businessId ?? this.businessId,
       email: email ?? this.email,
       website: website ?? this.website,
@@ -160,6 +123,7 @@ class Business {
       'isVerified': isVerified,
       'website': website,
       'userId': userId,
+      'youtube': youtube,
       'twitter': twitter,
       'facebook': facebook,
       'linkedIn': linkedIn,
@@ -191,6 +155,7 @@ class Business {
       userId: map['userId'] ?? '',
       twitter: map['twitter'] ?? '',
       facebook: map['facebook'] ?? '',
+      youtube: map['youtube'] ?? '',
       isVerified: map['isVerified'] ?? false,
       linkedIn: map['linkedIn'] ?? '',
       instagram: map['instagram'] ?? '',
@@ -212,7 +177,7 @@ class Business {
 
   @override
   String toString() {
-    return 'Business(businessName: $businessName, businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored)';
+    return 'Business(businessName: $businessName, youtube: $youtube,businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored)';
   }
 
   @override
@@ -229,6 +194,7 @@ class Business {
         other.email == email &&
         other.website == website &&
         other.twitter == twitter &&
+        other.youtube == youtube &&
         other.facebook == facebook &&
         other.linkedIn == linkedIn &&
         other.businessId == businessId &&
@@ -255,6 +221,7 @@ class Business {
         businessCategory.hashCode ^
         createdAt.hashCode ^
         phone.hashCode ^
+        youtube.hashCode ^
         email.hashCode ^
         website.hashCode ^
         twitter.hashCode ^

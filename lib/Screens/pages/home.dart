@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:b2bmobile/Screens/business%20detal/business_detail_screen.dart';
+import 'package:b2bmobile/Screens/pages/business%20detal/business_detail_screen.dart';
 import 'package:b2bmobile/models/business.dart';
 
 class HomePage extends StatefulWidget {
@@ -52,73 +52,6 @@ class _FavoritesState extends State<HomePage> {
                     ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Back2Black Mobile Featured Brands',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 18,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      //ToDo
-                    },
-                    child: Text(
-                      'Show All',
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 18,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: size.height * 0.35,
-              width: double.infinity,
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('businesses')
-                    .where('isFeatured', isEqualTo: true)
-                    .where('isBlackOwned', isEqualTo: true)
-                    .limit(30)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.data?.docs.isEmpty ?? true) {
-                    return const Center(
-                      child: Text('No Featured Businesses available'),
-                    );
-                  }
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
-                    itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
-                      return HomeBusinessTile(
-                        business: business,
-                        size: size,
-                      );
-                    },
-                  );
-                },
               ),
             ),
             const SizedBox(
@@ -197,7 +130,7 @@ class _FavoritesState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Discover Back2Black Mobile',
+                    'Edwina\'s Move Her Forward',
                     style: GoogleFonts.bebasNeue(
                       fontSize: 18,
                     ),
@@ -224,7 +157,11 @@ class _FavoritesState extends State<HomePage> {
               height: size.height * 0.35,
               width: double.infinity,
               child: StreamBuilder(
-                stream: getRandomBusinessesStream(),
+                stream: FirebaseFirestore.instance
+                    .collection('businesses')
+                    .where('womenOriented', isEqualTo: true)
+                    .limit(30)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -240,7 +177,7 @@ class _FavoritesState extends State<HomePage> {
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
                     itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data() as Map<String, dynamic>);
+                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
                         size: size,
@@ -259,7 +196,7 @@ class _FavoritesState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Back2Black Mobile Recently Added',
+                    'Back2Black Mobile Essential Services',
                     style: GoogleFonts.bebasNeue(
                       fontSize: 18,
                     ),
@@ -289,6 +226,7 @@ class _FavoritesState extends State<HomePage> {
                 stream: FirebaseFirestore.instance
                     .collection('businesses')
                     .where('isBlackOwned', isEqualTo: true)
+                    .where('isEsential', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -315,6 +253,76 @@ class _FavoritesState extends State<HomePage> {
                   );
                 },
               ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Back2Black Mobile Featured Brands',
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 18,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //ToDo
+                    },
+                    child: Text(
+                      'Show All',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: size.height * 0.35,
+              width: double.infinity,
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('businesses')
+                    .where('isFeatured', isEqualTo: true)
+                    .where('isBlackOwned', isEqualTo: true)
+                    .limit(30)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.data?.docs.isEmpty ?? true) {
+                    return const Center(
+                      child: Text('No Featured Businesses available'),
+                    );
+                  }
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
+                    itemBuilder: (ctx, index) {
+                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                      return HomeBusinessTile(
+                        business: business,
+                        size: size,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
           ],
         ),

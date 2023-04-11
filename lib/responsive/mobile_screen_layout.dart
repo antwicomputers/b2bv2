@@ -10,14 +10,13 @@ import 'package:b2bmobile/Screens/pages/favorites.dart';
 import 'package:b2bmobile/Screens/pages/home.dart';
 import 'package:b2bmobile/Screens/pages/maps.dart';
 import 'package:b2bmobile/Screens/pages/categories.dart';
+import 'package:b2bmobile/Screens/vew%20all%20events/view_all_events_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:b2bmobile/models/users.dart' as model;
 import '../Screens/authenticate/login_screen.dart';
-import '../resources/auth_methods.dart';
 import 'package:b2bmobile/Screens/drawer/register_event.dart';
 
 class MobileScreenLayout extends StatefulWidget {
@@ -42,25 +41,26 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     const Favorites(),
     const Categories(),
   ];
+  // late model.User user;
 
   @override
   Widget build(BuildContext context) {
-    model.User user = Provider.of<UserProvider>(context).getUser;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: InkWell(
-          child: const Text('Back2Black Mobile'),
-          onLongPress: () {
-            if (user.email == 'admin@b2bmobile.com') {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AdminPanel(),
-                ),
-              );
-            }
-          },
+        title: Consumer<UserProvider>(
+          builder: (context, value, child) => InkWell(
+            child: const Text('Back2Black Mobile'),
+            onLongPress: () {
+              if (value.userModel!.email == 'admin@b2bmobile.com') {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AdminPanel(),
+                  ),
+                );
+              }
+            },
+          ),
         ),
         centerTitle: true,
       ),
@@ -134,9 +134,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               title: 'View All Events',
               onTap: () {
                 Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const RegisterEvent()),
-                );
+                Get.to(() => const ViewAllEventsScreen());
               },
             ),
             _buildItem(
@@ -169,17 +167,19 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 );
               },
             ),
-            _buildItem(
-              icon: Icons.logout,
-              title: 'Logout',
-              onTap: () async {
-                await AuthMethods().signOut();
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                );
-              },
+            Consumer<UserProvider>(
+              builder: (context, value, child) => _buildItem(
+                icon: Icons.logout,
+                title: 'Logout',
+                onTap: () async {
+                  await value.signOut();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

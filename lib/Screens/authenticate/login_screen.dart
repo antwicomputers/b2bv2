@@ -1,10 +1,11 @@
 import 'package:b2bmobile/Screens/authenticate/signup_screen.dart';
-import 'package:b2bmobile/resources/auth_methods.dart';
+import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/text_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
@@ -27,29 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-  }
-
-  void loginUser() async {
-    setState(() {
-      _isLoading = true;
-    });
-    String res = await AuthMethods().loginUser(email: _emailController.text, password: _passwordController.text);
-
-    if (res == 'success') {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            mobileScreenLayout: MobileScreenLayout(),
-            webScreenLayout: WebScreenLayout(),
-          ),
-        ),
-      );
-    } else {
-      showSnackBar(res, context);
-    }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   void navigateToSignUp() {
@@ -100,28 +78,53 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24,
               ),
               //button for login
-              InkWell(
-                onTap: loginUser,
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
-                        ),
-                      )
-                    : Container(
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: const ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
+              Consumer<UserProvider>(
+                builder: (context, value, child) => InkWell(
+                  onTap: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    String res =
+                        await value.loginUser(email: _emailController.text, password: _passwordController.text);
+
+                    if (res == 'success') {
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const ResponsiveLayout(
+                            mobileScreenLayout: MobileScreenLayout(),
+                            webScreenLayout: WebScreenLayout(),
                           ),
-                          color: blueColor,
                         ),
-                        child: const Text('Login'),
-                      ),
+                      );
+                    } else {
+                      showSnackBar(res, context);
+                    }
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  },
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: const ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
+                            ),
+                            color: blueColor,
+                          ),
+                          child: const Text('Login'),
+                        ),
+                ),
               ),
               const SizedBox(
                 height: 12,

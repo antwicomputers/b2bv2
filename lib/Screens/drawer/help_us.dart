@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SupportUs extends StatefulWidget {
@@ -55,7 +56,6 @@ class _SupportUsState extends State<SupportUs> {
 
               try {
                 final collection = FirebaseFirestore.instance.collection('feedback');
-
                 await collection.doc().set(
                   {
                     'timestamp': FieldValue.serverTimestamp(),
@@ -64,6 +64,9 @@ class _SupportUsState extends State<SupportUs> {
                 );
               } catch (_) {
                 message = 'error when sending feedback';
+                if (kDebugMode) {
+                  print(message);
+                }
               }
             }
           },

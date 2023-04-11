@@ -1,9 +1,10 @@
-import 'package:b2bmobile/resources/auth_methods.dart';
+import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';
@@ -30,6 +31,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   final TextEditingController _instagram = TextEditingController();
   final TextEditingController _tiktok = TextEditingController();
   final TextEditingController _twitch = TextEditingController();
+  final TextEditingController _youtube = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
   Uint8List? _image;
   final bool isBlack = false;
@@ -51,6 +53,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     _instagram.dispose();
     _tiktok.dispose();
     _twitch.dispose();
+    _youtube.dispose();
     _podcast.dispose();
 
     super.dispose();
@@ -222,6 +225,14 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
+                    controller: _youtube,
+                    decoration: const InputDecoration(
+                      label: Text('Youtube'),
+                      prefixIcon: Icon(FontAwesomeIcons.youtube),
+                    ),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
                     controller: _linkedIn,
                     decoration: const InputDecoration(
                       label: Text('LinkedIn'),
@@ -278,15 +289,55 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   //   child: const Text('Select 3 Images'),
                   // ),
 
-                  ElevatedButton(
-                    onPressed: registerBusiness,
-                    child: _isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: primaryColor,
+                  Consumer<UserProvider>(
+                    builder: (context, value, child) => ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        String message = await value.registerBusiness(
+                          businessName: _businessName.text,
+                          businessDescription: _businessDescription.text,
+                          businessAddress: _businessAddress.text,
+                          businessCategory: _businessCategory.text,
+                          phone: _phone.text,
+                          youtube: _youtube.text,
+                          email: _email.text,
+                          website: _website.text,
+                          twitter: _twitter.text,
+                          facebook: _facebook.text,
+                          linkedIn: _linkedIn.text,
+                          instagram: _instagram.text,
+                          tiktok: _tiktok.text,
+                          twitch: _twitch.text,
+                          podcast: _podcast.text,
+                          businessFile: _image!,
+                        );
+                        setState(() {
+                          _isLoading = false;
+                        });
+
+                        if (message == 'success') {
+                          showSnackBar(message, context);
+                        } else {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const ResponsiveLayout(
+                                mobileScreenLayout: MobileScreenLayout(),
+                                webScreenLayout: WebScreenLayout(),
+                              ),
                             ),
-                          )
-                        : const Text('Register Business'),
+                          );
+                        }
+                      },
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
+                            )
+                          : const Text('Register Business'),
+                    ),
                   )
                 ],
               ),
@@ -295,44 +346,5 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
         ),
       ),
     );
-  }
-
-  void registerBusiness() async {
-    setState(() {
-      _isLoading = true;
-    });
-    String message = await AuthMethods().registerBusiness(
-        businessName: _businessName.text,
-        businessDescription: _businessDescription.text,
-        businessAddress: _businessAddress.text,
-        businessCategory: _businessCategory.text,
-        phone: _phone.text,
-        email: _email.text,
-        website: _website.text,
-        twitter: _twitter.text,
-        facebook: _facebook.text,
-        linkedIn: _linkedIn.text,
-        instagram: _instagram.text,
-        tiktok: _tiktok.text,
-        twitch: _twitch.text,
-        podcast: _podcast.text,
-        businessFile: _image!);
-
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (message == 'success') {
-      showSnackBar(message, context);
-    } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            mobileScreenLayout: MobileScreenLayout(),
-            webScreenLayout: WebScreenLayout(),
-          ),
-        ),
-      );
-    }
   }
 }
