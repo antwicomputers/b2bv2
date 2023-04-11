@@ -130,6 +130,139 @@ class _FavoritesState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
+                    'Edwina\'s Move Her Forward',
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 18,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //ToDo
+                    },
+                    child: Text(
+                      'Show All',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: size.height * 0.35,
+              width: double.infinity,
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('businesses')
+                    .where('womenOriented', isEqualTo: true)
+                    .limit(30)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.data?.docs.isEmpty ?? true) {
+                    return const Center(
+                      child: Text('No Businesses to discover'),
+                    );
+                  }
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
+                    itemBuilder: (ctx, index) {
+                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                      return HomeBusinessTile(
+                        business: business,
+                        size: size,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Back2Black Mobile Essential Services',
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 18,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //ToDo
+                    },
+                    child: Text(
+                      'Show All',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: size.height * 0.35,
+              width: double.infinity,
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('businesses')
+                    .where('isBlackOwned', isEqualTo: true)
+                    .where('isEsential', isEqualTo: true)
+                    .limit(30)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.data?.docs.isEmpty ?? true) {
+                    return const Center(
+                      child: Text('No Businesses available'),
+                    );
+                  }
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
+                    itemBuilder: (ctx, index) {
+                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                      return HomeBusinessTile(
+                        business: business,
+                        size: size,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
                     'Back2Black Mobile Featured Brands',
                     style: GoogleFonts.bebasNeue(
                       fontSize: 18,
@@ -190,131 +323,6 @@ class _FavoritesState extends State<HomePage> {
             ),
             const SizedBox(
               height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Discover Back2Black Mobile',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 18,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      //ToDo
-                    },
-                    child: Text(
-                      'Show All',
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 18,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: size.height * 0.35,
-              width: double.infinity,
-              child: StreamBuilder(
-                stream: getRandomBusinessesStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.data?.docs.isEmpty ?? true) {
-                    return const Center(
-                      child: Text('No Businesses to discover'),
-                    );
-                  }
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
-                    itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data() as Map<String, dynamic>);
-                      return HomeBusinessTile(
-                        business: business,
-                        size: size,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Back2Black Mobile Recently Added',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 18,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      //ToDo
-                    },
-                    child: Text(
-                      'Show All',
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 18,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: size.height * 0.35,
-              width: double.infinity,
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('businesses')
-                    .where('isBlackOwned', isEqualTo: true)
-                    .limit(30)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.data?.docs.isEmpty ?? true) {
-                    return const Center(
-                      child: Text('No Businesses available'),
-                    );
-                  }
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
-                    itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
-                      return HomeBusinessTile(
-                        business: business,
-                        size: size,
-                      );
-                    },
-                  );
-                },
-              ),
             ),
           ],
         ),

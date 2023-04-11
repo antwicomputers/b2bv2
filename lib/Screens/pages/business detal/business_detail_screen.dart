@@ -37,6 +37,7 @@ class BusinessDetailScreen extends StatelessWidget {
             ),
           ),
         ],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SizedBox(
         height: double.infinity,

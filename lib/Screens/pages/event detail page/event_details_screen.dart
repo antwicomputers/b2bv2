@@ -20,7 +20,29 @@ class EventDetailsScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Consumer<UserProvider>(
       builder: (context, value, child) => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          title: Text(event.eventName),
+          actions: [
+            InkWell(
+              onTap: () {},
+              child: Row(
+                children: const [
+                  Text('Report'),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.report_gmailerrorred,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         body: SizedBox(
           height: double.infinity,
           width: double.infinity,
