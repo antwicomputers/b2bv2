@@ -1,27 +1,27 @@
 import 'package:b2bmobile/Screens/business/register_business.dart';
-import 'package:b2bmobile/Screens/drawer/about_us.dart';
-import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
-import 'package:b2bmobile/Screens/drawer/essential.dart';
-import 'package:b2bmobile/Screens/drawer/help_us.dart';
-import 'package:b2bmobile/Screens/drawer/mental_health.dart';
-import 'package:b2bmobile/Screens/drawer/new_events.dart';
 import 'package:b2bmobile/Screens/drawer/register_event.dart';
-import 'package:b2bmobile/Screens/drawer/women.dart';
-import 'package:b2bmobile/Screens/vew%20all%20events/view_all_events_screen.dart';
+import 'package:b2bmobile/Screens/vew%20all%20events/all_events.dart';
+import 'package:b2bmobile/Screens/vew%20all%20events/my_events.dart';
+import 'package:b2bmobile/Screens/vew%20all%20events/past_events.dart';
+import 'package:b2bmobile/Screens/vew%20all%20events/sponsored_events.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Categories extends StatefulWidget {
-  const Categories({super.key});
+class MainEvents extends StatefulWidget {
+  const MainEvents({super.key});
 
   @override
-  State<Categories> createState() => _SettingsState();
+  State<MainEvents> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Categories> {
+class _SettingsState extends State<MainEvents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text('Back2Black Mobile Networking'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -32,246 +32,7 @@ class _SettingsState extends State<Categories> {
                   Get.back();
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => const RegisterBusiness()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/register.jpg'),
-                        ),
-                        Text('Register Business')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const WomenBusiness()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image(image: AssetImage('assets/womentile.jpeg')),
-                        Text('Women Empowerment')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const MentalHealth()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image(image: AssetImage('assets/health.jpeg')),
-                        SizedBox(
-                          height: 9,
-                        ),
-                        Text('Essential Services')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const BlackKickStart()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image(image: AssetImage('assets/bks.jpeg')),
-                        Text('The Black Kick Start')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterBusiness()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/resources.jpeg'),
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        Text('Resources')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const MainEvents()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/events.jpg'),
-                        ),
-                        SizedBox(
-                          height: 43,
-                        ),
-                        Text('Events: Networking')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterBusiness()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/youth.jpeg'),
-                        ),
-                        Text('Youth Empowerment')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const AboutUs()),
+                        builder: (context) => const RegisterEvent()),
                   );
                 },
                 child: Container(
@@ -292,10 +53,13 @@ class _SettingsState extends State<Categories> {
                     child: Column(
                       children: [
                         Icon(
-                          Icons.info_rounded,
-                          size: 112,
+                          Icons.event,
+                          size: 113,
                         ),
-                        Text('About')
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('Register Event')
                       ],
                     ),
                   ),
@@ -305,7 +69,7 @@ class _SettingsState extends State<Categories> {
                 onTap: () {
                   Get.back();
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const SupportUs()),
+                    MaterialPageRoute(builder: (context) => const MyEvents()),
                   );
                 },
                 child: Container(
@@ -322,14 +86,167 @@ class _SettingsState extends State<Categories> {
                     ],
                   ),
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
                         Icon(
-                          Icons.feedback,
-                          size: 112,
+                          Icons.event,
+                          size: 113,
                         ),
-                        Text('Feeback & Suggestions')
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('My Events')
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.back();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const AllEvents()),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.event,
+                          size: 113,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('All Events')
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.back();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const SponsoredEvents()),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.event,
+                          size: 113,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('Sponsored Events')
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.back();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterEvent()),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.event,
+                          size: 113,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('Attending')
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.back();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const PastEvents()),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.event,
+                          size: 113,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('Past Event')
                       ],
                     ),
                   ),

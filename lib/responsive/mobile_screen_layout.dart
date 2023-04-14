@@ -75,7 +75,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onTap: () {
                 Get.back();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const WomenBusiness()),
+                  MaterialPageRoute(
+                      builder: (context) => const WomenBusiness()),
                 );
               },
             ),
@@ -95,7 +96,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onTap: () {
                 Get.back();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const BlackKickStart()),
+                  MaterialPageRoute(
+                      builder: (context) => const BlackKickStart()),
                 );
               },
             ),
@@ -105,7 +107,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onTap: () {
                 Get.back();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const WomenBusiness()),
+                  MaterialPageRoute(
+                      builder: (context) => const WomenBusiness()),
                 );
               },
             ),
@@ -115,7 +118,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onTap: () {
                 Get.back();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const RegisterBusiness()),
+                  MaterialPageRoute(
+                      builder: (context) => const RegisterBusiness()),
                 );
               },
             ),
@@ -125,7 +129,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onTap: () {
                 Get.back();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const RegisterEvent()),
+                  MaterialPageRoute(
+                      builder: (context) => const RegisterEvent()),
                 );
               },
             ),
@@ -206,8 +211,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               text: 'FAVS',
             ),
             GButton(
-              icon: Icons.category,
-              text: 'Find',
+              icon: Icons.more_horiz_outlined,
+              text: 'More',
             ),
           ],
         ),
@@ -239,7 +244,10 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     );
   }
 
-  Widget _buildItem({required IconData icon, required String title, required GestureTapCallback onTap}) {
+  Widget _buildItem(
+      {required IconData icon,
+      required String title,
+      required GestureTapCallback onTap}) {
     return ListTile(
       leading: Icon(icon),
       minLeadingWidth: 5,
