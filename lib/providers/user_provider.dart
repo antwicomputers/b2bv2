@@ -97,6 +97,7 @@ class UserProvider with ChangeNotifier {
         fullname: fullname,
         photoUrl: photoUrl,
       );
+      _user = cred.user;
       await _firestore.collection('users').doc(cred.user!.uid).set(user.toMap());
       res = "success";
     } catch (err) {
@@ -113,7 +114,10 @@ class UserProvider with ChangeNotifier {
     String res = 'Some error occurred';
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+        final cred = await _auth.signInWithEmailAndPassword(email: email, password: password);
+        _user = cred.user;
+        userDataStream(_user!);
+        // navigateToTabsPage(_user);
         res = 'success';
       } else {
         res = 'Please enter all the fields';
