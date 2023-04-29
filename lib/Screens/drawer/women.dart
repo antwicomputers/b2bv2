@@ -1,3 +1,4 @@
+import 'package:b2bmobile/Screens/pages/all_women.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,16 +12,16 @@ class WomenBusiness extends StatefulWidget {
 class _WomenBusinessState extends State<WomenBusiness> {
   @override
   Widget build(BuildContext context) {
-    // double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
+// double height = MediaQuery.of(context).size.height;
+// double width = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
         bottomSheet: InkWell(
           onTap: () {
-            if (kDebugMode) {
-              print('you clicked the bottom');
-            }
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const AllWomen()),
+            );
           },
           child: Container(
             height: 50,
@@ -64,7 +65,7 @@ class _WomenBusinessState extends State<WomenBusiness> {
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "Black Queens. You are strong, fierce and resilient. You are determined and dedicate yourselves to everything you do.  You are a force to be reckoned with and we want you to know that we see you, admire you, love you, support you and thank you. We are giving you your own section in Back2Black Mobile to make it easy for others who want to support you and your businesses. We salute you!",
+                  "Black Queens. You are strong, fierce and resilient. You are determined and dedicate yourselves to everything you do. You are a force to be reckoned with and we want you to know that we see you, admire you, love you, support you and thank you. We are giving you your own section in Back2Black Mobile to make it easy for others who want to support you and your businesses. We salute you!",
                   textAlign: TextAlign.justify,
                 ),
               ),

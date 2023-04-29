@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:b2bmobile/Screens/business/register_business.dart';
-import 'package:b2bmobile/Screens/drawer/about_us.dart';
 import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
-import 'package:b2bmobile/Screens/drawer/help_us.dart';
 import 'package:b2bmobile/Screens/drawer/mental_health.dart';
 import 'package:b2bmobile/Screens/drawer/new_events.dart';
 import 'package:b2bmobile/Screens/drawer/women.dart';
@@ -24,8 +21,8 @@ class _SettingsState extends State<Categories> {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 20,
-          crossAxisSpacing: 10,
-          childAspectRatio: .7,
+          crossAxisSpacing: 15,
+          childAspectRatio: .8,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         children: [
@@ -33,7 +30,8 @@ class _SettingsState extends State<Categories> {
             onTap: () {
               Get.back();
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const RegisterBusiness()),
+                MaterialPageRoute(
+                    builder: (context) => const RegisterBusiness()),
               );
             },
             child: const CategoryWIdget(
@@ -50,7 +48,7 @@ class _SettingsState extends State<Categories> {
             },
             child: const CategoryWIdget(
               image: 'assets/womentile.jpeg',
-              title: 'Women Empowerment',
+              title: 'Women Empowerment\nPowered by Edwina',
             ),
           ),
           InkWell(
@@ -61,7 +59,7 @@ class _SettingsState extends State<Categories> {
               );
             },
             child: const CategoryWIdget(
-              image: 'assets/health.jpeg',
+              image: 'assets/mentaltile.jpeg',
               title: 'Essential Services',
             ),
           ),
@@ -81,7 +79,8 @@ class _SettingsState extends State<Categories> {
             onTap: () {
               Get.back();
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const RegisterBusiness()),
+                MaterialPageRoute(
+                    builder: (context) => const RegisterBusiness()),
               );
             },
             child: const CategoryWIdget(
@@ -97,7 +96,7 @@ class _SettingsState extends State<Categories> {
               );
             },
             child: const CategoryWIdget(
-              image: 'assets/events.jpg',
+              image: 'assets/events.jpeg',
               title: 'Events: Networking',
             ),
           ),
@@ -105,7 +104,8 @@ class _SettingsState extends State<Categories> {
             onTap: () {
               Get.back();
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const RegisterBusiness()),
+                MaterialPageRoute(
+                    builder: (context) => const RegisterBusiness()),
               );
             },
             child: const CategoryWIdget(
@@ -117,64 +117,12 @@ class _SettingsState extends State<Categories> {
             onTap: () {
               Get.back();
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AboutUs()),
+                MaterialPageRoute(builder: (context) => const MainEvents()),
               );
             },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.info_rounded,
-                    size: 112,
-                  ),
-                  Text('About')
-                ],
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Get.back();
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const SupportUs()),
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.feedback,
-                    size: 112,
-                  ),
-                  Text('Feeback & Suggestions')
-                ],
-              ),
+            child: const CategoryWIdget(
+              image: 'assets/news.jpeg',
+              title: 'In The News',
             ),
           ),
         ],
@@ -216,7 +164,7 @@ class CategoryWIdget extends StatelessWidget {
               image,
             ),
             height: size.height * 0.2,
-            width: size.width * 0.3,
+            width: size.width * 0.5,
             fit: BoxFit.cover,
           ),
           const SizedBox(

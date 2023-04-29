@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2bmobile/models/support.dart';
 import 'package:b2bmobile/models/users.dart';
 import 'package:flutter/foundation.dart';
 import 'package:b2bmobile/resources/storage_methods.dart';
@@ -7,8 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:b2bmobile/models/business.dart' as model;
 import 'package:b2bmobile/models/events.dart' as model;
+import 'package:b2bmobile/models/support.dart' as model;
 import 'package:get/get.dart';
-
 import '../Screens/authenticate/login_screen.dart';
 import '../responsive/mobile_screen_layout.dart';
 import '../responsive/responsive_layout_screen.dart';
@@ -31,7 +32,10 @@ class UserProvider with ChangeNotifier {
     );
   }
   Future<bool> getUserData(User firebaseUser) async {
-    final document = await FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).get();
+    final document = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(firebaseUser.uid)
+        .get();
     if (document.exists) {
       userModel = UserModel.fromMap(document.data()!);
       return true;
@@ -41,7 +45,11 @@ class UserProvider with ChangeNotifier {
   }
 
   void userDataStream(User firebaseUser) {
-    FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).snapshots().listen((document) {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(firebaseUser.uid)
+        .snapshots()
+        .listen((document) {
       if (kDebugMode) {
         print("USER STREAM WMITTING VALUE");
       }
@@ -83,12 +91,17 @@ class UserProvider with ChangeNotifier {
   }) async {
     String res = "Some error occured";
     try {
-      if (email.isNotEmpty || password.isNotEmpty || fullname.isNotEmpty || username.isNotEmpty) {}
-      UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      if (email.isNotEmpty ||
+          password.isNotEmpty ||
+          fullname.isNotEmpty ||
+          username.isNotEmpty) {}
+      UserCredential cred = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       if (kDebugMode) {
         print(cred.user!.uid);
       }
-      String photoUrl = await StorageMethods().uploadImageToStoage('profilePics', file, false);
+      String photoUrl = await StorageMethods()
+          .uploadImageToStoage('profilePics', file, false);
       //add user to database
       UserModel user = UserModel(
         username: username,
@@ -97,8 +110,10 @@ class UserProvider with ChangeNotifier {
         fullname: fullname,
         photoUrl: photoUrl,
       );
-      _user = cred.user;
-      await _firestore.collection('users').doc(cred.user!.uid).set(user.toMap());
+      await _firestore
+          .collection('users')
+          .doc(cred.user!.uid)
+          .set(user.toMap());
       res = "success";
     } catch (err) {
       res = err.toString();
@@ -114,10 +129,8 @@ class UserProvider with ChangeNotifier {
     String res = 'Some error occurred';
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
-        final cred = await _auth.signInWithEmailAndPassword(email: email, password: password);
-        _user = cred.user;
-        userDataStream(_user!);
-        // navigateToTabsPage(_user);
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
         res = 'success';
       } else {
         res = 'Please enter all the fields';
@@ -147,7 +160,8 @@ class UserProvider with ChangeNotifier {
       required String youtube,
       required Uint8List businessFile}) async {
     String message = 'some error occured';
-    String businessUrl = await StorageMethods().uploadImageToStoage('businessPics', businessFile, false);
+    String businessUrl = await StorageMethods()
+        .uploadImageToStoage('businessPics', businessFile, false);
     final ref = FirebaseFirestore.instance.collection('businesses').doc().id;
     model.Business business = model.Business(
       businessName: businessName,
@@ -187,6 +201,70 @@ class UserProvider with ChangeNotifier {
     return message;
   }
 
+//resgister support
+  Future<String> registerSupport(
+      {required String supportName,
+      required String supportDescription,
+      required String supportAddress,
+      required String supportCategory,
+      required String phone,
+      required String email,
+      required String website,
+      required String twitter,
+      required String facebook,
+      required String linkedIn,
+      required String instagram,
+      required String tiktok,
+      required String twitch,
+      required String podcast,
+      required String youtube,
+      required Uint8List businessFile}) async {
+    String message = 'some error occured';
+    String supportUrl = await StorageMethods()
+        .uploadImageToStoage('supportPics', businessFile, false);
+    final ref =
+        FirebaseFirestore.instance.collection('supportbusinesses').doc().id;
+    model.Support support = model.Support(
+      supportName: supportName,
+      supportId: ref,
+      supportDescription: supportDescription,
+      supportAddress: supportAddress,
+      isVerified: false,
+      userId: _auth.currentUser!.uid,
+      supportCategory: supportCategory,
+      createdAt: DateTime.now(),
+      phone: phone,
+      youtube: youtube,
+      isBlackOwned: false,
+      isEsential: false,
+      isFeatured: false,
+      isSponsored: false,
+      womenOriented: false,
+      email: email,
+      website: website,
+      twitter: twitter,
+      facebook: facebook,
+      linkedIn: linkedIn,
+      instagram: instagram,
+      tiktok: tiktok,
+      twitch: twitch,
+      podcast: podcast,
+      SupportUrl: supportUrl,
+    );
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('supportbusinesses')
+          .doc(ref)
+          .set(
+            support.toMap(),
+          );
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
+
   //register event
   Future<String> registerEvent(
       {required String eventName,
@@ -208,7 +286,8 @@ class UserProvider with ChangeNotifier {
       required String podcast,
       required Uint8List eventFile}) async {
     String message = 'some error occured';
-    String eventUrl = await StorageMethods().uploadImageToStoage('eventPics', eventFile, false);
+    String eventUrl = await StorageMethods()
+        .uploadImageToStoage('eventPics', eventFile, false);
     String ref = FirebaseFirestore.instance.collection('events').doc().id;
     model.Events business = model.Events(
       eventName: eventName,

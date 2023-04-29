@@ -40,8 +40,7 @@ class _AboutUsState extends State<AboutUs> {
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "Back2Black Mobile was created to establish a network of proudly owned black businesses to share their knowledge and experience in how to grow together and keep our dollar in our community"
-                  ". It is extremely important for our community to build relationships to last. We must make it a habit to support and praise each other by going the extra mile to grow together and not apart. Coming together to promote our plans for the growth of our community and children will promote healthy business partnerships and allow us to build multi-billion dollar businesses.",
+                  "Ready to connect with the vibrant community of black-owned businesses? Back2Black Mobile enables endless possibilities for growth and success. Our app provides you with easy access to a network of proudly owned black businesses, where you can discover new products, services, and opportunities. You'll also have access to exclusive content, resources, and events designed to help you thrive. With the Back2Black Mobile app, you can stay connected with other like-minded entrepreneurs and build lasting relationships that will take your business to new heights.",
                   textAlign: TextAlign.justify,
                 ),
               ),

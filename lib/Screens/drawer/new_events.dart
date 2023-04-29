@@ -23,241 +23,188 @@ class _SettingsState extends State<MainEvents> {
         title: const Text('Back2Black Mobile Networking'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          child: GridView(
+        padding: const EdgeInsets.all(20),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const RegisterEvent()),
+            );
+          },
+          child: ListView(
             children: [
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterEvent()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+              ListTile(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    color: Colors.white,
+                    width: 2,
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.event,
-                          size: 113,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text('Register Event')
-                      ],
-                    ),
-                  ),
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                leading: const Icon(
+                  Icons.event,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                title: Row(
+                  children: [
+                    Text('Register Event'),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
               ),
               InkWell(
                 onTap: () {
-                  Get.back();
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => const MyEvents()),
                   );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.event,
-                          size: 113,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text('My Events')
-                      ],
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Colors.white,
+                      width: 2,
                     ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  leading: const Icon(
+                    Icons.event_seat_rounded,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  title: Row(
+                    children: const [
+                      Text('My Events'),
+                    ],
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
               InkWell(
                 onTap: () {
-                  Get.back();
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => const AllEvents()),
                   );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.event,
-                          size: 113,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text('All Events')
-                      ],
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Colors.white,
+                      width: 2,
                     ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  leading: const Icon(
+                    Icons.calendar_month,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  title: Row(
+                    children: [
+                      Text('All Event'),
+                    ],
                   ),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
               InkWell(
                 onTap: () {
-                  Get.back();
                   Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => const SponsoredEvents()),
                   );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.event,
-                          size: 113,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text('Sponsored Events')
-                      ],
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Colors.white,
+                      width: 2,
                     ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  leading: const Icon(
+                    Icons.emoji_events_outlined,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  title: Row(
+                    children: [
+                      Text('Sponsored Event'),
+                    ],
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterEvent()),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+              SizedBox(
+                height: 20,
+              ),
+              ListTile(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    color: Colors.white,
+                    width: 2,
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.event,
-                          size: 113,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text('Attending')
-                      ],
-                    ),
-                  ),
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                leading: const Icon(
+                  Icons.event_available_sharp,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                title: Row(
+                  children: [
+                    Text('Attending'),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
               ),
               InkWell(
                 onTap: () {
-                  Get.back();
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => const PastEvents()),
                   );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.event,
-                          size: 113,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text('Past Event')
-                      ],
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Colors.white,
+                      width: 2,
                     ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  leading: const Icon(
+                    Icons.event_repeat,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  title: Row(
+                    children: const [
+                      Text('Past Event'),
+                    ],
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              ListTile(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: const Text(
+                    '\nNetworking is vital in the black community for sharing resources and opportunities, building professional relationships, and overcoming systemic barriers to success.\n'),
+              ),
             ],
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 30,
-              crossAxisSpacing: 30,
-            ),
           ),
         ),
       ),

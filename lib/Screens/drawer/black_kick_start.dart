@@ -1,3 +1,4 @@
+import 'package:b2bmobile/Screens/pages/kick_start_landing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +19,9 @@ class _MentalHealthState extends State<BlackKickStart> {
       child: Scaffold(
         bottomSheet: InkWell(
           onTap: () {
-            if (kDebugMode) {
-              print('you clicked the bottom');
-            }
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const KickStartLanding()),
+            );
           },
           child: Container(
             height: 50,
@@ -28,7 +29,7 @@ class _MentalHealthState extends State<BlackKickStart> {
             width: MediaQuery.of(context).size.width,
             child: const Center(
               child: Text(
-                "Click to Explore Essential Services",
+                "Start Here",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -51,7 +52,7 @@ class _MentalHealthState extends State<BlackKickStart> {
             children: [
               Image.asset("assets/bks.jpeg"),
               const SizedBox(
-                height: 20,
+                height: 1,
               ),
               const Text(
                 "The Black KickStart",
@@ -66,7 +67,7 @@ class _MentalHealthState extends State<BlackKickStart> {
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "Support a Business",
+                  "Support Growth and Success:\n\nIntroducing our latest initiative, The Black Kickstart program - an exclusive program designed to provide black-owned businesses with the boost they need to succeed. Our program is meticulously crafted to cater to the specific requirements of black-owned businesses, offering a comprehensive range of services provided by our community that can help accelerate growth, streamline operations and pave the way for success. Are you a resource willing to support the growth of black-owned businesses by providing mentorship, donations, or any other service? Fill out our form to support this movement today!\n\nKickstart Your Business: Search Our Database Today!\n\nAre you looking for mentorship or a service opportunity but lack the financial means to get started? Search our database today for a comprehensive list of resources that can help kickstart your business!",
                   textAlign: TextAlign.justify,
                   style: TextStyle(fontSize: 15),
                 ),

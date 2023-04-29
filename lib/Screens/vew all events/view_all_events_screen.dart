@@ -67,7 +67,8 @@ class _ViewAllEventsScreenState extends State<ViewAllEventsScreen> {
                   return ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
-                      Events event = Events.fromMap(snapshot.data!.docs[index].data());
+                      Events event =
+                          Events.fromMap(snapshot.data!.docs[index].data());
                       return EventCardWidget(event: event);
                     },
                   );
@@ -96,7 +97,8 @@ class _ViewAllEventsScreenState extends State<ViewAllEventsScreen> {
                   return ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
-                      Events event = Events.fromMap(snapshot.data!.docs[index].data());
+                      Events event =
+                          Events.fromMap(snapshot.data!.docs[index].data());
 
                       if (!event.isVerified) {
                         Container();
@@ -133,7 +135,8 @@ class _ViewAllEventsScreenState extends State<ViewAllEventsScreen> {
                   return ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
-                      Events event = Events.fromMap(snapshot.data!.docs[index].data());
+                      Events event =
+                          Events.fromMap(snapshot.data!.docs[index].data());
                       if (!event.isVerified) {
                         return Container();
                       }
@@ -164,7 +167,8 @@ class _ViewAllEventsScreenState extends State<ViewAllEventsScreen> {
                   return ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
-                      Events event = Events.fromMap(snapshot.data!.docs[index].data());
+                      Events event =
+                          Events.fromMap(snapshot.data!.docs[index].data());
                       return EventCardWidget(event: event);
                     },
                   );
@@ -249,7 +253,8 @@ class EventCardWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          DateFormat('dd/MMM/yyyy HH:MM a').format(event.eventDate),
+                          DateFormat('dd/MMM/yyyy HH:MM a')
+                              .format(event.eventDate),
                           style: const TextStyle(
                             fontSize: 10,
                           ),

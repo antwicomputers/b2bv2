@@ -1,3 +1,4 @@
+import 'package:b2bmobile/Screens/pages/all_esential.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +19,9 @@ class _MentalHealthState extends State<MentalHealth> {
       child: Scaffold(
         bottomSheet: InkWell(
           onTap: () {
-            if (kDebugMode) {
-              print('you clicked the bottom');
-            }
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const AllEssential()),
+            );
           },
           child: Container(
             height: 50,

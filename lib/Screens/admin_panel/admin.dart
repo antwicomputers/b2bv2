@@ -1,6 +1,7 @@
 import 'package:b2bmobile/Screens/admin_panel/all_feedback.dart';
 import 'package:b2bmobile/Screens/admin_panel/event%20request%20/event_request_screen.dart';
 import 'package:b2bmobile/Screens/admin_panel/manage_users.dart';
+import 'package:b2bmobile/Screens/admin_panel/support_request/support_request_screen.dart';
 import 'package:b2bmobile/Screens/verification%20request/verification_request_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:b2bmobile/Screens/admin_panel/all_businesses.dart';
@@ -61,14 +62,16 @@ class _AdminPanelState extends State<AdminPanel> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Get.to(() => const SupportRequest());
+            },
             child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
                 child: Center(
                     child: Text(
-                  "Manage Categories",
+                  "Support\nVerification",
                   textAlign: TextAlign.center,
                 )),
               ),
