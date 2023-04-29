@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:b2bmobile/Screens/pages/all_esential.dart';
+import 'package:b2bmobile/Screens/pages/all_featured.dart';
+import 'package:b2bmobile/Screens/pages/all_sponsors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:b2bmobile/Screens/pages/business%20detal/business_detail_screen.dart';
 import 'package:b2bmobile/models/business.dart';
+
+import 'all_women.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,7 +50,8 @@ class _FavoritesState extends State<HomePage> {
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search, color: Colors.white),
                   hintText: 'What are you looking for... ',
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade600)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade600)),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey.shade600,
@@ -70,13 +76,15 @@ class _FavoritesState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //ToDo
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const AllSponsors()),
+                      );
                     },
                     child: Text(
                       'Show All',
                       style: GoogleFonts.bebasNeue(
                         fontSize: 18,
-                        color: Colors.blue,
                       ),
                     ),
                   ),
@@ -96,7 +104,9 @@ class _FavoritesState extends State<HomePage> {
                     .where('isBlackOwned', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -109,9 +119,12 @@ class _FavoritesState extends State<HomePage> {
                   }
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.docs.length > 30
+                        ? 30
+                        : snapshot.data!.docs.length,
                     itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                      Business business =
+                          Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
                         size: size,
@@ -137,13 +150,15 @@ class _FavoritesState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //ToDo
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const AllWomen()),
+                      );
                     },
                     child: Text(
                       'Show All',
                       style: GoogleFonts.bebasNeue(
                         fontSize: 18,
-                        color: Colors.blue,
                       ),
                     ),
                   ),
@@ -175,9 +190,12 @@ class _FavoritesState extends State<HomePage> {
                   }
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.docs.length > 30
+                        ? 30
+                        : snapshot.data!.docs.length,
                     itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                      Business business =
+                          Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
                         size: size,
@@ -203,13 +221,15 @@ class _FavoritesState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //ToDo
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const AllEssential()),
+                      );
                     },
                     child: Text(
                       'Show All',
                       style: GoogleFonts.bebasNeue(
                         fontSize: 18,
-                        color: Colors.blue,
                       ),
                     ),
                   ),
@@ -229,7 +249,9 @@ class _FavoritesState extends State<HomePage> {
                     .where('isEsential', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -242,9 +264,12 @@ class _FavoritesState extends State<HomePage> {
                   }
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.docs.length > 30
+                        ? 30
+                        : snapshot.data!.docs.length,
                     itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                      Business business =
+                          Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
                         size: size,
@@ -270,13 +295,15 @@ class _FavoritesState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //ToDo
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const AllFeatured()),
+                      );
                     },
                     child: Text(
                       'Show All',
                       style: GoogleFonts.bebasNeue(
                         fontSize: 18,
-                        color: Colors.blue,
                       ),
                     ),
                   ),
@@ -296,7 +323,9 @@ class _FavoritesState extends State<HomePage> {
                     .where('isBlackOwned', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -309,9 +338,12 @@ class _FavoritesState extends State<HomePage> {
                   }
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.docs.length > 30 ? 30 : snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.docs.length > 30
+                        ? 30
+                        : snapshot.data!.docs.length,
                     itemBuilder: (ctx, index) {
-                      Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                      Business business =
+                          Business.fromMap(snapshot.data!.docs[index].data());
                       return HomeBusinessTile(
                         business: business,
                         size: size,
@@ -331,7 +363,8 @@ class _FavoritesState extends State<HomePage> {
   }
 
   Stream<QuerySnapshot<Object?>>? getRandomBusinessesStream() {
-    final CollectionReference<Object?> businessesRef = FirebaseFirestore.instance.collection('businesses');
+    final CollectionReference<Object?> businessesRef =
+        FirebaseFirestore.instance.collection('businesses');
     final Random random = Random();
 
     return businessesRef

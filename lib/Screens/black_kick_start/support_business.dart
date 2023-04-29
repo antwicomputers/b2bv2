@@ -3,25 +3,26 @@ import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../../responsive/mobile_screen_layout.dart';
+import '../../responsive/responsive_layout_screen.dart';
+import '../../responsive/web_screen_layout.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:b2bmobile/models/support.dart';
 
-class RegisterEvent extends StatefulWidget {
-  const RegisterEvent({super.key});
+class SupportBusiness extends StatefulWidget {
+  const SupportBusiness({super.key});
 
   @override
-  State<RegisterEvent> createState() => _RegisterEventState();
+  State<SupportBusiness> createState() => _RegisterBusinessState();
 }
 
-class _RegisterEventState extends State<RegisterEvent> {
-  final TextEditingController _eventName = TextEditingController();
-  final TextEditingController _eventDescription = TextEditingController();
-  final TextEditingController _eventAddress = TextEditingController();
-  final TextEditingController _eventCategory = TextEditingController();
+class _RegisterBusinessState extends State<SupportBusiness> {
+  final TextEditingController _businessName = TextEditingController();
+  final TextEditingController _businessDescription = TextEditingController();
+  final TextEditingController _businessAddress = TextEditingController();
+  final TextEditingController _businessCategory = TextEditingController();
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _website = TextEditingController();
@@ -29,9 +30,9 @@ class _RegisterEventState extends State<RegisterEvent> {
   final TextEditingController _facebook = TextEditingController();
   final TextEditingController _linkedIn = TextEditingController();
   final TextEditingController _instagram = TextEditingController();
-  final TextEditingController _youtube = TextEditingController();
   final TextEditingController _tiktok = TextEditingController();
   final TextEditingController _twitch = TextEditingController();
+  final TextEditingController _youtube = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
   Uint8List? _image;
   final bool isBlack = false;
@@ -40,12 +41,11 @@ class _RegisterEventState extends State<RegisterEvent> {
 
   @override
   void dispose() {
-    _eventName.dispose();
-    _eventDescription.dispose();
-    _eventAddress.dispose();
-    _eventCategory.dispose();
+    _businessName.dispose();
+    _businessDescription.dispose();
+    _businessAddress.dispose();
+    _businessCategory.dispose();
     _phone.dispose();
-    _youtube.dispose();
     _email.dispose();
     _website.dispose();
     _twitter.dispose();
@@ -54,6 +54,7 @@ class _RegisterEventState extends State<RegisterEvent> {
     _instagram.dispose();
     _tiktok.dispose();
     _twitch.dispose();
+    _youtube.dispose();
     _podcast.dispose();
 
     super.dispose();
@@ -67,15 +68,13 @@ class _RegisterEventState extends State<RegisterEvent> {
     });
   }
 
-  bool isOnline = false;
-  DateTime eventDate = DateTime.now();
   final _formsKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('Register Event'),
+        title: const Text('Support Business'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -94,48 +93,46 @@ class _RegisterEventState extends State<RegisterEvent> {
                     child: Stack(
                       children: <Widget>[
                         Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: _image != null
-                              ? Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: _image == null
-                                      ? const SizedBox(
-                                          height: 150,
-                                          width: 50,
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : Container(
-                                          height: 250,
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: DecorationImage(
-                                              image: MemoryImage(_image!),
-                                              fit: BoxFit.fill,
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: _image != null
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: _image == null
+                                        ? const SizedBox(
+                                            height: 150,
+                                            width: 50,
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        : Container(
+                                            height: 250,
+                                            width: 250,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              image: DecorationImage(
+                                                image: MemoryImage(_image!),
+                                                fit: BoxFit.fill,
+                                              ),
                                             ),
-                                          ),
+                                          ))
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height: 150,
+                                      width: 150,
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.add_a_photo,
                                         ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    height: 150,
-                                    width: 150,
-                                    child: IconButton(
-                                      icon: const Icon(
-                                        Icons.add_a_photo,
+                                        iconSize: 50,
+                                        onPressed: selectImage,
                                       ),
-                                      iconSize: 50,
-                                      onPressed: selectImage,
                                     ),
-                                  ),
-                                ),
-                        ),
+                                  )),
                       ],
                     ),
                   ),
@@ -143,138 +140,50 @@ class _RegisterEventState extends State<RegisterEvent> {
                     height: 30.0,
                   ),
                   TextFormField(
-                    controller: _eventName,
+                    controller: _businessName,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                      label: Text('Enter Event Name'),
-                      prefixIcon: Icon(
-                        Icons.monetization_on,
-                      ),
-                    ),
+                        label: Text('Enter Business Name'),
+                        prefixIcon: Icon(Icons.monetization_on)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Event name is required';
+                        return 'business name is required';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
-                    controller: _eventDescription,
+                    controller: _businessDescription,
                     keyboardType: TextInputType.multiline,
                     decoration: const InputDecoration(
-                      label: Text('Enter Event Description'),
-                      prefixIcon: Icon(
-                        Icons.info,
-                      ),
-                    ),
+                        label: Text('Enter Business Description'),
+                        prefixIcon: Icon(Icons.info)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'event description is required';
+                        return 'business description is required';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
-                    controller: _eventAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'event Address is required';
-                      }
-                      return null;
-                    },
+                    controller: _businessAddress,
                     decoration: const InputDecoration(
-                      label: Text('Event Address'),
-                      prefixIcon: Icon(
-                        Icons.location_city,
-                      ),
-                    ),
+                        label: Text('Business Address'),
+                        prefixIcon: Icon(Icons.location_city)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
-                    controller: _eventCategory,
+                    controller: _businessCategory,
                     decoration: const InputDecoration(
-                      label: Text('event Category'),
-                      prefixIcon: Icon(
-                        Icons.category,
-                      ),
-                    ),
+                        label: Text('Business Category'),
+                        prefixIcon: Icon(Icons.category)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'category is required';
                       }
                       return null;
                     },
-                  ),
-                  SwitchListTile(
-                    value: isOnline,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    onChanged: (val) {
-                      isOnline = val;
-                      setState(() {});
-                    },
-                    title: Row(
-                      children: [
-                        Icon(Icons.ondemand_video_outlined,
-                            color:
-                                Theme.of(context).hintColor.withOpacity(0.7)),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Online event',
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).hintColor.withOpacity(0.7)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: Theme.of(context).hintColor,
-                    thickness: 1,
-                    height: 8,
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      DateTime? selectedDate =
-                          await DatePicker.showDateTimePicker(
-                        context,
-                        theme: const DatePickerTheme(
-                          backgroundColor: Colors.black,
-                          itemStyle: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                      if (selectedDate != null) {
-                        eventDate = selectedDate;
-                        setState(() {});
-                      }
-                    },
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    leading: Icon(Icons.calendar_month,
-                        color: Theme.of(context).hintColor.withOpacity(0.7)),
-                    horizontalTitleGap: -5,
-                    title: Text(
-                      'Event Date',
-                      style: TextStyle(
-                          color: Theme.of(context).hintColor.withOpacity(0.7)),
-                    ),
-                    subtitle: Text(
-                      DateFormat('dd/MMM/yyyy hh:mm a').format(
-                        eventDate,
-                      ),
-                      style: TextStyle(
-                        color: Theme.of(context).hintColor.withOpacity(0.7),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: Theme.of(context).hintColor,
-                    thickness: 1,
-                    height: 8,
                   ),
                   TextFormField(
                     controller: _phone,
@@ -283,21 +192,15 @@ class _RegisterEventState extends State<RegisterEvent> {
                       FilteringTextInputFormatter.digitsOnly
                     ],
                     decoration: const InputDecoration(
-                      label: Text('Phone Number'),
-                      prefixIcon: Icon(
-                        Icons.phone,
-                      ),
-                    ),
+                        label: Text('Phone Number'),
+                        prefixIcon: Icon(Icons.phone)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     controller: _email,
                     decoration: const InputDecoration(
-                      label: Text('email'),
-                      prefixIcon: Icon(
-                        Icons.email,
-                      ),
-                    ),
+                        label: Text('email'),
+                        prefixIcon: Icon(FontAwesomeIcons.at)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
@@ -394,40 +297,50 @@ class _RegisterEventState extends State<RegisterEvent> {
                   const SizedBox(
                     height: 20,
                   ),
+                  // ElevatedButton(
+                  //   onPressed: selectImages,
+                  //   child: const Text('Select 3 Images'),
+                  // ),
+
                   Consumer<UserProvider>(
                     builder: (context, value, child) => ElevatedButton(
                       onPressed: () async {
                         setState(() {
                           _isLoading = true;
                         });
-                        String message = await value.registerEvent(
-                          eventName: _eventName.text,
-                          eventDescription: _eventDescription.text,
-                          eventAddress: _eventAddress.text,
-                          eventCategory: _eventCategory.text,
+                        String message = await value.registerSupport(
+                          supportName: _businessName.text,
+                          supportDescription: _businessDescription.text,
+                          supportAddress: _businessAddress.text,
+                          supportCategory: _businessCategory.text,
                           phone: _phone.text,
+                          youtube: _youtube.text,
                           email: _email.text,
-                          eventDate: eventDate,
-                          isOnline: isOnline,
                           website: _website.text,
                           twitter: _twitter.text,
-                          youtube: _youtube.text,
                           facebook: _facebook.text,
                           linkedIn: _linkedIn.text,
                           instagram: _instagram.text,
                           tiktok: _tiktok.text,
                           twitch: _twitch.text,
                           podcast: _podcast.text,
-                          eventFile: _image!,
+                          businessFile: _image!,
                         );
                         setState(() {
                           _isLoading = false;
                         });
+
                         if (message == 'success') {
-                          // ignore: use_build_context_synchronously
                           showSnackBar(message, context);
                         } else {
-                          Get.back();
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const ResponsiveLayout(
+                                mobileScreenLayout: MobileScreenLayout(),
+                                webScreenLayout: WebScreenLayout(),
+                              ),
+                            ),
+                          );
                         }
                       },
                       child: _isLoading
@@ -436,7 +349,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                                 color: primaryColor,
                               ),
                             )
-                          : const Text('Register Event'),
+                          : const Text('Register Business'),
                     ),
                   )
                 ],

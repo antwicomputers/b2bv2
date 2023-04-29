@@ -2,22 +2,22 @@ import 'package:b2bmobile/utils/app_constants.dart';
 import 'package:b2bmobile/utils/images.dart';
 import 'package:flutter/material.dart';
 
-import 'package:b2bmobile/models/business.dart';
+import 'package:b2bmobile/models/support.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BusinessDetailScreen extends StatelessWidget {
-  const BusinessDetailScreen({
+class SupportDetailScreen extends StatelessWidget {
+  const SupportDetailScreen({
     Key? key,
-    required this.business,
+    required this.support,
   }) : super(key: key);
-  final Business business;
+  final Support support;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(business.businessName),
+        title: Text(support.supportName),
         actions: [
           InkWell(
             onTap: () {},
@@ -52,7 +52,7 @@ class BusinessDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                      business.businessUrl,
+                      support.SupportUrl,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -108,7 +108,7 @@ class BusinessDetailScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      'Address: ${business.businessAddress}',
+                      'Address: ${support.supportAddress}',
                     ),
                   ),
                   const Icon(
@@ -118,7 +118,7 @@ class BusinessDetailScreen extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text(business.businessCategory),
+                  Text(support.supportCategory),
                 ],
               ),
             ),
@@ -128,7 +128,7 @@ class BusinessDetailScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
-                business.businessName,
+                support.supportName,
                 style: AppConstants.titleStyle
                     .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
               ),
@@ -148,7 +148,7 @@ class BusinessDetailScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    business.businessDescription,
+                    support.supportDescription,
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -164,25 +164,25 @@ class BusinessDetailScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  business.facebook.isEmpty
+                  support.facebook.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.facebook.com/${business.facebook}'));
+                                'https://www.facebook.com/${support.facebook}'));
                           },
                           icon: const Icon(
                             Icons.facebook,
                             size: 40,
                           ),
                         ),
-                  business.email.isEmpty
+                  support.email.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(Uri(
                               scheme: 'mailto',
-                              path: business.email,
+                              path: support.email,
                               queryParameters: {'subject': 'Hi'},
                             ));
                           },
@@ -191,36 +191,35 @@ class BusinessDetailScreen extends StatelessWidget {
                             size: 40,
                           ),
                         ),
-                  business.phone.isEmpty
+                  support.phone.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
-                            await _launchUrl(
-                                Uri.parse('tel:${business.phone}'));
+                            await _launchUrl(Uri.parse('tel:${support.phone}'));
                           },
                           icon: const Icon(
                             Icons.phone,
                             size: 40,
                           ),
                         ),
-                  business.website.isEmpty
+                  support.website.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(
-                                Uri.parse('https://www.${business.website}'));
+                                Uri.parse('https://www.${support.website}'));
                           },
                           icon: const Icon(
                             Icons.language,
                             size: 40,
                           ),
                         ),
-                  business.twitter.isEmpty
+                  support.twitter.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://twitter.com/${business.twitter}'));
+                                'https://twitter.com/${support.twitter}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -233,12 +232,12 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.twitch.isEmpty
+                  support.twitch.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.twitch.tv/${business.twitch}'));
+                                'https://www.twitch.tv/${support.twitch}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -251,22 +250,22 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.youtube.isEmpty
+                  support.youtube.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
-                            await _launchUrl(Uri.parse(business.youtube));
+                            await _launchUrl(Uri.parse(support.youtube));
                           },
                           icon: const Icon(
                             FontAwesomeIcons.youtube,
                           ),
                         ),
-                  business.tiktok.isEmpty
+                  support.tiktok.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.tiktok.com/${business.tiktok}'));
+                                'https://www.tiktok.com/${support.tiktok}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -279,12 +278,12 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.linkedIn.isEmpty
+                  support.linkedIn.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.linkedin.com/in/${business.linkedIn}'));
+                                'https://www.linkedin.com/in/${support.linkedIn}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -297,12 +296,12 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.instagram.isEmpty
+                  support.instagram.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.instagram.com/${business.instagram}'));
+                                'https://www.instagram.com/${support.instagram}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -315,11 +314,11 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.podcast.isEmpty
+                  support.podcast.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
-                            await _launchUrl(Uri.parse(business.podcast));
+                            await _launchUrl(Uri.parse(support.podcast));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
