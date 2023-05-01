@@ -1,3 +1,4 @@
+import 'package:b2bmobile/userresources/user_resources_landing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:b2bmobile/Screens/business/register_business.dart';
@@ -80,7 +81,7 @@ class _SettingsState extends State<Categories> {
               Get.back();
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => const RegisterBusiness()),
+                    builder: (context) => const ResourceLanding()),
               );
             },
             child: const CategoryWIdget(

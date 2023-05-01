@@ -2,7 +2,9 @@ import 'package:b2bmobile/Screens/admin_panel/all_feedback.dart';
 import 'package:b2bmobile/Screens/admin_panel/event%20request%20/event_request_screen.dart';
 import 'package:b2bmobile/Screens/admin_panel/manage_users.dart';
 import 'package:b2bmobile/Screens/admin_panel/support_request/support_request_screen.dart';
+import 'package:b2bmobile/Screens/user_resource_request/user_request_screen.dart';
 import 'package:b2bmobile/Screens/verification%20request/verification_request_screen.dart';
+import 'package:b2bmobile/userresources/user_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:b2bmobile/Screens/admin_panel/all_businesses.dart';
 import 'package:get/get.dart';
@@ -126,14 +128,18 @@ class _AdminPanelState extends State<AdminPanel> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const UserSupportRequest(),
+              ),
+            ),
             child: SizedBox(
               width: width * 0.4,
               height: height * 0.15,
               child: const Card(
                 child: Center(
                     child: Text(
-                  "Assign Business Owners",
+                  "Resource Requests",
                   textAlign: TextAlign.center,
                 )),
               ),
