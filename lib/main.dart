@@ -1,11 +1,18 @@
+import 'package:b2bmobile/Screens/drawer/alerts.dart';
 import 'package:b2bmobile/Screens/splash%20screen/splash_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +28,29 @@ void main() async {
     );
   } else {
     await Firebase.initializeApp();
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
   runApp(const MyApp());

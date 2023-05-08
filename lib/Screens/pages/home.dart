@@ -4,6 +4,7 @@ import 'package:b2bmobile/Screens/pages/all_esential.dart';
 import 'package:b2bmobile/Screens/pages/all_featured.dart';
 import 'package:b2bmobile/Screens/pages/all_sponsors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +22,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _FavoritesState extends State<HomePage> {
+  @override
+  void initState() {
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        debugPrint("onMessage:");
+        //log("onMessage: $message" as num);
+        final snackBar =
+            SnackBar(content: Text(message.notification?.title ?? ""));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

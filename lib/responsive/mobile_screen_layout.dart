@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:b2bmobile/Screens/admin_panel/admin.dart';
 import 'package:b2bmobile/Screens/business/register_business.dart';
 import 'package:b2bmobile/Screens/drawer/about_us.dart';
@@ -12,6 +14,7 @@ import 'package:b2bmobile/Screens/pages/maps.dart';
 import 'package:b2bmobile/Screens/pages/categories.dart';
 import 'package:b2bmobile/Screens/vew%20all%20events/view_all_events_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -27,6 +30,7 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+  @override
   int _selectedIndex = 0;
 
   void navigateBottomBar(int index) {
@@ -42,7 +46,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     const Categories(),
   ];
   // late model.User user;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
