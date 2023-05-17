@@ -30,10 +30,11 @@ class _ViewAllEventsScreenState extends State<AllEvents> {
           body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('events')
-                .where(
-                  'asTimeStamp',
-                  isGreaterThan: DateTime.now(),
-                )
+                // .where(
+                //   'asTimeStamp',
+                //   isGreaterThan: DateTime.now(),
+                // )
+                .where('isVerified')
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

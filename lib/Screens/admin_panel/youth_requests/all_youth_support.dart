@@ -1,21 +1,20 @@
-import 'package:b2bmobile/Screens/pages/event%20detail%20page/event_details_screen.dart';
-import 'package:b2bmobile/models/events.dart';
+import 'package:b2bmobile/Screens/pages/support_detail_page/support_detail_screen.dart';
+import 'package:b2bmobile/models/support.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/app_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class PastEvents extends StatefulWidget {
-  const PastEvents({Key? key}) : super(key: key);
+class AllYouth extends StatefulWidget {
+  const AllYouth({super.key});
 
   @override
-  State<PastEvents> createState() => _ViewAllEventsScreenState();
+  State<AllYouth> createState() => _AllYouthState();
 }
 
-class _ViewAllEventsScreenState extends State<PastEvents> {
+class _AllYouthState extends State<AllYouth> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -25,17 +24,15 @@ class _ViewAllEventsScreenState extends State<PastEvents> {
         builder: (context, value, child) => Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black,
-            title: const Text('Previous Events'),
-            centerTitle: true,
+            title: const Text('Youth Resources'),
           ),
           body: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('events')
+                .collection('youthresource')
                 .where(
-                  'asTimeStamp',
-                  isLessThan: DateTime.now(),
+                  'isBlackOwned',
+                  isEqualTo: true,
                 )
-                .limit(20)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,19 +42,21 @@ class _ViewAllEventsScreenState extends State<PastEvents> {
               }
               if (snapshot.data?.docs.isEmpty ?? true) {
                 return const Center(
-                  child: Text('No Past Events available'),
+                  child: Text('No resources available'),
                 );
               }
-
               return ListView.builder(
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (context, index) {
-                  Events event =
-                      Events.fromMap(snapshot.data!.docs[index].data());
-                  if (!event.isVerified) {
-                    return Container();
+                  Support support =
+                      Support.fromMap(snapshot.data!.docs[index].data());
+
+                  if (!support.isVerified) {
+                    Container();
                   }
-                  return EventCardWidget(event: event);
+                  return SupportCardWidget(
+                    support: support,
+                  );
                 },
               );
             },
@@ -68,18 +67,18 @@ class _ViewAllEventsScreenState extends State<PastEvents> {
   }
 }
 
-class EventCardWidget extends StatelessWidget {
-  const EventCardWidget({
+class SupportCardWidget extends StatelessWidget {
+  const SupportCardWidget({
     super.key,
-    required this.event,
+    required this.support,
   });
-  final Events event;
+  final Support support;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => EventDetailsScreen(event: event));
+        Get.to(() => SupportDetailScreen(support: support));
       },
       child: Container(
         height: size.height * 0.15,
@@ -105,7 +104,7 @@ class EventCardWidget extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(7),
                 child: Image.network(
-                  event.eventUrl,
+                  support.SupportUrl,
                   height: size.height * 0.13,
                   width: size.height * 0.13,
                   fit: BoxFit.cover,
@@ -122,7 +121,7 @@ class EventCardWidget extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        event.eventName,
+                        support.supportName,
                         style: AppConstants.titleStyle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -131,30 +130,11 @@ class EventCardWidget extends StatelessWidget {
                     Expanded(
                       flex: 3,
                       child: Text(
-                        event.eventDescription,
+                        support.supportDescription,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          DateFormat('dd/MMM/yyyy HH:MM a')
-                              .format(event.eventDate),
-                          style: const TextStyle(
-                            fontSize: 10,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          'Attending :12',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               )

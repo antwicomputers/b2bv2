@@ -1,25 +1,29 @@
 import 'package:b2bmobile/Screens/black_kick_start/support_business.dart';
 import 'package:b2bmobile/Screens/drawer/register_event.dart';
 import 'package:b2bmobile/Screens/pages/support_resources.dart';
+import 'package:b2bmobile/Screens/pages/youth_resource.dart';
 import 'package:b2bmobile/Screens/user_resource.dart';
 import 'package:b2bmobile/Screens/vew%20all%20events/my_events.dart';
+import 'package:b2bmobile/models/youth.dart';
 import 'package:b2bmobile/userresources/user_resources.dart';
 import 'package:flutter/material.dart';
 
-class ResourceLanding extends StatefulWidget {
-  const ResourceLanding({super.key});
+import '../Screens/admin_panel/youth_requests/all_youth_support.dart';
+
+class YouthResourceLanding extends StatefulWidget {
+  const YouthResourceLanding({super.key});
 
   @override
-  State<ResourceLanding> createState() => _ResourceLandingState();
+  State<YouthResourceLanding> createState() => _YouthResourceLandingState();
 }
 
-class _ResourceLandingState extends State<ResourceLanding> {
+class _YouthResourceLandingState extends State<YouthResourceLanding> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('Resources'),
+        title: const Text('Youth Empowerment'),
         centerTitle: true,
       ),
       body: Padding(
@@ -27,7 +31,7 @@ class _ResourceLandingState extends State<ResourceLanding> {
         child: InkWell(
           onTap: () {
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const AddResource()),
+              MaterialPageRoute(builder: (context) => const YouthResource()),
             );
           },
           child: ListView(
@@ -57,8 +61,7 @@ class _ResourceLandingState extends State<ResourceLanding> {
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const UserResources()),
+                    MaterialPageRoute(builder: (context) => const AllYouth()),
                   );
                 },
                 child: ListTile(
@@ -96,7 +99,7 @@ class _ResourceLandingState extends State<ResourceLanding> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 title: const Text(
-                    '\nAccess to resources such as education, healthcare, and job opportunities can help break down systemic barriers that have historically prevented Black people from achieving economic and social mobility. With access to resources, Black individuals can gain the skills, knowledge, and experience necessary to succeed in various fields and industries.\n'),
+                    '\nEmpowering black youth is crucial for achieving equality, breaking generational cycles, fostering diversity, promoting leadership, driving economic empowerment, and nurturing social cohesion. By providing resources, opportunities, and support, we can create a more equitable and inclusive future where black youth can thrive and contribute to society\'s growth and well-being.\n'),
               ),
             ],
           ),

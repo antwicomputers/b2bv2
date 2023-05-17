@@ -389,4 +389,64 @@ class UserProvider with ChangeNotifier {
     }
     return message;
   }
+
+  //register youth support
+  Future<String> youthRegister(
+      {required String supportName,
+      required String supportDescription,
+      required String supportAddress,
+      required String supportCategory,
+      required String phone,
+      required String email,
+      required String website,
+      required String twitter,
+      required String facebook,
+      required String linkedIn,
+      required String instagram,
+      required String tiktok,
+      required String twitch,
+      required String podcast,
+      required String youtube,
+      required Uint8List businessFile}) async {
+    String message = 'some error occured';
+    String supportUrl = await StorageMethods()
+        .uploadImageToStoage('youthPics', businessFile, false);
+    final ref = FirebaseFirestore.instance.collection('youthresource').doc().id;
+    model.Support support = model.Support(
+      supportName: supportName,
+      supportId: ref,
+      supportDescription: supportDescription,
+      supportAddress: supportAddress,
+      isVerified: false,
+      userId: _auth.currentUser!.uid,
+      supportCategory: supportCategory,
+      createdAt: DateTime.now(),
+      phone: phone,
+      youtube: youtube,
+      isBlackOwned: false,
+      isEsential: false,
+      isFeatured: false,
+      isSponsored: false,
+      womenOriented: false,
+      email: email,
+      website: website,
+      twitter: twitter,
+      facebook: facebook,
+      linkedIn: linkedIn,
+      instagram: instagram,
+      tiktok: tiktok,
+      twitch: twitch,
+      podcast: podcast,
+      SupportUrl: supportUrl,
+    );
+
+    try {
+      await FirebaseFirestore.instance.collection('youthresource').doc(ref).set(
+            support.toMap(),
+          );
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
 }
