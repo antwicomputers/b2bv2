@@ -1,5 +1,6 @@
 import 'package:b2bmobile/utils/app_constants.dart';
 import 'package:b2bmobile/utils/images.dart';
+import 'package:b2bmobile/utils/report_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:b2bmobile/models/business.dart';
@@ -20,7 +21,12 @@ class BusinessDetailScreen extends StatelessWidget {
         title: Text(business.businessName),
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => DropDownTextFieldScreen()),
+              );
+            },
             child: Row(
               children: const [
                 Text('Report'),

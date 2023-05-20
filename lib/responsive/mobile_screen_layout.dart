@@ -171,7 +171,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onTap: () {
                 Get.back();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SupportUs()),
+                  MaterialPageRoute(builder: (context) => SupportUs()),
                 );
               },
             ),

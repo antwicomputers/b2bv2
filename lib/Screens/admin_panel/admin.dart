@@ -1,6 +1,7 @@
 import 'package:b2bmobile/Screens/admin_panel/all_feedback.dart';
 import 'package:b2bmobile/Screens/admin_panel/event%20request%20/event_request_screen.dart';
 import 'package:b2bmobile/Screens/admin_panel/manage_users.dart';
+import 'package:b2bmobile/Screens/admin_panel/report_business.dart';
 import 'package:b2bmobile/Screens/admin_panel/support_request/support_request_screen.dart';
 import 'package:b2bmobile/Screens/admin_panel/youth_requests/youth_request_screen.dart';
 import 'package:b2bmobile/Screens/user_resource_request/user_request_screen.dart';
@@ -112,7 +113,7 @@ class _AdminPanelState extends State<AdminPanel> {
           InkWell(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const ManageUsers(),
+                builder: (context) => const BusinessReport(),
               ),
             ),
             child: SizedBox(
@@ -121,7 +122,7 @@ class _AdminPanelState extends State<AdminPanel> {
               child: const Card(
                 child: Center(
                     child: Text(
-                  "Manage Users",
+                  "Business Feedback",
                   textAlign: TextAlign.center,
                 )),
               ),
@@ -130,7 +131,7 @@ class _AdminPanelState extends State<AdminPanel> {
           InkWell(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const UserSupportRequest(),
+                builder: (context) => const BusinessReport(),
               ),
             ),
             child: SizedBox(
