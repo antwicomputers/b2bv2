@@ -1,6 +1,7 @@
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
+import 'package:b2bmobile/widgets/predict_address.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -110,7 +111,8 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                             width: 250,
                                             decoration: BoxDecoration(
                                               border: Border.all(),
-                                              borderRadius: BorderRadius.circular(15),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
                                               image: DecorationImage(
                                                 image: MemoryImage(_image!),
                                                 fit: BoxFit.fill,
@@ -141,7 +143,8 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                     controller: _businessName,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                        label: Text('Enter Business Name'), prefixIcon: Icon(Icons.monetization_on)),
+                        label: Text('Enter Business Name'),
+                        prefixIcon: Icon(Icons.monetization_on)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'business name is required';
@@ -152,8 +155,9 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   TextFormField(
                     controller: _businessDescription,
                     keyboardType: TextInputType.multiline,
-                    decoration:
-                        const InputDecoration(label: Text('Enter Business Description'), prefixIcon: Icon(Icons.info)),
+                    decoration: const InputDecoration(
+                        label: Text('Enter Business Description'),
+                        prefixIcon: Icon(Icons.info)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'business description is required';
@@ -164,14 +168,16 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _businessAddress,
-                    decoration:
-                        const InputDecoration(label: Text('Business Address'), prefixIcon: Icon(Icons.location_city)),
+                    decoration: const InputDecoration(
+                        label: Text('Business Address'),
+                        prefixIcon: Icon(Icons.location_city)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _businessCategory,
-                    decoration:
-                        const InputDecoration(label: Text('Business Category'), prefixIcon: Icon(Icons.category)),
+                    decoration: const InputDecoration(
+                        label: Text('Business Category'),
+                        prefixIcon: Icon(Icons.category)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'category is required';
@@ -182,13 +188,19 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   TextFormField(
                     controller: _phone,
                     keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                    decoration: const InputDecoration(label: Text('Phone Number'), prefixIcon: Icon(Icons.phone)),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    decoration: const InputDecoration(
+                        label: Text('Phone Number'),
+                        prefixIcon: Icon(Icons.phone)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     controller: _email,
-                    decoration: const InputDecoration(label: Text('email'), prefixIcon: Icon(FontAwesomeIcons.at)),
+                    decoration: const InputDecoration(
+                        label: Text('email'),
+                        prefixIcon: Icon(FontAwesomeIcons.at)),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
@@ -278,17 +290,20 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _podcast,
-                    decoration:
-                        const InputDecoration(label: Text('Podcast'), prefixIcon: Icon(FontAwesomeIcons.podcast)),
+                    decoration: const InputDecoration(
+                        label: Text('Podcast'),
+                        prefixIcon: Icon(FontAwesomeIcons.podcast)),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  // ElevatedButton(
-                  //   onPressed: selectImages,
-                  //   child: const Text('Select 3 Images'),
-                  // ),
-
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => AddressScreen()));
+                    },
+                    child: const Text('Select Address'),
+                  ),
                   Consumer<UserProvider>(
                     builder: (context, value, child) => ElevatedButton(
                       onPressed: () async {
