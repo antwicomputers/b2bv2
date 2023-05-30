@@ -311,23 +311,24 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                           _isLoading = true;
                         });
                         String message = await value.registerBusiness(
-                          businessName: _businessName.text,
-                          businessDescription: _businessDescription.text,
-                          businessAddress: _businessAddress.text,
-                          businessCategory: _businessCategory.text,
-                          phone: _phone.text,
-                          youtube: _youtube.text,
-                          email: _email.text,
-                          website: _website.text,
-                          twitter: _twitter.text,
-                          facebook: _facebook.text,
-                          linkedIn: _linkedIn.text,
-                          instagram: _instagram.text,
-                          tiktok: _tiktok.text,
-                          twitch: _twitch.text,
-                          podcast: _podcast.text,
-                          businessFile: _image!,
-                        );
+                            businessName: _businessName.text,
+                            businessDescription: _businessDescription.text,
+                            businessAddress: _businessAddress.text,
+                            businessCategory: _businessCategory.text,
+                            phone: _phone.text,
+                            youtube: _youtube.text,
+                            email: _email.text,
+                            website: _website.text,
+                            twitter: _twitter.text,
+                            facebook: _facebook.text,
+                            linkedIn: _linkedIn.text,
+                            instagram: _instagram.text,
+                            tiktok: _tiktok.text,
+                            twitch: _twitch.text,
+                            podcast: _podcast.text,
+                            businessFile: _image!,
+                            isLiked: [],
+                            isFavorite: []);
                         setState(() {
                           _isLoading = false;
                         });

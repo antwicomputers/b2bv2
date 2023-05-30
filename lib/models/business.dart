@@ -26,18 +26,18 @@ class Business {
   final bool isEsential;
   final bool isFeatured;
   final bool isSponsored;
+  final List<String> isLiked;
+  final List<String> isFavorite;
 
   const Business({
     required this.businessName,
     required this.businessDescription,
     required this.businessAddress,
     required this.businessCategory,
-    required this.createdAt,
-    required this.phone,
-    required this.youtube,
-    required this.isVerified,
     required this.businessId,
     required this.userId,
+    required this.createdAt,
+    required this.phone,
     required this.email,
     required this.website,
     required this.twitter,
@@ -49,10 +49,14 @@ class Business {
     required this.podcast,
     required this.businessUrl,
     required this.isBlackOwned,
+    required this.youtube,
     required this.womenOriented,
+    required this.isVerified,
     required this.isEsential,
     required this.isFeatured,
     required this.isSponsored,
+    required this.isLiked,
+    required this.isFavorite,
   });
 
   Business copyWith({
@@ -81,6 +85,8 @@ class Business {
     bool? isFeatured,
     String? businessId,
     bool? isSponsored,
+    List<String>? isLiked,
+    List<String>? isFavorite,
   }) {
     return Business(
       businessName: businessName ?? this.businessName,
@@ -108,6 +114,8 @@ class Business {
       isEsential: isEsential ?? this.isEsential,
       isFeatured: isFeatured ?? this.isFeatured,
       isSponsored: isSponsored ?? this.isSponsored,
+      isLiked: isLiked ?? this.isLiked,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
@@ -138,6 +146,8 @@ class Business {
       'isEsential': isEsential,
       'isFeatured': isFeatured,
       'isSponsored': isSponsored,
+      'isLiked': isLiked,
+      'isFavorite': isFavorite,
     };
   }
 
@@ -147,7 +157,9 @@ class Business {
       businessDescription: map['businessDescription'] ?? '',
       businessAddress: map['businessAddress'] ?? '',
       businessCategory: map['businessCategory'] ?? '',
-      createdAt: map['createdAt'] == null ? null : DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      createdAt: map['createdAt'] == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
       phone: map['phone'] ?? '',
       businessId: map['businessId'] ?? '',
       email: map['email'] ?? '',
@@ -168,16 +180,19 @@ class Business {
       isEsential: map['isEsential'] ?? false,
       isFeatured: map['isFeatured'] ?? false,
       isSponsored: map['isSponsored'] ?? false,
+      isLiked: List<String>.from(map['isLiked'] ?? []),
+      isFavorite: List<String>.from(map['isFavorite'] ?? []),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Business.fromJson(String source) => Business.fromMap(json.decode(source));
+  factory Business.fromJson(String source) =>
+      Business.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Business(businessName: $businessName, youtube: $youtube,businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored)';
+    return 'Business(businessName: $businessName, youtube: $youtube,businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored, isLiked: $isLiked, isFavorite: $isFavorite)';
   }
 
   @override
@@ -210,7 +225,9 @@ class Business {
         other.womenOriented == womenOriented &&
         other.isEsential == isEsential &&
         other.isFeatured == isFeatured &&
-        other.isSponsored == isSponsored;
+        other.isSponsored == isSponsored &&
+        other.isLiked == isLiked &&
+        other.isFavorite == isFavorite;
   }
 
   @override
@@ -239,6 +256,8 @@ class Business {
         womenOriented.hashCode ^
         isEsential.hashCode ^
         isFeatured.hashCode ^
-        isSponsored.hashCode;
+        isSponsored.hashCode ^
+        isLiked.hashCode ^
+        isFavorite.hashCode;
   }
 }

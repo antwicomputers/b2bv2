@@ -44,6 +44,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   flutter_swiper_null_safety: ^1.0.2
   font_awesome_flutter: ^10.4.0
+  geocoding: ^2.1.0
   geolocator: ^9.0.2
   geopoint: ^1.0.0
   get: ^4.6.5
@@ -53,6 +54,8 @@ dependencies:
   hidden_drawer_menu: ^3.0.1
   image_picker: ^0.8.6+1
   intl: null
+  location: ^4.4.0
+  permission_handler: ^10.2.0
   provider: ^6.0.5
   scroll_snap_list: ^0.9.1
   shrink_sidemenu: ^2.0.0+2-null-safety

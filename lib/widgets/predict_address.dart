@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AddressScreen extends StatefulWidget {
   @override
@@ -37,16 +39,32 @@ class _AddressScreenState extends State<AddressScreen> {
     }
   }
 
-  void _saveAddressToFirebase(String address) {
+  void _saveAddressToFirebase(String address) async {
     final firebaseInstance = FirebaseFirestore.instance;
     final collectionRef = firebaseInstance.collection('addresses');
-    final documentRef = collectionRef.doc();
 
-    documentRef.set({'address': address}).then((value) {
-      print('Address saved to Firebase.');
-    }).catchError((error) {
-      print('Failed to save address: $error');
-    });
+    try {
+      final List<Location> locations = await locationFromAddress(address);
+      if (locations.isNotEmpty) {
+        final LatLng latLng =
+            LatLng(locations.first.latitude, locations.first.longitude);
+        final documentRef = collectionRef.doc();
+
+        documentRef.set({
+          'address': address,
+          'latitude': latLng.latitude,
+          'longitude': latLng.longitude,
+        }).then((value) {
+          print('Address saved to Firebase.');
+        }).catchError((error) {
+          print('Failed to save address: $error');
+        });
+      } else {
+        print('Failed to find location for the given address.');
+      }
+    } catch (error) {
+      print('Error occurred while retrieving location: $error');
+    }
   }
 
   @override

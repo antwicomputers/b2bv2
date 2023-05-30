@@ -1,3 +1,4 @@
+import 'package:b2bmobile/Screens/pages/training_request/training_request.dart';
 import 'package:b2bmobile/userresources/user_resources_landing.dart';
 import 'package:b2bmobile/youthresource/youth_resource_landing.dart';
 import 'package:flutter/material.dart';
@@ -119,12 +120,13 @@ class _SettingsState extends State<Categories> {
             onTap: () {
               Get.back();
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const MainEvents()),
+                MaterialPageRoute(
+                    builder: (context) => TrainingRegistrationForm()),
               );
             },
             child: const CategoryWIdget(
               image: 'assets/news.jpeg',
-              title: 'In The News',
+              title: 'Training Registration',
             ),
           ),
         ],

@@ -41,7 +41,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Maps(),
+    Maps(),
     const Favorites(),
     const Categories(),
   ];

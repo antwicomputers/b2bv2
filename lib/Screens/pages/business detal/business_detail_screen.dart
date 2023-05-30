@@ -2,29 +2,67 @@ import 'package:b2bmobile/utils/app_constants.dart';
 import 'package:b2bmobile/utils/images.dart';
 import 'package:b2bmobile/utils/report_button.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:b2bmobile/models/business.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BusinessDetailScreen extends StatelessWidget {
+class BusinessDetailScreen extends StatefulWidget {
   const BusinessDetailScreen({
     Key? key,
     required this.business,
   }) : super(key: key);
+
   final Business business;
+
+  @override
+  _BusinessDetailScreenState createState() => _BusinessDetailScreenState();
+}
+
+class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
+  int likeCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the like count from Firebase when the screen is initialized
+    loadLikeCount();
+  }
+
+  void loadLikeCount() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('businesses')
+        .doc(widget.business.businessId)
+        .get();
+    setState(() {
+      likeCount = (snapshot.data() as Map<String, dynamic>)['likeCount'] ?? 0;
+    });
+  }
+
+  void incrementLikeCount() async {
+    await FirebaseFirestore.instance
+        .collection('businesses')
+        .doc(widget.business.businessId)
+        .update({'likeCount': likeCount + 1});
+    setState(() {
+      likeCount = likeCount + 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(business.businessName),
+        title: Text(widget.business.businessName),
         actions: [
           InkWell(
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => DropDownTextFieldScreen()),
+                  builder: (context) => DropDownTextFieldScreen(),
+                ),
               );
             },
             child: Row(
@@ -58,7 +96,7 @@ class BusinessDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                      business.businessUrl,
+                      widget.business.businessUrl,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -84,7 +122,7 @@ class BusinessDetailScreen extends StatelessWidget {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.thumb_up),
-                              onPressed: () {},
+                              onPressed: incrementLikeCount,
                             ),
                             IconButton(
                               icon: const Icon(Icons.favorite),
@@ -114,7 +152,7 @@ class BusinessDetailScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      'Address: ${business.businessAddress}',
+                      'Address: ${widget.business.businessAddress}',
                     ),
                   ),
                   const Icon(
@@ -124,7 +162,7 @@ class BusinessDetailScreen extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text(business.businessCategory),
+                  Text(widget.business.businessCategory),
                 ],
               ),
             ),
@@ -134,9 +172,11 @@ class BusinessDetailScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
-                business.businessName,
-                style: AppConstants.titleStyle
-                    .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
+                widget.business.businessName,
+                style: AppConstants.titleStyle.copyWith(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const Padding(
@@ -154,7 +194,7 @@ class BusinessDetailScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    business.businessDescription,
+                    widget.business.businessDescription,
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -170,25 +210,25 @@ class BusinessDetailScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  business.facebook.isEmpty
+                  widget.business.facebook.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.facebook.com/${business.facebook}'));
+                                'https://www.facebook.com/${widget.business.facebook}'));
                           },
                           icon: const Icon(
                             Icons.facebook,
                             size: 40,
                           ),
                         ),
-                  business.email.isEmpty
+                  widget.business.email.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(Uri(
                               scheme: 'mailto',
-                              path: business.email,
+                              path: widget.business.email,
                               queryParameters: {'subject': 'Hi'},
                             ));
                           },
@@ -197,36 +237,36 @@ class BusinessDetailScreen extends StatelessWidget {
                             size: 40,
                           ),
                         ),
-                  business.phone.isEmpty
+                  widget.business.phone.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(
-                                Uri.parse('tel:${business.phone}'));
+                                Uri.parse('tel:${widget.business.phone}'));
                           },
                           icon: const Icon(
                             Icons.phone,
                             size: 40,
                           ),
                         ),
-                  business.website.isEmpty
+                  widget.business.website.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
-                            await _launchUrl(
-                                Uri.parse('https://www.${business.website}'));
+                            await _launchUrl(Uri.parse(
+                                'https://www.${widget.business.website}'));
                           },
                           icon: const Icon(
                             Icons.language,
                             size: 40,
                           ),
                         ),
-                  business.twitter.isEmpty
+                  widget.business.twitter.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://twitter.com/${business.twitter}'));
+                                'https://twitter.com/${widget.business.twitter}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -239,12 +279,12 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.twitch.isEmpty
+                  widget.business.twitch.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.twitch.tv/${business.twitch}'));
+                                'https://www.twitch.tv/${widget.business.twitch}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -257,40 +297,30 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.youtube.isEmpty
-                      ? Container()
-                      : IconButton(
-                          onPressed: () async {
-                            await _launchUrl(Uri.parse(business.youtube));
-                          },
-                          icon: const Icon(
-                            FontAwesomeIcons.youtube,
-                          ),
-                        ),
-                  business.tiktok.isEmpty
+                  widget.business.youtube.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.tiktok.com/${business.tiktok}'));
+                                'https://www.youtube.com/channel/${widget.business.youtube}'));
                           },
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: ImageIcon(
                               AssetImage(
-                                Images.tiktok,
+                                Images.instagram,
                               ),
                               color: Colors.white,
                               size: 40,
                             ),
                           ),
                         ),
-                  business.linkedIn.isEmpty
+                  widget.business.linkedIn.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.linkedin.com/in/${business.linkedIn}'));
+                                'https://www.linkedin.com/company/${widget.business.linkedIn}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -303,12 +333,12 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.instagram.isEmpty
+                  widget.business.instagram.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.instagram.com/${business.instagram}'));
+                                'https://www.instagram.com/${widget.business.instagram}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -321,28 +351,8 @@ class BusinessDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  business.podcast.isEmpty
-                      ? Container()
-                      : GestureDetector(
-                          onTap: () async {
-                            await _launchUrl(Uri.parse(business.podcast));
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: ImageIcon(
-                              AssetImage(
-                                Images.podcast,
-                              ),
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                          ),
-                        ),
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 20,
             ),
           ],
         ),
@@ -351,8 +361,10 @@ class BusinessDetailScreen extends StatelessWidget {
   }
 
   Future<void> _launchUrl(Uri uri) async {
-    if (!await launchUrl(uri)) {
-      throw Exception('Could not launch $uri');
+    if (await canLaunch(uri.toString())) {
+      await launch(uri.toString());
+    } else {
+      throw 'Could not launch $uri';
     }
   }
 }

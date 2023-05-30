@@ -19,45 +19,42 @@ class _ViewAllEventsScreenState extends State<MyEvents> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return DefaultTabController(
-      length: 4,
-      child: Consumer<UserProvider>(
-        builder: (context, value, child) => Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: const Text('My Events'),
-          ),
-          body: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('events')
-                .where(
-                  'userId',
-                  isEqualTo: value.getUser!.uid,
-                )
-                .where('isVerified', isEqualTo: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.data?.docs.isEmpty ?? true) {
-                return const Center(
-                  child: Text('No Verified Events available'),
-                );
-              }
-
-              return ListView.builder(
-                itemCount: snapshot.data?.docs.length,
-                itemBuilder: (context, index) {
-                  Events event =
-                      Events.fromMap(snapshot.data!.docs[index].data());
-                  return EventCardWidget(event: event);
-                },
+    return Consumer<UserProvider>(
+      builder: (context, value, child) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: const Text('My Events'),
+        ),
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('events')
+              .where(
+                'userId',
+                isEqualTo: value.getUser!.uid,
+              )
+              .where('isVerified', isEqualTo: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            },
-          ),
+            }
+            if (snapshot.data?.docs.isEmpty ?? true) {
+              return const Center(
+                child: Text('No Verified Events available'),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data?.docs.length,
+              itemBuilder: (context, index) {
+                Events event =
+                    Events.fromMap(snapshot.data!.docs[index].data());
+                return EventCardWidget(event: event);
+              },
+            );
+          },
         ),
       ),
     );
