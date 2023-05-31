@@ -84,8 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       _isLoading = true;
                     });
-                    String res =
-                        await value.loginUser(email: _emailController.text, password: _passwordController.text);
+                    String res = await value.loginUser(
+                        email: _emailController.text,
+                        password: _passwordController.text);
 
                     if (res == 'success') {
                       // ignore: use_build_context_synchronously
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Radius.circular(4),
                               ),
                             ),
-                            color: blueColor,
+                            color: Colors.grey,
                           ),
                           child: const Text('Login'),
                         ),
@@ -130,9 +131,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 12,
               ),
               Flexible(
+                flex: 1,
+                child: Container(),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text('Sign In With...'),
+              SizedBox(
+                height: 15,
+              ),
+              Flexible(
                 flex: 2,
                 child: Container(),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Icon(
+                    Icons.facebook,
+                    color: Colors.grey,
+                    size: 120,
+                  ),
+                  Icon(
+                    Icons.apple,
+                    color: Colors.grey,
+                    size: 120,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Flexible(
+                flex: 2,
+                child: Container(),
+              ),
+
               //Transition to sign up
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

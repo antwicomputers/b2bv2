@@ -6,6 +6,7 @@ import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/text_field_input.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,8 @@ class _LoginScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _verifyEmailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _verifyPasswordController = TextEditingController();
+  final TextEditingController _verifyPasswordController =
+      TextEditingController();
   final TextEditingController _userName = TextEditingController();
   Uint8List? _image;
   bool _isLoading = false;
@@ -209,9 +211,10 @@ class _LoginScreenState extends State<SignupScreen> {
                                 Radius.circular(4),
                               ),
                             ),
-                            color: blueColor,
+                            color: Colors.grey,
                           ),
-                          child: const Text('Sign Up and Support Black Excellence'),
+                          child: const Text(
+                              'Sign Up and Support Black Excellence'),
                         ),
                 ),
               ),

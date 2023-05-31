@@ -3,6 +3,7 @@ import 'package:b2bmobile/utils/images.dart';
 import 'package:b2bmobile/utils/report_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:b2bmobile/models/business.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,33 +22,69 @@ class BusinessDetailScreen extends StatefulWidget {
 }
 
 class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
+  bool isLiked = false;
   int likeCount = 0;
 
   @override
   void initState() {
     super.initState();
-    // Load the like count from Firebase when the screen is initialized
-    loadLikeCount();
+    // Load the like count and check if the current user liked the business
+    loadLikeCountAndCheckLiked();
   }
 
-  void loadLikeCount() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('businesses')
-        .doc(widget.business.businessId)
-        .get();
-    setState(() {
-      likeCount = (snapshot.data() as Map<String, dynamic>)['likeCount'] ?? 0;
-    });
+  void loadLikeCountAndCheckLiked() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('businesses')
+          .doc(widget.business.businessId)
+          .get();
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        setState(() {
+          likeCount = data['likeCount'] ?? 0;
+          isLiked = data['likedBy']?[uid] ?? false;
+        });
+      }
+    }
   }
 
-  void incrementLikeCount() async {
-    await FirebaseFirestore.instance
-        .collection('businesses')
-        .doc(widget.business.businessId)
-        .update({'likeCount': likeCount + 1});
-    setState(() {
-      likeCount = likeCount + 1;
-    });
+  void toggleLike() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentReference businessRef = FirebaseFirestore.instance
+          .collection('businesses')
+          .doc(widget.business.businessId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(businessRef);
+        if (snapshot.exists) {
+          int currentLikes =
+              (snapshot.data() as Map<String, dynamic>)['likeCount'] ?? 0;
+          bool isBusinessLiked =
+              (snapshot.data() as Map<String, dynamic>)['likedBy']?[uid] ??
+                  false;
+
+          if (isBusinessLiked) {
+            // Unlike the business
+            transaction.update(businessRef, {'likeCount': currentLikes - 1});
+            transaction.update(businessRef, {'likedBy.$uid': false});
+          } else {
+            // Like the business
+            transaction.update(businessRef, {'likeCount': currentLikes + 1});
+            transaction.update(businessRef, {'likedBy.$uid': true});
+          }
+        }
+      });
+
+      setState(() {
+        likeCount = isLiked ? likeCount - 1 : likeCount + 1;
+        isLiked = !isLiked;
+      });
+    }
   }
 
   @override
@@ -121,8 +158,11 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.thumb_up),
-                              onPressed: incrementLikeCount,
+                              icon: Icon(
+                                isLiked ? Icons.thumb_up : Icons.thumb_up_alt,
+                                color: isLiked ? Colors.grey : null,
+                              ),
+                              onPressed: toggleLike,
                             ),
                             IconButton(
                               icon: const Icon(Icons.favorite),
@@ -218,7 +258,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                                 'https://www.facebook.com/${widget.business.facebook}'));
                           },
                           icon: const Icon(
-                            Icons.facebook,
+                            FontAwesomeIcons.facebook,
                             size: 40,
                           ),
                         ),
