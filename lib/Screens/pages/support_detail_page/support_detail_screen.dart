@@ -1,24 +1,158 @@
 import 'package:b2bmobile/utils/app_constants.dart';
 import 'package:b2bmobile/utils/images.dart';
 import 'package:b2bmobile/utils/report_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:b2bmobile/models/support.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SupportDetailScreen extends StatelessWidget {
+class SupportDetailScreen extends StatefulWidget {
   const SupportDetailScreen({
     Key? key,
     required this.support,
   }) : super(key: key);
   final Support support;
+
+  @override
+  State<SupportDetailScreen> createState() => _SupportDetailScreenState();
+}
+
+class _SupportDetailScreenState extends State<SupportDetailScreen> {
+  bool isLiked = false;
+  int likeCount = 0;
+  bool isFavorite = false;
+  int favoriteCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the like count and check if the current user liked the business
+    loadLikeCountAndCheckLiked();
+    loadFavoriteCountandCheckFavorited();
+  }
+
+  void loadFavoriteCountandCheckFavorited() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('userresourcesupport')
+          .doc(widget.support.supportId)
+          .get();
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        setState(() {
+          likeCount = data['favoriteCount'] ?? 0;
+          isLiked = data['favoriteBy']?[uid] ?? false;
+        });
+      }
+    }
+  }
+
+  //toggle favorites
+  void toggleFavorite() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentReference businessRef = FirebaseFirestore.instance
+          .collection('userresourcesupport')
+          .doc(widget.support.supportId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(businessRef);
+        if (snapshot.exists) {
+          int currentFavorite =
+              (snapshot.data() as Map<String, dynamic>)['favoriteCount'] ?? 0;
+          bool isBusinessLiked =
+              (snapshot.data() as Map<String, dynamic>)['favoriteBy']?[uid] ??
+                  false;
+
+          if (isBusinessLiked) {
+            // Unlike the business
+            transaction
+                .update(businessRef, {'favoriteCount': currentFavorite - 1});
+            transaction.update(businessRef, {'favoriteBy.$uid': false});
+          } else {
+            // Like the business
+            transaction
+                .update(businessRef, {'favoriteCount': currentFavorite + 1});
+            transaction.update(businessRef, {'favoriteBy.$uid': true});
+          }
+        }
+      });
+
+      setState(() {
+        favoriteCount = isFavorite ? favoriteCount - 1 : favoriteCount + 1;
+        isFavorite = !isFavorite;
+      });
+    }
+  }
+
+  void loadLikeCountAndCheckLiked() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('userresourcesupport')
+          .doc(widget.support.supportId)
+          .get();
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        setState(() {
+          likeCount = data['likeCount'] ?? 0;
+          isLiked = data['likedBy']?[uid] ?? false;
+        });
+      }
+    }
+  }
+
+  void toggleLike() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentReference businessRef = FirebaseFirestore.instance
+          .collection('userresourcesupport')
+          .doc(widget.support.supportId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(businessRef);
+        if (snapshot.exists) {
+          int currentFavorite =
+              (snapshot.data() as Map<String, dynamic>)['likeCount'] ?? 0;
+          bool isBusinessLiked =
+              (snapshot.data() as Map<String, dynamic>)['likedBy']?[uid] ??
+                  false;
+
+          if (isBusinessLiked) {
+            // Unlike the business
+            transaction.update(businessRef, {'likeCount': currentFavorite - 1});
+            transaction.update(businessRef, {'likedBy.$uid': false});
+          } else {
+            // Like the business
+            transaction.update(businessRef, {'likeCount': currentFavorite + 1});
+            transaction.update(businessRef, {'likedBy.$uid': true});
+          }
+        }
+      });
+
+      setState(() {
+        likeCount = isLiked ? likeCount - 1 : likeCount + 1;
+        isLiked = !isLiked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(support.supportName),
+        title: Text(widget.support.supportName),
         actions: [
           InkWell(
             onTap: () {
@@ -58,7 +192,7 @@ class SupportDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                      support.SupportUrl,
+                      widget.support.SupportUrl,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -114,7 +248,7 @@ class SupportDetailScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      'Address: ${support.supportAddress}',
+                      'Address: ${widget.support.supportAddress}',
                     ),
                   ),
                   const Icon(
@@ -124,7 +258,7 @@ class SupportDetailScreen extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text(support.supportCategory),
+                  Text(widget.support.supportCategory),
                 ],
               ),
             ),
@@ -134,7 +268,7 @@ class SupportDetailScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
-                support.supportName,
+                widget.support.supportName,
                 style: AppConstants.titleStyle
                     .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
               ),
@@ -154,7 +288,7 @@ class SupportDetailScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    support.supportDescription,
+                    widget.support.supportDescription,
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -170,25 +304,25 @@ class SupportDetailScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  support.facebook.isEmpty
+                  widget.support.facebook.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.facebook.com/${support.facebook}'));
+                                'https://www.facebook.com/${widget.support.facebook}'));
                           },
                           icon: const Icon(
                             Icons.facebook,
                             size: 40,
                           ),
                         ),
-                  support.email.isEmpty
+                  widget.support.email.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
                             await _launchUrl(Uri(
                               scheme: 'mailto',
-                              path: support.email,
+                              path: widget.support.email,
                               queryParameters: {'subject': 'Hi'},
                             ));
                           },
@@ -197,35 +331,36 @@ class SupportDetailScreen extends StatelessWidget {
                             size: 40,
                           ),
                         ),
-                  support.phone.isEmpty
+                  widget.support.phone.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
-                            await _launchUrl(Uri.parse('tel:${support.phone}'));
+                            await _launchUrl(
+                                Uri.parse('tel:${widget.support.phone}'));
                           },
                           icon: const Icon(
                             Icons.phone,
                             size: 40,
                           ),
                         ),
-                  support.website.isEmpty
+                  widget.support.website.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
-                            await _launchUrl(
-                                Uri.parse('https://www.${support.website}'));
+                            await _launchUrl(Uri.parse(
+                                'https://www.${widget.support.website}'));
                           },
                           icon: const Icon(
                             Icons.language,
                             size: 40,
                           ),
                         ),
-                  support.twitter.isEmpty
+                  widget.support.twitter.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://twitter.com/${support.twitter}'));
+                                'https://twitter.com/${widget.support.twitter}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -238,12 +373,12 @@ class SupportDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  support.twitch.isEmpty
+                  widget.support.twitch.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.twitch.tv/${support.twitch}'));
+                                'https://www.twitch.tv/${widget.support.twitch}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -256,22 +391,22 @@ class SupportDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  support.youtube.isEmpty
+                  widget.support.youtube.isEmpty
                       ? Container()
                       : IconButton(
                           onPressed: () async {
-                            await _launchUrl(Uri.parse(support.youtube));
+                            await _launchUrl(Uri.parse(widget.support.youtube));
                           },
                           icon: const Icon(
                             FontAwesomeIcons.youtube,
                           ),
                         ),
-                  support.tiktok.isEmpty
+                  widget.support.tiktok.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.tiktok.com/${support.tiktok}'));
+                                'https://www.tiktok.com/${widget.support.tiktok}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -284,12 +419,12 @@ class SupportDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  support.linkedIn.isEmpty
+                  widget.support.linkedIn.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.linkedin.com/in/${support.linkedIn}'));
+                                'https://www.linkedin.com/in/${widget.support.linkedIn}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -302,12 +437,12 @@ class SupportDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  support.instagram.isEmpty
+                  widget.support.instagram.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
                             await _launchUrl(Uri.parse(
-                                'https://www.instagram.com/${support.instagram}'));
+                                'https://www.instagram.com/${widget.support.instagram}'));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -320,11 +455,11 @@ class SupportDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  support.podcast.isEmpty
+                  widget.support.podcast.isEmpty
                       ? Container()
                       : GestureDetector(
                           onTap: () async {
-                            await _launchUrl(Uri.parse(support.podcast));
+                            await _launchUrl(Uri.parse(widget.support.podcast));
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),

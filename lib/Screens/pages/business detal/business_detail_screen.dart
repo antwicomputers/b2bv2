@@ -24,12 +24,73 @@ class BusinessDetailScreen extends StatefulWidget {
 class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
   bool isLiked = false;
   int likeCount = 0;
+  bool isFavorite = false;
+  int favoriteCount = 0;
 
   @override
   void initState() {
     super.initState();
     // Load the like count and check if the current user liked the business
     loadLikeCountAndCheckLiked();
+    loadFavoriteCountandCheckFavorited();
+  }
+
+  void loadFavoriteCountandCheckFavorited() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('businesses')
+          .doc(widget.business.businessId)
+          .get();
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        setState(() {
+          favoriteCount = data['favoriteCount'] ?? 0;
+          isFavorite = data['favoriteBy']?[uid] ?? false;
+        });
+      }
+    }
+  }
+
+  //toggle favorites
+  void toggleFavorite() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentReference businessRef = FirebaseFirestore.instance
+          .collection('businesses')
+          .doc(widget.business.businessId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(businessRef);
+        if (snapshot.exists) {
+          int currentFavorite =
+              (snapshot.data() as Map<String, dynamic>)['favoriteCount'] ?? 0;
+          bool isBusinessFavorite =
+              (snapshot.data() as Map<String, dynamic>)['favoriteBy']?[uid] ??
+                  false;
+
+          if (isBusinessFavorite) {
+            // Unlike the business
+            transaction
+                .update(businessRef, {'favoriteCount': currentFavorite - 1});
+            transaction.update(businessRef, {'favoriteBy.$uid': false});
+          } else {
+            // favorite the business
+            transaction
+                .update(businessRef, {'favoriteCount': currentFavorite + 1});
+            transaction.update(businessRef, {'favoriteBy.$uid': true});
+          }
+        }
+      });
+
+      setState(() {
+        favoriteCount = isFavorite ? favoriteCount - 1 : favoriteCount + 1;
+        isFavorite = !isFavorite;
+      });
+    }
   }
 
   void loadLikeCountAndCheckLiked() async {
@@ -62,19 +123,19 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(businessRef);
         if (snapshot.exists) {
-          int currentLikes =
+          int currentFavorite =
               (snapshot.data() as Map<String, dynamic>)['likeCount'] ?? 0;
-          bool isBusinessLiked =
+          bool isBusinessFavorite =
               (snapshot.data() as Map<String, dynamic>)['likedBy']?[uid] ??
                   false;
 
-          if (isBusinessLiked) {
+          if (isBusinessFavorite) {
             // Unlike the business
-            transaction.update(businessRef, {'likeCount': currentLikes - 1});
+            transaction.update(businessRef, {'likeCount': currentFavorite - 1});
             transaction.update(businessRef, {'likedBy.$uid': false});
           } else {
             // Like the business
-            transaction.update(businessRef, {'likeCount': currentLikes + 1});
+            transaction.update(businessRef, {'likeCount': currentFavorite + 1});
             transaction.update(businessRef, {'likedBy.$uid': true});
           }
         }
@@ -159,14 +220,21 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                           children: [
                             IconButton(
                               icon: Icon(
-                                isLiked ? Icons.thumb_up : Icons.thumb_up_alt,
-                                color: isLiked ? Colors.grey : null,
+                                isLiked
+                                    ? Icons.thumb_up_alt
+                                    : Icons.thumb_up_alt_outlined,
+                                color: isLiked ? Colors.white : null,
                               ),
                               onPressed: toggleLike,
                             ),
                             IconButton(
-                              icon: const Icon(Icons.favorite),
-                              onPressed: () {},
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_outlined,
+                                color: isFavorite ? Colors.white : null,
+                              ),
+                              onPressed: toggleFavorite,
                             ),
                           ],
                         ),
@@ -344,12 +412,10 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                             await _launchUrl(Uri.parse(
                                 'https://www.youtube.com/channel/${widget.business.youtube}'));
                           },
-                          child: Padding(
+                          child: const Padding(
                             padding: EdgeInsets.only(left: 10),
-                            child: ImageIcon(
-                              AssetImage(
-                                Images.instagram,
-                              ),
+                            child: Icon(
+                              FontAwesomeIcons.youtube,
                               color: Colors.white,
                               size: 40,
                             ),
@@ -382,11 +448,8 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 10),
-                            child: ImageIcon(
-                              AssetImage(
-                                Images.instagram,
-                              ),
-                              color: Colors.white,
+                            child: Icon(
+                              FontAwesomeIcons.instagram,
                               size: 40,
                             ),
                           ),

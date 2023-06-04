@@ -1,4 +1,6 @@
 import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -9,12 +11,144 @@ import 'package:b2bmobile/models/events.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/images.dart';
 
-class EventDetailsScreen extends StatelessWidget {
+class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({
     Key? key,
     required this.event,
   }) : super(key: key);
   final Events event;
+
+  @override
+  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
+}
+
+class _EventDetailsScreenState extends State<EventDetailsScreen> {
+  bool isLiked = false;
+  int likeCount = 0;
+  bool isFavorite = false;
+  int favoriteCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the like count and check if the current user liked the business
+    loadLikeCountAndCheckLiked();
+    loadFavoriteCountandCheckFavorited();
+  }
+
+  void loadFavoriteCountandCheckFavorited() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(widget.event.eventId)
+          .get();
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        setState(() {
+          likeCount = data['favoriteCount'] ?? 0;
+          isLiked = data['favoriteBy']?[uid] ?? false;
+        });
+      }
+    }
+  }
+
+  //toggle favorites
+  void toggleFavorite() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentReference businessRef = FirebaseFirestore.instance
+          .collection('events')
+          .doc(widget.event.eventId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(businessRef);
+        if (snapshot.exists) {
+          int currentFavorite =
+              (snapshot.data() as Map<String, dynamic>)['favoriteCount'] ?? 0;
+          bool isBusinessLiked =
+              (snapshot.data() as Map<String, dynamic>)['favoriteBy']?[uid] ??
+                  false;
+
+          if (isBusinessLiked) {
+            // Unlike the business
+            transaction
+                .update(businessRef, {'favoriteCount': currentFavorite - 1});
+            transaction.update(businessRef, {'favoriteBy.$uid': false});
+          } else {
+            // Like the business
+            transaction
+                .update(businessRef, {'favoriteCount': currentFavorite + 1});
+            transaction.update(businessRef, {'favoriteBy.$uid': true});
+          }
+        }
+      });
+
+      setState(() {
+        favoriteCount = isFavorite ? favoriteCount - 1 : favoriteCount + 1;
+        isFavorite = !isFavorite;
+      });
+    }
+  }
+
+  void loadLikeCountAndCheckLiked() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(widget.event.eventId)
+          .get();
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        setState(() {
+          likeCount = data['likeCount'] ?? 0;
+          isLiked = data['likedBy']?[uid] ?? false;
+        });
+      }
+    }
+  }
+
+  void toggleLike() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      DocumentReference businessRef = FirebaseFirestore.instance
+          .collection('events')
+          .doc(widget.event.eventId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(businessRef);
+        if (snapshot.exists) {
+          int currentFavorite =
+              (snapshot.data() as Map<String, dynamic>)['likeCount'] ?? 0;
+          bool isBusinessLiked =
+              (snapshot.data() as Map<String, dynamic>)['likedBy']?[uid] ??
+                  false;
+
+          if (isBusinessLiked) {
+            // Unlike the business
+            transaction.update(businessRef, {'likeCount': currentFavorite - 1});
+            transaction.update(businessRef, {'likedBy.$uid': false});
+          } else {
+            // Like the business
+            transaction.update(businessRef, {'likeCount': currentFavorite + 1});
+            transaction.update(businessRef, {'likedBy.$uid': true});
+          }
+        }
+      });
+
+      setState(() {
+        likeCount = isLiked ? likeCount - 1 : likeCount + 1;
+        isLiked = !isLiked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,7 +156,7 @@ class EventDetailsScreen extends StatelessWidget {
       builder: (context, value, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          title: Text(event.eventName),
+          title: Text(widget.event.eventName),
           actions: [
             InkWell(
               onTap: () {},
@@ -55,7 +189,7 @@ class EventDetailsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
-                        event.eventUrl,
+                        widget.event.eventUrl,
                       ),
                       fit: BoxFit.cover,
                     ),
@@ -80,12 +214,22 @@ class EventDetailsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.thumb_up),
-                                onPressed: () {},
+                                icon: Icon(
+                                  isLiked
+                                      ? Icons.thumb_up_alt
+                                      : Icons.thumb_up_alt_outlined,
+                                  color: isLiked ? Colors.white : null,
+                                ),
+                                onPressed: toggleLike,
                               ),
                               IconButton(
-                                icon: const Icon(Icons.favorite),
-                                onPressed: () {},
+                                icon: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border_outlined,
+                                  color: isFavorite ? Colors.white : null,
+                                ),
+                                onPressed: toggleFavorite,
                               ),
                             ],
                           ),
@@ -111,7 +255,7 @@ class EventDetailsScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        'Address: ${event.eventAddress}',
+                        'Address: ${widget.event.eventAddress}',
                       ),
                     ),
                     const Icon(
@@ -121,7 +265,7 @@ class EventDetailsScreen extends StatelessWidget {
                     const SizedBox(
                       width: 5,
                     ),
-                    Text(event.eventCategory),
+                    Text(widget.event.eventCategory),
                   ],
                 ),
               ),
@@ -129,10 +273,12 @@ class EventDetailsScreen extends StatelessWidget {
                 height: 10,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
-                  event.eventName,
-                  style: AppConstants.titleStyle.copyWith(fontSize: 30, fontWeight: FontWeight.bold),
+                  widget.event.eventName,
+                  style: AppConstants.titleStyle
+                      .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),
               const Padding(
@@ -150,7 +296,7 @@ class EventDetailsScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      event.eventDescription,
+                      widget.event.eventDescription,
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -162,28 +308,30 @@ class EventDetailsScreen extends StatelessWidget {
               Container(
                 height: size.height * 0.1,
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    event.facebook.isEmpty
+                    widget.event.facebook.isEmpty
                         ? Container()
                         : IconButton(
                             onPressed: () async {
-                              await _launchUrl(Uri.parse('https://www.facebook.com/${event.facebook}'));
+                              await _launchUrl(Uri.parse(
+                                  'https://www.facebook.com/${widget.event.facebook}'));
                             },
                             icon: const Icon(
                               Icons.facebook,
                               size: 40,
                             ),
                           ),
-                    event.email.isEmpty
+                    widget.event.email.isEmpty
                         ? Container()
                         : IconButton(
                             onPressed: () async {
                               await _launchUrl(Uri(
                                 scheme: 'mailto',
-                                path: event.email,
+                                path: widget.event.email,
                                 queryParameters: {'subject': 'Hi'},
                               ));
                             },
@@ -192,33 +340,36 @@ class EventDetailsScreen extends StatelessWidget {
                               size: 40,
                             ),
                           ),
-                    event.phone.isEmpty
+                    widget.event.phone.isEmpty
                         ? Container()
                         : IconButton(
                             onPressed: () async {
-                              await _launchUrl(Uri.parse('tel:${event.phone}'));
+                              await _launchUrl(
+                                  Uri.parse('tel:${widget.event.phone}'));
                             },
                             icon: const Icon(
                               Icons.phone,
                               size: 40,
                             ),
                           ),
-                    event.website.isEmpty
+                    widget.event.website.isEmpty
                         ? Container()
                         : IconButton(
                             onPressed: () async {
-                              await _launchUrl(Uri.parse('https://www.${event.website}'));
+                              await _launchUrl(Uri.parse(
+                                  'https://www.${widget.event.website}'));
                             },
                             icon: const Icon(
                               Icons.language,
                               size: 40,
                             ),
                           ),
-                    event.twitter.isEmpty
+                    widget.event.twitter.isEmpty
                         ? Container()
                         : GestureDetector(
                             onTap: () async {
-                              await _launchUrl(Uri.parse('https://twitter.com/${event.twitter}'));
+                              await _launchUrl(Uri.parse(
+                                  'https://twitter.com/${widget.event.twitter}'));
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(left: 10),
@@ -231,11 +382,12 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                    event.twitch.isEmpty
+                    widget.event.twitch.isEmpty
                         ? Container()
                         : GestureDetector(
                             onTap: () async {
-                              await _launchUrl(Uri.parse('https://www.twitch.tv/${event.twitch}'));
+                              await _launchUrl(Uri.parse(
+                                  'https://www.twitch.tv/${widget.event.twitch}'));
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(left: 10),
@@ -248,11 +400,12 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                    event.tiktok.isEmpty
+                    widget.event.tiktok.isEmpty
                         ? Container()
                         : GestureDetector(
                             onTap: () async {
-                              await _launchUrl(Uri.parse('https://www.tiktok.com/${event.tiktok}'));
+                              await _launchUrl(Uri.parse(
+                                  'https://www.tiktok.com/${widget.event.tiktok}'));
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(left: 10),
@@ -265,11 +418,12 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                    event.linkedIn.isEmpty
+                    widget.event.linkedIn.isEmpty
                         ? Container()
                         : GestureDetector(
                             onTap: () async {
-                              await _launchUrl(Uri.parse('https://www.linkedin.com/in/${event.linkedIn}'));
+                              await _launchUrl(Uri.parse(
+                                  'https://www.linkedin.com/in/${widget.event.linkedIn}'));
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(left: 10),
@@ -282,11 +436,12 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                    event.instagram.isEmpty
+                    widget.event.instagram.isEmpty
                         ? Container()
                         : GestureDetector(
                             onTap: () async {
-                              await _launchUrl(Uri.parse('https://www.instagram.com/${event.instagram}'));
+                              await _launchUrl(Uri.parse(
+                                  'https://www.instagram.com/${widget.event.instagram}'));
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(left: 10),
@@ -299,21 +454,21 @@ class EventDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                    event.youtube.isEmpty
+                    widget.event.youtube.isEmpty
                         ? Container()
                         : IconButton(
                             onPressed: () async {
-                              await _launchUrl(Uri.parse(event.youtube));
+                              await _launchUrl(Uri.parse(widget.event.youtube));
                             },
                             icon: const Icon(
                               FontAwesomeIcons.youtube,
                             ),
                           ),
-                    event.podcast.isEmpty
+                    widget.event.podcast.isEmpty
                         ? Container()
                         : GestureDetector(
                             onTap: () async {
-                              await _launchUrl(Uri.parse(event.podcast));
+                              await _launchUrl(Uri.parse(widget.event.podcast));
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(left: 10),
