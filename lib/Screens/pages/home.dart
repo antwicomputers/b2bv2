@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:b2bmobile/Screens/pages/all_esential.dart';
 import 'package:b2bmobile/Screens/pages/all_featured.dart';
 import 'package:b2bmobile/Screens/pages/all_sponsors.dart';
+import 'package:b2bmobile/Screens/pages/search_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,12 @@ class _FavoritesState extends State<HomePage> {
               ),
               child: TextField(
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search, color: Colors.white),
+                  prefixIcon: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SearchPage()));
+                      },
+                      child: const Icon(Icons.search, color: Colors.white)),
                   hintText: 'What are you looking for... ',
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade600)),
