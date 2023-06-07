@@ -12,6 +12,8 @@ class VerificationScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verification Request'),
+        centerTitle: true,
+        backgroundColor: Colors.black,
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -40,7 +42,8 @@ class VerificationScreen extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data?.docs.length ?? 0,
               itemBuilder: (context, index) {
-                Business business = Business.fromMap(snapshot.data!.docs[index].data());
+                Business business =
+                    Business.fromMap(snapshot.data!.docs[index].data());
                 return Container(
                   margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
@@ -101,7 +104,8 @@ class VerificationScreen extends StatelessWidget {
                           await FirebaseFirestore.instance
                               .collection('businesses')
                               .doc(business.businessId)
-                              .update({'womenOriented': !business.womenOriented});
+                              .update(
+                                  {'womenOriented': !business.womenOriented});
                         },
                         title: const Text('womenOriented'),
                       ),
