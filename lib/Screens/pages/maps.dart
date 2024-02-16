@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Maps extends StatefulWidget {
+  const Maps({super.key});
+
   @override
   _MapsState createState() => _MapsState();
 }
@@ -31,13 +33,13 @@ class _MapsState extends State<Maps> {
 
       if (newPermissionStatus.isGranted) {
         // Permission granted. Fetch businesses and current location.
-        fetchBusinesses();
         getCurrentLocation();
+        fetchBusinesses();
       }
     } else if (permissionStatus.isGranted) {
       // Permission already granted. Fetch businesses and current location.
-      fetchBusinesses();
       getCurrentLocation();
+      fetchBusinesses();
     }
   }
 
@@ -65,6 +67,12 @@ class _MapsState extends State<Maps> {
           );
         } else {
           // Handle missing or invalid latitude/longitude values
+          // You can choose to skip adding the marker or use a default location
+          // For example:
+          // return Marker(
+          //   markerId: MarkerId(document.id),
+          //   position: LatLng(0, 0),
+          // );
           return Marker(
             markerId: MarkerId(document.id),
             position: LatLng(0, 0),
@@ -107,7 +115,7 @@ class _MapsState extends State<Maps> {
                 currentPosition?.latitude ?? 0.0,
                 currentPosition?.longitude ?? 0.0,
               ),
-              zoom: 0.0,
+              zoom: 14.0, // Set a reasonable zoom level
             ),
             markers: markers,
             onMapCreated: (GoogleMapController controller) {
