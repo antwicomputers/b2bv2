@@ -4,7 +4,7 @@ class AboutUs extends StatefulWidget {
   const AboutUs({super.key});
 
   @override
-  _AboutUsState createState() => _AboutUsState();
+  State<AboutUs> createState() => _AboutUsState();
 }
 
 class _AboutUsState extends State<AboutUs> {

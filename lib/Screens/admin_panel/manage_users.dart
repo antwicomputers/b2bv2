@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 
 class ManageUsers extends StatefulWidget {
-  const ManageUsers({Key? key}) : super(key: key);
+  const ManageUsers({super.key});
 
   @override
   State<ManageUsers> createState() => _ManageUsersState();
@@ -25,7 +24,7 @@ class _ManageUsersState extends State<ManageUsers> {
           : AppBar(
               backgroundColor: mobileBackgroundColor,
               centerTitle: false,
-              title: Text('All Users')
+              title: const Text('All Users')
               // actions: [
               //   IconButton(
               //     icon: const Icon(
@@ -74,7 +73,7 @@ class _ManageUsersState extends State<ManageUsers> {
                 trailing: const Icon(
                   Icons.more_vert,
                 ),
-                onTap: () => print('you pressed more'),
+                onTap: () => debugPrint('you pressed more'),
                 subtitle: Text(
                   (snapshot.data! as dynamic).docs[index]['email'],
                 ),

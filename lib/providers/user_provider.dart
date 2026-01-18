@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:b2bmobile/models/support.dart';
 import 'package:b2bmobile/models/users.dart';
 import 'package:flutter/foundation.dart';
 import 'package:b2bmobile/resources/storage_methods.dart';
@@ -51,12 +49,12 @@ class UserProvider with ChangeNotifier {
         .snapshots()
         .listen((document) {
       if (kDebugMode) {
-        print("USER STREAM WMITTING VALUE");
+        debugPrint("USER STREAM WMITTING VALUE");
       }
       if (document.exists) {
         userModel = UserModel.fromMap(document.data()!);
         if (kDebugMode) {
-          print("NOTIFTING LISTENERS");
+          debugPrint("NOTIFTING LISTENERS");
         }
         notifyListeners();
       }
@@ -98,7 +96,7 @@ class UserProvider with ChangeNotifier {
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       if (kDebugMode) {
-        print(cred.user!.uid);
+        debugPrint(cred.user!.uid);
       }
       String photoUrl = await StorageMethods()
           .uploadImageToStoage('profilePics', file, false);
@@ -158,41 +156,40 @@ class UserProvider with ChangeNotifier {
       required String twitch,
       required String podcast,
       required String youtube,
-      required List<String> isLiked,
-      required List<String> isFavorite,
       required Uint8List businessFile}) async {
     String message = 'some error occured';
     String businessUrl = await StorageMethods()
         .uploadImageToStoage('businessPics', businessFile, false);
     final ref = FirebaseFirestore.instance.collection('businesses').doc().id;
     model.Business business = model.Business(
-        businessName: businessName,
-        businessId: ref,
-        businessDescription: businessDescription,
-        businessAddress: businessAddress,
-        isVerified: false,
-        userId: _auth.currentUser!.uid,
-        businessCategory: businessCategory,
-        createdAt: DateTime.now(),
-        phone: phone,
-        youtube: youtube,
-        isBlackOwned: false,
-        isEsential: false,
-        isFeatured: false,
-        isSponsored: false,
-        womenOriented: false,
-        email: email,
-        website: website,
-        twitter: twitter,
-        facebook: facebook,
-        linkedIn: linkedIn,
-        instagram: instagram,
-        tiktok: tiktok,
-        twitch: twitch,
-        podcast: podcast,
-        businessUrl: businessUrl,
-        isLiked: isLiked,
-        isFavorite: isFavorite);
+      businessName: businessName,
+      businessId: ref,
+      businessDescription: businessDescription,
+      businessAddress: businessAddress,
+      isVerified: false,
+      userId: _auth.currentUser!.uid,
+      businessCategory: businessCategory,
+      createdAt: DateTime.now(),
+      phone: phone,
+      youtube: youtube,
+      isBlackOwned: false,
+      isEsential: false,
+      isFeatured: false,
+      isSponsored: false,
+      womenOriented: false,
+      email: email,
+      website: website,
+      twitter: twitter,
+      facebook: facebook,
+      linkedIn: linkedIn,
+      instagram: instagram,
+      tiktok: tiktok,
+      twitch: twitch,
+      podcast: podcast,
+      businessUrl: businessUrl,
+      isLiked: [],
+      isFavorite: [],
+    );
 
     try {
       await FirebaseFirestore.instance.collection('businesses').doc(ref).set(
@@ -252,7 +249,7 @@ class UserProvider with ChangeNotifier {
       tiktok: tiktok,
       twitch: twitch,
       podcast: podcast,
-      SupportUrl: supportUrl,
+      supportUrl: supportUrl,
     );
 
     try {
@@ -377,7 +374,7 @@ class UserProvider with ChangeNotifier {
       tiktok: tiktok,
       twitch: twitch,
       podcast: podcast,
-      SupportUrl: supportUrl,
+      supportUrl: supportUrl,
     );
 
     try {
@@ -440,7 +437,7 @@ class UserProvider with ChangeNotifier {
       tiktok: tiktok,
       twitch: twitch,
       podcast: podcast,
-      SupportUrl: supportUrl,
+      supportUrl: supportUrl,
     );
 
     try {

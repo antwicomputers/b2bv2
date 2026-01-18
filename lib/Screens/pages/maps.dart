@@ -8,7 +8,7 @@ class Maps extends StatefulWidget {
   const Maps({super.key});
 
   @override
-  _MapsState createState() => _MapsState();
+  State<Maps> createState() => _MapsState();
 }
 
 class _MapsState extends State<Maps> {
@@ -75,7 +75,7 @@ class _MapsState extends State<Maps> {
           // );
           return Marker(
             markerId: MarkerId(document.id),
-            position: LatLng(0, 0),
+            position: const LatLng(0, 0),
           );
         }
       }).toSet();
@@ -91,7 +91,7 @@ class _MapsState extends State<Maps> {
         currentPosition = position;
         markers.add(
           Marker(
-            markerId: MarkerId('currentLocation'),
+            markerId: const MarkerId('currentLocation'),
             position: LatLng(
               currentPosition!.latitude,
               currentPosition!.longitude,
@@ -100,7 +100,7 @@ class _MapsState extends State<Maps> {
         );
       });
     } catch (e) {
-      print('Error getting location: $e');
+      debugPrint('Error getting location: $e');
     }
   }
 
@@ -142,7 +142,7 @@ class _MapsState extends State<Maps> {
                   );
                 }
               },
-              child: Icon(Icons.my_location),
+              child: const Icon(Icons.my_location),
             ),
           ),
         ],

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:b2bmobile/models/business.dart';
 
 class VerificationScreen extends StatelessWidget {
-  const VerificationScreen({Key? key}) : super(key: key);
+  const VerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class VerificationScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
+                        color: Colors.grey.withValues(alpha: 0.5),
                         spreadRadius: 3,
                         blurRadius: 10,
                         offset: const Offset(0, 3),
@@ -153,10 +153,10 @@ class VerificationScreen extends StatelessWidget {
 
 class InfoWidget extends StatelessWidget {
   const InfoWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+  });
   final String title;
   final String subtitle;
 

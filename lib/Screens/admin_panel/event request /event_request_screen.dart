@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class EventRequestScreen extends StatelessWidget {
-  const EventRequestScreen({Key? key}) : super(key: key);
+  const EventRequestScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

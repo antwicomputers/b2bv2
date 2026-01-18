@@ -6,7 +6,6 @@ import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/text_field_input.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -44,12 +43,14 @@ class _LoginScreenState extends State<SignupScreen> {
     _fullName.dispose();
   }
 
-  selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
+  Future<void> selectImage() async {
+    Uint8List? im = await pickImage(ImageSource.gallery);
+    if (im != null) {
+      // set state because we need to display the image we selected on the circle avatar
+      setState(() {
+        _image = im;
+      });
+    }
   }
 
   void navigateToLogin() {
@@ -183,8 +184,10 @@ class _LoginScreenState extends State<SignupScreen> {
                     });
 
                     if (res != 'success') {
+                      if (!context.mounted) return;
                       showSnackBar(res, context);
                     } else {
+                      if (!context.mounted) return;
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const ResponsiveLayout(

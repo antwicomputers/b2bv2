@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DropDownTextFieldScreen extends StatefulWidget {
+  const DropDownTextFieldScreen({super.key});
+
   @override
-  _DropDownTextFieldScreenState createState() =>
+  State<DropDownTextFieldScreen> createState() =>
       _DropDownTextFieldScreenState();
 }
 
@@ -37,7 +39,7 @@ class _DropDownTextFieldScreenState extends State<DropDownTextFieldScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Business Feedback'),
+        title: const Text('Business Feedback'),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
@@ -65,27 +67,27 @@ class _DropDownTextFieldScreenState extends State<DropDownTextFieldScreen> {
                   );
                 },
               ).toList(),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Select Option',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: textFieldController,
               maxLines: null, // Allow multiple lines
               keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Enter your feedback',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: saveData,
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             ListTile(

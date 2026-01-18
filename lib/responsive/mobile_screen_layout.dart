@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:b2bmobile/Screens/admin_panel/admin.dart';
 import 'package:b2bmobile/Screens/business/register_business.dart';
 import 'package:b2bmobile/Screens/drawer/about_us.dart';
@@ -14,7 +12,6 @@ import 'package:b2bmobile/Screens/pages/maps.dart';
 import 'package:b2bmobile/Screens/pages/categories.dart';
 import 'package:b2bmobile/Screens/vew%20all%20events/view_all_events_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -30,7 +27,6 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
-  @override
   int _selectedIndex = 0;
 
   void navigateBottomBar(int index) {
@@ -41,7 +37,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    Maps(),
+    const Maps(),
     const Favorites(),
     const Categories(),
   ];
@@ -171,7 +167,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onTap: () {
                 Get.back();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SupportUs()),
+                  MaterialPageRoute(builder: (context) => const SupportUs()),
                 );
               },
             ),
@@ -181,6 +177,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 title: 'Logout',
                 onTap: () async {
                   await value.signOut();
+                  // ignore: use_build_context_synchronously
+                  if (!context.mounted) return;
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const LoginScreen(),
@@ -224,14 +222,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   }
 
   Widget _buildHeader() {
-    return DrawerHeader(
-      decoration: const BoxDecoration(
+    return const DrawerHeader(
+      decoration: BoxDecoration(
         color: Colors.black,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           CircleAvatar(
             backgroundImage: NetworkImage(
                 'https://images.unsplash.com/photo-1512094476718-4d8f19366c62?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGJsYWNrJTIwd29tZW4lMjBpbiUyMGJ1c2luZXNzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=900&q=60'),

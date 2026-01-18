@@ -60,12 +60,14 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     super.dispose();
   }
 
-  selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
+  Future<void> selectImage() async {
+    Uint8List? im = await pickImage(ImageSource.gallery);
+    if (im != null) {
+      // set state because we need to display the image we selected on the circle avatar
+      setState(() {
+        _image = im;
+      });
+    }
   }
 
   final _formsKey = GlobalKey<FormState>();
@@ -300,7 +302,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => AddressScreen()));
+                          builder: (context) => const AddressScreen()));
                     },
                     child: const Text('Select Address'),
                   ),
@@ -326,16 +328,16 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                             tiktok: _tiktok.text,
                             twitch: _twitch.text,
                             podcast: _podcast.text,
-                            businessFile: _image!,
-                            isLiked: [],
-                            isFavorite: []);
+                            businessFile: _image!);
                         setState(() {
                           _isLoading = false;
                         });
 
                         if (message == 'success') {
+                          if (!context.mounted) return;
                           showSnackBar(message, context);
                         } else {
+                          if (!context.mounted) return;
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const ResponsiveLayout(

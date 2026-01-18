@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SupportUs extends StatefulWidget {
+  const SupportUs({super.key});
+
   @override
-  _SupportUsState createState() => _SupportUsState();
+  State<SupportUs> createState() => _SupportUsState();
 }
 
 class _SupportUsState extends State<SupportUs> {
@@ -20,15 +21,16 @@ class _SupportUsState extends State<SupportUs> {
         'feedback': feedback,
         'timestamp': FieldValue.serverTimestamp(),
       });
+      if (!mounted) return;
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Feedback Submitted'),
-            content: Text('Thank you for providing feedback.'),
+            title: const Text('Feedback Submitted'),
+            content: const Text('Thank you for providing feedback.'),
             actions: [
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -39,15 +41,16 @@ class _SupportUsState extends State<SupportUs> {
       );
       _feedbackController.clear();
     } catch (e) {
+      if (!mounted) return;
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to submit feedback.'),
+            title: const Text('Error'),
+            content: const Text('Failed to submit feedback.'),
             actions: [
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -56,7 +59,7 @@ class _SupportUsState extends State<SupportUs> {
           );
         },
       );
-      print('Error adding feedback: $e');
+      debugPrint('Error adding feedback: $e');
     }
   }
 
@@ -64,22 +67,22 @@ class _SupportUsState extends State<SupportUs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedback & Suggestions'),
+        title: const Text('Feedback & Suggestions'),
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _feedbackController,
               maxLines: null,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Feedback',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 String feedback = _feedbackController.text.trim();
@@ -87,9 +90,9 @@ class _SupportUsState extends State<SupportUs> {
                   saveFeedback(feedback);
                 }
               },
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             ListTile(

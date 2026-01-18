@@ -11,9 +11,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SupportDetailScreen extends StatefulWidget {
   const SupportDetailScreen({
-    Key? key,
+    super.key,
     required this.support,
-  }) : super(key: key);
+  });
   final Support support;
 
   @override
@@ -158,11 +158,11 @@ class _SupportDetailScreenState extends State<SupportDetailScreen> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => DropDownTextFieldScreen()),
+                    builder: (context) => const DropDownTextFieldScreen()),
               );
             },
-            child: Row(
-              children: const [
+            child: const Row(
+              children: [
                 Text('Report'),
                 SizedBox(
                   width: 5,
@@ -192,7 +192,7 @@ class _SupportDetailScreenState extends State<SupportDetailScreen> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                      widget.support.SupportUrl,
+                      widget.support.supportUrl,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -201,7 +201,7 @@ class _SupportDetailScreenState extends State<SupportDetailScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.white.withOpacity(0),
+                        Colors.white.withValues(alpha: 0),
                         Colors.black,
                       ],
                       begin: Alignment.topCenter,

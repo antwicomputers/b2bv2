@@ -11,14 +11,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 class BusinessDetailScreen extends StatefulWidget {
   const BusinessDetailScreen({
-    Key? key,
+    super.key,
     required this.business,
-  }) : super(key: key);
+  });
 
   final Business business;
 
   @override
-  _BusinessDetailScreenState createState() => _BusinessDetailScreenState();
+  State<BusinessDetailScreen> createState() => _BusinessDetailScreenState();
 }
 
 class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
@@ -159,12 +159,12 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => DropDownTextFieldScreen(),
+                  builder: (context) => const DropDownTextFieldScreen(),
                 ),
               );
             },
-            child: Row(
-              children: const [
+            child: const Row(
+              children: [
                 Text('Report'),
                 SizedBox(
                   width: 5,
@@ -203,7 +203,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.white.withOpacity(0),
+                        Colors.white.withValues(alpha: 0),
                         Colors.black,
                       ],
                       begin: Alignment.topCenter,
@@ -464,10 +464,8 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
   }
 
   Future<void> _launchUrl(Uri uri) async {
-    if (await canLaunch(uri.toString())) {
-      await launch(uri.toString());
-    } else {
-      throw 'Could not launch $uri';
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $uri');
     }
   }
 }

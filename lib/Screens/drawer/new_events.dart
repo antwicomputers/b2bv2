@@ -1,11 +1,9 @@
-import 'package:b2bmobile/Screens/business/register_business.dart';
 import 'package:b2bmobile/Screens/drawer/register_event.dart';
 import 'package:b2bmobile/Screens/vew%20all%20events/all_events.dart';
 import 'package:b2bmobile/Screens/vew%20all%20events/my_events.dart';
 import 'package:b2bmobile/Screens/vew%20all%20events/past_events.dart';
 import 'package:b2bmobile/Screens/vew%20all%20events/sponsored_events.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class MainEvents extends StatefulWidget {
   const MainEvents({super.key});
@@ -45,13 +43,13 @@ class _SettingsState extends State<MainEvents> {
                   size: 30,
                   color: Colors.white,
                 ),
-                title: Row(
+                title: const Row(
                   children: [
                     Text('Register Event'),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -73,8 +71,8 @@ class _SettingsState extends State<MainEvents> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  title: Row(
-                    children: const [
+                  title: const Row(
+                    children: [
                       Text('My Events'),
                     ],
                   ),
@@ -102,14 +100,14 @@ class _SettingsState extends State<MainEvents> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  title: Row(
+                  title: const Row(
                     children: [
                       Text('All Event'),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -132,14 +130,14 @@ class _SettingsState extends State<MainEvents> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  title: Row(
+                  title: const Row(
                     children: [
                       Text('Sponsored Event'),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ListTile(
@@ -155,13 +153,13 @@ class _SettingsState extends State<MainEvents> {
                   size: 30,
                   color: Colors.white,
                 ),
-                title: Row(
+                title: const Row(
                   children: [
                     Text('Attending'),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -183,8 +181,8 @@ class _SettingsState extends State<MainEvents> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  title: Row(
-                    children: const [
+                  title: const Row(
+                    children: [
                       Text('Past Event'),
                     ],
                   ),

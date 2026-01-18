@@ -29,24 +29,27 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
     initInfo();
   }
 
-  initInfo() {
+  void initInfo() {
     var androidInitialize =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iOSInialize = const IOSInitializationSettings();
+    var iOSInialize = const DarwinInitializationSettings();
     var initializationSettings =
         InitializationSettings(android: androidInitialize, iOS: iOSInialize);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
+        onDidReceiveNotificationResponse: (NotificationResponse response) async {
+      final String? payload = response.payload;
       try {
         if (payload != null && payload.isNotEmpty) {
         } else {}
-      } catch (e) {}
+      } catch (e) {
+        debugPrint(e.toString());
+      }
       return;
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('..............On Message...................');
-      print(
+      debugPrint('..............On Message...................');
+      debugPrint(
           'onMessage: ${message.notification?.title}/${message.notification?.body}}');
 
       BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
@@ -59,6 +62,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
           AndroidNotificationDetails(
         'dbfoods',
         'dbfoods',
+        channelDescription: 'dbfoods',
         importance: Importance.high,
         styleInformation: bigTextStyleInformation,
         priority: Priority.high,
@@ -66,7 +70,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
       );
       NotificationDetails platformChannelSpecifics = NotificationDetails(
           android: androidPlatformChannelSpecifics,
-          iOS: const IOSNotificationDetails());
+          iOS: const DarwinNotificationDetails());
       await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
           message.notification?.body, platformChannelSpecifics,
           payload: message.data['body']);
@@ -77,7 +81,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
     await FirebaseMessaging.instance.getToken().then((token) {
       setState(() {
         mtoken = token;
-        print('My token is $mtoken');
+        debugPrint('My token is $mtoken');
       });
       saveToken(token!);
     });
@@ -101,12 +105,13 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
       sound: true,
     );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('user granted provisional permission');
-    } else
-      print('user did not provide permission');
+      debugPrint('user granted provisional permission');
+    } else {
+      debugPrint('user did not provide permission');
+    }
   }
 
   // addData() async {

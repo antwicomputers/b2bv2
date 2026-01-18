@@ -5,17 +5,19 @@ import '../../models/business.dart';
 import 'business detal/business_detail_screen.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
-  _SearchPageState createState() => _SearchPageState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  Algolia algolia = Algolia.init(
+  Algolia algolia = const Algolia.init(
     applicationId: '7ID12WNW47',
     apiKey: 'a505630b1ad41820d77a530672338433',
   );
 
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<AlgoliaObjectSnapshot> _results = [];
   bool _isSearching = false;
 
@@ -26,7 +28,7 @@ class _SearchPageState extends State<SearchPage> {
     });
 
     AlgoliaQuery searchQuery =
-        algolia.instance.index('b2b_businesses').search(query);
+        algolia.instance.index('b2b_businesses').query(query);
     AlgoliaQuerySnapshot querySnapshot = await searchQuery.getObjects();
 
     setState(() {
@@ -39,31 +41,31 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search B2B Database'),
+        title: const Text('Search B2B Database'),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _searchController,
               onChanged: (value) {
                 _performSearch(value);
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search',
               ),
             ),
           ),
           Expanded(
             child: _isSearching
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : _results.isEmpty
-                    ? Center(
+                    ? const Center(
                         child: Text('No Results Found'),
                       )
                     : ListView.builder(

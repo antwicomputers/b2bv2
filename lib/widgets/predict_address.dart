@@ -7,8 +7,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 
 class AddressScreen extends StatefulWidget {
+  const AddressScreen({super.key});
+
   @override
-  _AddressScreenState createState() => _AddressScreenState();
+  State<AddressScreen> createState() => _AddressScreenState();
 }
 
 class _AddressScreenState extends State<AddressScreen> {
@@ -22,8 +24,8 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   Future<List<String>> _getAddressPredictions(String input) async {
-    final apiKey = 'AIzaSyADCVeLD0o5fhX2uFj6qfAnNzUlA96KJ1Q';
-    final endpoint =
+    const apiKey = 'AIzaSyADCVeLD0o5fhX2uFj6qfAnNzUlA96KJ1Q';
+    const endpoint =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
     final requestUrl = '$endpoint?input=$input&key=$apiKey';
 
@@ -55,15 +57,15 @@ class _AddressScreenState extends State<AddressScreen> {
           'latitude': latLng.latitude,
           'longitude': latLng.longitude,
         }).then((value) {
-          print('Address saved to Firebase.');
+          debugPrint('Address saved to Firebase.');
         }).catchError((error) {
-          print('Failed to save address: $error');
+          debugPrint('Failed to save address: $error');
         });
       } else {
-        print('Failed to find location for the given address.');
+        debugPrint('Failed to find location for the given address.');
       }
     } catch (error) {
-      print('Error occurred while retrieving location: $error');
+      debugPrint('Error occurred while retrieving location: $error');
     }
   }
 
@@ -71,7 +73,7 @@ class _AddressScreenState extends State<AddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Address Prediction'),
+        title: const Text('Address Prediction'),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
@@ -79,7 +81,7 @@ class _AddressScreenState extends State<AddressScreen> {
         children: [
           TextField(
             controller: _searchController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Search Address',
             ),
             onChanged: (value) async {

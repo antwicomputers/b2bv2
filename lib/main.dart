@@ -1,4 +1,3 @@
-import 'package:b2bmobile/Screens/drawer/alerts.dart';
 import 'package:b2bmobile/Screens/splash%20screen/splash_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,25 +8,22 @@ import 'package:b2bmobile/utils/colors.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(message) async {
-  await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
+import 'package:b2bmobile/firebase_options.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  debugPrint('Handling a background message ${message.messageId}');
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyBhdJBPEgapkYbbCqF1TH-TdQUOb6FgUTA',
-        appId: '1:749632425380:web:d0cbbe5cd242d2267bc531',
-        messagingSenderId: '749632425380',
-        projectId: 'b2bmobile-b2ed8',
-        storageBucket: 'b2bmobile-b2ed8.appspot.com',
-      ),
-    );
-  } else {
-    await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  if (!kIsWeb) {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     await FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -43,14 +39,13 @@ void main() async {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      debugPrint('User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      debugPrint('User declined or has not accepted permission');
     }
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
   runApp(const MyApp());

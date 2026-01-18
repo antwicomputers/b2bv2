@@ -1,8 +1,4 @@
-import 'package:b2bmobile/Screens/black_kick_start/support_business.dart';
-import 'package:b2bmobile/Screens/drawer/register_event.dart';
-import 'package:b2bmobile/Screens/pages/support_resources.dart';
 import 'package:b2bmobile/Screens/user_resource.dart';
-import 'package:b2bmobile/Screens/vew%20all%20events/my_events.dart';
 import 'package:b2bmobile/userresources/user_resources.dart';
 import 'package:flutter/material.dart';
 
@@ -45,13 +41,13 @@ class _ResourceLandingState extends State<ResourceLanding> {
                   size: 30,
                   color: Colors.white,
                 ),
-                title: Row(
+                title: const Row(
                   children: [
                     Text('Share a Resource'),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -74,8 +70,8 @@ class _ResourceLandingState extends State<ResourceLanding> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  title: Row(
-                    children: const [
+                  title: const Row(
+                    children: [
                       Text('Browse Resources'),
                     ],
                   ),

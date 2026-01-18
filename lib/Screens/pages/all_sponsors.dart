@@ -18,7 +18,6 @@ class AllSponsors extends StatefulWidget {
 class _AllSponsorsState extends State<AllSponsors> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 4,
       child: Consumer<UserProvider>(
@@ -88,7 +87,7 @@ class EventCardWidget extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withValues(alpha: 0.5),
               spreadRadius: 3,
               blurRadius: 10,
               offset: const Offset(0, 3),

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TrainingRegistrationForm extends StatefulWidget {
+  const TrainingRegistrationForm({super.key});
+
   @override
-  _TrainingRegistrationFormState createState() =>
+  State<TrainingRegistrationForm> createState() =>
       _TrainingRegistrationFormState();
 }
 
@@ -23,23 +25,23 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Training Registration'),
+        title: const Text('Training Registration'),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Select an option:',
                   style: TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   value: dropdownValue,
                   onChanged: (String? newValue) {
@@ -65,9 +67,9 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Full Name',
                   ),
                   validator: (value) {
@@ -80,9 +82,9 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
                     fullName = value;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'E-mail Address',
                   ),
                   validator: (value) {
@@ -98,9 +100,9 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
                     emailAddress = value;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Contact Phone Number',
                   ),
                   validator: (value) {
@@ -113,9 +115,9 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
                     contactPhoneNumber = value;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Additional Comments',
                   ),
                   maxLines: 3,
@@ -171,16 +173,17 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
           'multiLineText': multiLineText,
         });
 
+        if (!mounted) return;
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Registration Successful'),
-              content: Text(
+              title: const Text('Registration Successful'),
+              content: const Text(
                   'Thank you for signing up. We will get back to you shortly.'),
               actions: [
                 TextButton(
-                  child: Text('OK'),
+                  child: const Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop();
                     resetFields();
@@ -191,15 +194,16 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
           },
         );
       } catch (error) {
-        showDialog(
+            if (!mounted) return;
+            showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Error'),
-              content: Text('An error occurred. Please try again later.'),
+              title: const Text('Error'),
+              content: const Text('An error occurred. Please try again later.'),
               actions: [
                 TextButton(
-                  child: Text('OK'),
+                  child: const Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

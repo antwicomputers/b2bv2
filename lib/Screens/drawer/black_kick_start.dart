@@ -1,5 +1,4 @@
 import 'package:b2bmobile/Screens/pages/kick_start_landing.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class BlackKickStart extends StatefulWidget {

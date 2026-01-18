@@ -59,12 +59,14 @@ class _AddResourceState extends State<AddResource> {
     super.dispose();
   }
 
-  selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
+  Future<void> selectImage() async {
+    Uint8List? im = await pickImage(ImageSource.gallery);
+    if (im != null) {
+      // set state because we need to display the image we selected on the circle avatar
+      setState(() {
+        _image = im;
+      });
+    }
   }
 
   final _formsKey = GlobalKey<FormState>();
@@ -329,6 +331,7 @@ class _AddResourceState extends State<AddResource> {
                           _isLoading = false;
                         });
 
+                        if (!context.mounted) return;
                         if (message == 'success') {
                           showSnackBar(message, context);
                         } else {

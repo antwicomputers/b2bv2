@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import 'business detal/business_detail_screen.dart';
 
 class Favorites extends StatefulWidget {
-  const Favorites({Key? key}) : super(key: key);
+  const Favorites({super.key});
 
   @override
   State<Favorites> createState() => _FavoritesState();
@@ -44,7 +43,7 @@ class _FavoritesState extends State<Favorites> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
 
           final businesses = snapshot.data!.docs;
@@ -85,11 +84,11 @@ class _FavoritesState extends State<Favorites> {
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({
-    Key? key,
+    super.key,
     required this.image,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final String image;
   final String title;
@@ -107,7 +106,7 @@ class CategoryWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withValues(alpha: 0.5),
               spreadRadius: 3,
               blurRadius: 10,
               offset: const Offset(0, 3),

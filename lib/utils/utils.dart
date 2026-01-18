@@ -1,7 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-pickImage(ImageSource source) async {
+Future<Uint8List?> pickImage(ImageSource source) async {
   final ImagePicker imagePicker = ImagePicker();
 
   XFile? file = await imagePicker.pickImage(source: source);
@@ -9,18 +11,20 @@ pickImage(ImageSource source) async {
   if (file != null) {
     return await file.readAsBytes();
   }
-  print('No Image selected');
+  debugPrint('No Image selected');
+  return null;
 }
 
-pickVideo(ImageSource src, BuildContext context) async {
+Future<Uint8List?> pickVideo(ImageSource src, BuildContext context) async {
   final video = await ImagePicker().pickVideo(source: src);
 
   if (video != null) {
     return await video.readAsBytes();
   }
+  return null;
 }
 
-showSnackBar(String content, BuildContext context) {
+void showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(content),

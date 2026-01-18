@@ -8,9 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class UserDetailScreen extends StatelessWidget {
   const UserDetailScreen({
-    Key? key,
+    super.key,
     required this.resources,
-  }) : super(key: key);
+  });
   final Resources resources;
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,8 @@ class UserDetailScreen extends StatelessWidget {
         actions: [
           InkWell(
             onTap: () {},
-            child: Row(
-              children: const [
+            child: const Row(
+              children: [
                 Text('Report'),
                 SizedBox(
                   width: 5,
@@ -61,7 +61,7 @@ class UserDetailScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.white.withOpacity(0),
+                        Colors.white.withValues(alpha: 0),
                         Colors.black,
                       ],
                       begin: Alignment.topCenter,

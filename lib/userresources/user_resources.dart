@@ -17,7 +17,7 @@ class UserResources extends StatefulWidget {
 class _UserResourcesState extends State<UserResources> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    //Size size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 4,
       child: Consumer<UserProvider>(
@@ -89,7 +89,7 @@ class SupportCardWidget extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withValues(alpha: 0.5),
               spreadRadius: 3,
               blurRadius: 10,
               offset: const Offset(0, 3),
@@ -105,7 +105,7 @@ class SupportCardWidget extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(7),
                 child: Image.network(
-                  support.SupportUrl,
+                  support.supportUrl,
                   height: size.height * 0.13,
                   width: size.height * 0.13,
                   fit: BoxFit.cover,

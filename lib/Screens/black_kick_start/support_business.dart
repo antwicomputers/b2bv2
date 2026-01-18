@@ -9,7 +9,6 @@ import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:b2bmobile/models/support.dart';
 
 class SupportBusiness extends StatefulWidget {
   const SupportBusiness({super.key});
@@ -60,12 +59,14 @@ class _RegisterBusinessState extends State<SupportBusiness> {
     super.dispose();
   }
 
-  selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
+  Future<void> selectImage() async {
+    Uint8List? im = await pickImage(ImageSource.gallery);
+    if (im != null) {
+      // set state because we need to display the image we selected on the circle avatar
+      setState(() {
+        _image = im;
+      });
+    }
   }
 
   final _formsKey = GlobalKey<FormState>();
@@ -331,8 +332,10 @@ class _RegisterBusinessState extends State<SupportBusiness> {
                         });
 
                         if (message == 'success') {
+                          if (!context.mounted) return;
                           showSnackBar(message, context);
                         } else {
+                          if (!context.mounted) return;
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const ResponsiveLayout(

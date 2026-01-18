@@ -29,6 +29,7 @@ class _FavoritesState extends State<HomePage> {
       (RemoteMessage message) {
         debugPrint("onMessage:");
         //log("onMessage: $message" as num);
+        if (!mounted) return;
         final snackBar =
             SnackBar(content: Text(message.notification?.title ?? ""));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -67,7 +68,7 @@ class _FavoritesState extends State<HomePage> {
                   prefixIcon: GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SearchPage()));
+                            builder: (context) => const SearchPage()));
                       },
                       child: const Icon(Icons.search, color: Colors.white)),
                   hintText: 'What are you looking for... ',
@@ -399,10 +400,10 @@ class _FavoritesState extends State<HomePage> {
 
 class HomeBusinessTile extends StatelessWidget {
   const HomeBusinessTile({
-    Key? key,
+    super.key,
     required this.business,
     required this.size,
-  }) : super(key: key);
+  });
   final Business business;
   final Size size;
   @override
@@ -421,7 +422,7 @@ class HomeBusinessTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withValues(alpha: 0.5),
                 spreadRadius: 3,
                 blurRadius: 10,
                 offset: const Offset(0, 3),

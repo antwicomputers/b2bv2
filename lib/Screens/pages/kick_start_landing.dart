@@ -1,7 +1,5 @@
 import 'package:b2bmobile/Screens/black_kick_start/support_business.dart';
-import 'package:b2bmobile/Screens/drawer/register_event.dart';
 import 'package:b2bmobile/Screens/pages/support_resources.dart';
-import 'package:b2bmobile/Screens/vew%20all%20events/my_events.dart';
 import 'package:flutter/material.dart';
 
 class KickStartLanding extends StatefulWidget {
@@ -43,13 +41,13 @@ class _SettingsState extends State<KickStartLanding> {
                   size: 30,
                   color: Colors.white,
                 ),
-                title: Row(
+                title: const Row(
                   children: [
                     Text('Support Black Owned Businesses'),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -72,8 +70,8 @@ class _SettingsState extends State<KickStartLanding> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  title: Row(
-                    children: const [
+                  title: const Row(
+                    children: [
                       Text('Browse Support Resources'),
                     ],
                   ),

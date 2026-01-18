@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:b2bmobile/models/support.dart';
 
 class YouthRequestScreen extends StatelessWidget {
-  const YouthRequestScreen({Key? key}) : super(key: key);
+  const YouthRequestScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class YouthRequestScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
+                        color: Colors.grey.withValues(alpha: 0.5),
                         spreadRadius: 3,
                         blurRadius: 10,
                         offset: const Offset(0, 3),
@@ -63,7 +63,7 @@ class YouthRequestScreen extends StatelessWidget {
                       ),
                       Image(
                         image: NetworkImage(
-                          support.SupportUrl,
+                          support.supportUrl,
                         ),
                         width: 250,
                         height: 150,
@@ -151,10 +151,10 @@ class YouthRequestScreen extends StatelessWidget {
 
 class InfoWidget extends StatelessWidget {
   const InfoWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+  });
   final String title;
   final String subtitle;
 

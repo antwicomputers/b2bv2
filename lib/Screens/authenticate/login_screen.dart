@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               // svg image
               SvgPicture.asset(
                 'assets/ic_b2b1.svg',
-                color: primaryColor,
+                colorFilter: const ColorFilter.mode(primaryColor, BlendMode.srcIn),
               ),
               const SizedBox(height: 64),
               //text field input for email
@@ -99,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     } else {
+                      if (!context.mounted) return;
                       showSnackBar(res, context);
                     }
                     setState(() {
@@ -134,18 +135,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 flex: 1,
                 child: Container(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text('Sign In With...'),
-              SizedBox(
+              const Text('Sign In With...'),
+              const SizedBox(
                 height: 15,
               ),
               Flexible(
                 flex: 2,
                 child: Container(),
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Icon(
@@ -160,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Flexible(

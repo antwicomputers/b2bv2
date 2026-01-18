@@ -27,11 +27,11 @@ class BusinessTile extends StatelessWidget {
                 'assets/logo.jpeg',
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     'Back2Black',
                     style: TextStyle(
@@ -47,9 +47,9 @@ class BusinessTile extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
+              children: [
                 Icon(
                   Icons.thumb_up,
                 ),

@@ -1,13 +1,5 @@
-import 'package:b2bmobile/Screens/black_kick_start/support_business.dart';
-import 'package:b2bmobile/Screens/drawer/register_event.dart';
-import 'package:b2bmobile/Screens/pages/support_resources.dart';
 import 'package:b2bmobile/Screens/pages/youth_resource.dart';
-import 'package:b2bmobile/Screens/user_resource.dart';
-import 'package:b2bmobile/Screens/vew%20all%20events/my_events.dart';
-import 'package:b2bmobile/models/youth.dart';
-import 'package:b2bmobile/userresources/user_resources.dart';
 import 'package:flutter/material.dart';
-
 import '../Screens/admin_panel/youth_requests/all_youth_support.dart';
 
 class YouthResourceLanding extends StatefulWidget {
@@ -49,13 +41,13 @@ class _YouthResourceLandingState extends State<YouthResourceLanding> {
                   size: 30,
                   color: Colors.white,
                 ),
-                title: Row(
+                title: const Row(
                   children: [
                     Text('Share a Resource'),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -77,8 +69,8 @@ class _YouthResourceLandingState extends State<YouthResourceLanding> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  title: Row(
-                    children: const [
+                  title: const Row(
+                    children: [
                       Text('Browse Resources'),
                     ],
                   ),

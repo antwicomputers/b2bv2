@@ -1,12 +1,11 @@
 import 'package:b2bmobile/Screens/pages/all_women.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class WomenBusiness extends StatefulWidget {
   const WomenBusiness({super.key});
 
   @override
-  _WomenBusinessState createState() => _WomenBusinessState();
+  State<WomenBusiness> createState() => _WomenBusinessState();
 }
 
 class _WomenBusinessState extends State<WomenBusiness> {

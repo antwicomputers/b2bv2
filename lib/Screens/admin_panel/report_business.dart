@@ -24,7 +24,7 @@ class _BusinessReportState extends State<BusinessReport> {
           : AppBar(
               backgroundColor: mobileBackgroundColor,
               centerTitle: true,
-              title: Text('Business Report'),
+              title: const Text('Business Report'),
               // actions: [
               //   IconButton(
               //     icon: const Icon(
@@ -79,7 +79,7 @@ class _BusinessReportState extends State<BusinessReport> {
                 trailing: const Icon(
                   Icons.more_vert,
                 ),
-                onTap: () => print('you pressed more'),
+                onTap: () => debugPrint('you pressed more'),
               ),
             ),
           );

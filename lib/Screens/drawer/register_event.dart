@@ -3,7 +3,8 @@ import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -59,12 +60,14 @@ class _RegisterEventState extends State<RegisterEvent> {
     super.dispose();
   }
 
-  selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
-    setState(() {
-      _image = im;
-    });
+  Future<void> selectImage() async {
+    Uint8List? im = await pickImage(ImageSource.gallery);
+    if (im != null) {
+      // set state because we need to display the image we selected on the circle avatar
+      setState(() {
+        _image = im;
+      });
+    }
   }
 
   bool isOnline = false;
@@ -217,7 +220,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                       children: [
                         Icon(Icons.ondemand_video_outlined,
                             color:
-                                Theme.of(context).hintColor.withOpacity(0.7)),
+                                Theme.of(context).hintColor.withValues(alpha: 0.7)),
                         const SizedBox(
                           width: 10,
                         ),
@@ -225,7 +228,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                           'Online event',
                           style: TextStyle(
                               color:
-                                  Theme.of(context).hintColor.withOpacity(0.7)),
+                                  Theme.of(context).hintColor.withValues(alpha: 0.7)),
                         ),
                       ],
                     ),
@@ -238,9 +241,9 @@ class _RegisterEventState extends State<RegisterEvent> {
                   ListTile(
                     onTap: () async {
                       DateTime? selectedDate =
-                          await DatePicker.showDateTimePicker(
+                          await picker.DatePicker.showDateTimePicker(
                         context,
-                        theme: const DatePickerTheme(
+                        theme: const picker.DatePickerTheme(
                           backgroundColor: Colors.black,
                           itemStyle: TextStyle(
                             color: Colors.white,
@@ -254,19 +257,19 @@ class _RegisterEventState extends State<RegisterEvent> {
                     },
                     contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                     leading: Icon(Icons.calendar_month,
-                        color: Theme.of(context).hintColor.withOpacity(0.7)),
+                        color: Theme.of(context).hintColor.withValues(alpha: 0.7)),
                     horizontalTitleGap: -5,
                     title: Text(
                       'Event Date',
                       style: TextStyle(
-                          color: Theme.of(context).hintColor.withOpacity(0.7)),
+                          color: Theme.of(context).hintColor.withValues(alpha: 0.7)),
                     ),
                     subtitle: Text(
                       DateFormat('dd/MMM/yyyy hh:mm a').format(
                         eventDate,
                       ),
                       style: TextStyle(
-                        color: Theme.of(context).hintColor.withOpacity(0.7),
+                        color: Theme.of(context).hintColor.withValues(alpha: 0.7),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

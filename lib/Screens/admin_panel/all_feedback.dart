@@ -5,7 +5,7 @@ import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 
 class AllFeedback extends StatefulWidget {
-  const AllFeedback({Key? key}) : super(key: key);
+  const AllFeedback({super.key});
 
   @override
   State<AllFeedback> createState() => _ManageUsersState();
@@ -24,7 +24,7 @@ class _ManageUsersState extends State<AllFeedback> {
           : AppBar(
               backgroundColor: mobileBackgroundColor,
               centerTitle: false,
-              title: Text('All Feedback')
+              title: const Text('All Feedback')
               // actions: [
               //   IconButton(
               //     icon: const Icon(
@@ -76,7 +76,7 @@ class _ManageUsersState extends State<AllFeedback> {
                 trailing: const Icon(
                   Icons.more_vert,
                 ),
-                onTap: () => print('you pressed more'),
+                onTap: () => debugPrint('you pressed more'),
               ),
             ),
           );

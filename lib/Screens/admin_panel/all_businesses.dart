@@ -4,7 +4,7 @@ import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 
 class BusinessAll extends StatefulWidget {
-  const BusinessAll({Key? key}) : super(key: key);
+  const BusinessAll({super.key});
 
   @override
   State<BusinessAll> createState() => _ManageUsersState();
@@ -19,7 +19,7 @@ class _ManageUsersState extends State<BusinessAll> {
       backgroundColor: width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
       appBar: width > webScreenSize
           ? null
-          : AppBar(backgroundColor: mobileBackgroundColor, centerTitle: false, title: Text('All Businesses')
+          : AppBar(backgroundColor: mobileBackgroundColor, centerTitle: false, title: const Text('All Businesses')
               // actions: [
               //   IconButton(
               //     icon: const Icon(
@@ -67,7 +67,7 @@ class _ManageUsersState extends State<BusinessAll> {
                 trailing: const Icon(
                   Icons.more_vert,
                 ),
-                onTap: () => print('you pressed more'),
+                onTap: () => debugPrint('you pressed more'),
                 subtitle: Text(
                   (snapshot.data! as dynamic).docs[index]['phone'],
                 ),

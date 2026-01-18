@@ -121,7 +121,7 @@ class _SettingsState extends State<Categories> {
               Get.back();
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => TrainingRegistrationForm()),
+                    builder: (context) => const TrainingRegistrationForm()),
               );
             },
             child: const CategoryWIdget(
@@ -137,10 +137,10 @@ class _SettingsState extends State<Categories> {
 
 class CategoryWIdget extends StatelessWidget {
   const CategoryWIdget({
-    Key? key,
+    super.key,
     required this.image,
     required this.title,
-  }) : super(key: key);
+  });
   final String image;
   final String title;
   @override
@@ -153,7 +153,7 @@ class CategoryWIdget extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             spreadRadius: 3,
             blurRadius: 10,
             offset: const Offset(0, 3),

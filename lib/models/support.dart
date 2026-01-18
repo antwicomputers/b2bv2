@@ -18,7 +18,7 @@ class Support {
   final String tiktok;
   final String twitch;
   final String podcast;
-  final String SupportUrl;
+  final String supportUrl;
   final bool isBlackOwned;
   final String youtube;
   final bool womenOriented;
@@ -47,7 +47,7 @@ class Support {
     required this.tiktok,
     required this.twitch,
     required this.podcast,
-    required this.SupportUrl,
+    required this.supportUrl,
     required this.isBlackOwned,
     required this.womenOriented,
     required this.isEsential,
@@ -56,10 +56,10 @@ class Support {
   });
 
   Support copyWith({
-    String? SupportName,
-    String? SupportDescription,
-    String? SupportAddress,
-    String? SupportCategory,
+    String? supportName,
+    String? supportDescription,
+    String? supportAddress,
+    String? supportCategory,
     DateTime? createdAt,
     String? phone,
     String? email,
@@ -73,25 +73,25 @@ class Support {
     String? tiktok,
     String? twitch,
     String? podcast,
-    String? SupportUrl,
+    String? supportUrl,
     bool? isBlackOwned,
     bool? isVerified,
     bool? womenOriented,
     bool? isEsential,
     bool? isFeatured,
-    String? SupportId,
+    String? supportId,
     bool? isSponsored,
   }) {
     return Support(
-      supportName: SupportName ?? this.supportName,
-      supportDescription: SupportDescription ?? this.supportDescription,
-      supportAddress: SupportAddress ?? this.supportAddress,
-      supportCategory: SupportCategory ?? this.supportCategory,
+      supportName: supportName ?? this.supportName,
+      supportDescription: supportDescription ?? this.supportDescription,
+      supportAddress: supportAddress ?? this.supportAddress,
+      supportCategory: supportCategory ?? this.supportCategory,
       createdAt: createdAt ?? this.createdAt,
       isVerified: isVerified ?? this.isVerified,
       phone: phone ?? this.phone,
       youtube: youtube ?? this.youtube,
-      supportId: SupportId ?? this.supportId,
+      supportId: supportId ?? this.supportId,
       email: email ?? this.email,
       website: website ?? this.website,
       twitter: twitter ?? this.twitter,
@@ -102,7 +102,7 @@ class Support {
       tiktok: tiktok ?? this.tiktok,
       twitch: twitch ?? this.twitch,
       podcast: podcast ?? this.podcast,
-      SupportUrl: SupportUrl ?? this.SupportUrl,
+      supportUrl: supportUrl ?? this.supportUrl,
       isBlackOwned: isBlackOwned ?? this.isBlackOwned,
       womenOriented: womenOriented ?? this.womenOriented,
       isEsential: isEsential ?? this.isEsential,
@@ -132,7 +132,7 @@ class Support {
       'twitch': twitch,
       'SupportId': supportId,
       'podcast': podcast,
-      'SupportUrl': SupportUrl,
+      'SupportUrl': supportUrl,
       'isBlackOwned': isBlackOwned,
       'womenOriented': womenOriented,
       'isEsential': isEsential,
@@ -164,7 +164,7 @@ class Support {
       tiktok: map['tiktok'] ?? '',
       twitch: map['twitch'] ?? '',
       podcast: map['podcast'] ?? '',
-      SupportUrl: map['SupportUrl'] ?? '',
+      supportUrl: map['SupportUrl'] ?? '',
       isBlackOwned: map['isBlackOwned'] ?? false,
       womenOriented: map['womenOriented'] ?? false,
       isEsential: map['isEsential'] ?? false,
@@ -180,7 +180,7 @@ class Support {
 
   @override
   String toString() {
-    return 'Support(SupportName: $supportName, youtube: $youtube,SupportDescription: $supportDescription, SupportAddress: $supportAddress, SupportCategory: $supportCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, SupportUrl: $SupportUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored)';
+    return 'Support(SupportName: $supportName, youtube: $youtube,SupportDescription: $supportDescription, SupportAddress: $supportAddress, SupportCategory: $supportCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, SupportUrl: $supportUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored)';
   }
 
   @override
@@ -208,7 +208,7 @@ class Support {
         other.tiktok == tiktok &&
         other.twitch == twitch &&
         other.podcast == podcast &&
-        other.SupportUrl == SupportUrl &&
+        other.supportUrl == supportUrl &&
         other.isBlackOwned == isBlackOwned &&
         other.womenOriented == womenOriented &&
         other.isEsential == isEsential &&
@@ -237,7 +237,7 @@ class Support {
         podcast.hashCode ^
         userId.hashCode ^
         createdAt.hashCode ^
-        SupportUrl.hashCode ^
+        supportUrl.hashCode ^
         isBlackOwned.hashCode ^
         womenOriented.hashCode ^
         isEsential.hashCode ^

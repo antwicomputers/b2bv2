@@ -13,9 +13,9 @@ import '../../../utils/images.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({
-    Key? key,
+    super.key,
     required this.event,
-  }) : super(key: key);
+  });
   final Events event;
 
   @override
@@ -160,8 +160,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           actions: [
             InkWell(
               onTap: () {},
-              child: Row(
-                children: const [
+              child: const Row(
+                children: [
                   Text('Report'),
                   SizedBox(
                     width: 5,
@@ -198,7 +198,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Colors.white.withOpacity(0),
+                          Colors.white.withValues(alpha: 0),
                           Colors.black,
                         ],
                         begin: Alignment.topCenter,
