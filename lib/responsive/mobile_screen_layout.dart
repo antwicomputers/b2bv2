@@ -222,26 +222,35 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   }
 
   Widget _buildHeader() {
-    return const DrawerHeader(
-      decoration: BoxDecoration(
-        color: Colors.black,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1512094476718-4d8f19366c62?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGJsYWNrJTIwd29tZW4lMjBpbiUyMGJ1c2luZXNzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=900&q=60'),
-            radius: 40,
+    return Consumer<UserProvider>(
+      builder: (context, value, child) {
+        final user = value.userModel;
+        if (user == null) {
+          return const UserAccountsDrawerHeader(
+            decoration: BoxDecoration(color: Colors.black),
+            accountName: Text("Loading..."),
+            accountEmail: Text(""),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.grey,
+              child: CircularProgressIndicator(color: Colors.white),
+            ),
+          );
+        }
+        return UserAccountsDrawerHeader(
+          decoration: const BoxDecoration(
+            color: Colors.black,
           ),
-          SizedBox(
-            height: 20,
+          accountName: Text(
+            user.fullname,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          Text('Black Queen'),
-          Text('black.queens@godsplan.com'),
-        ],
-      ),
+          accountEmail: Text(user.email),
+          currentAccountPicture: CircleAvatar(
+            backgroundImage: NetworkImage(user.photoUrl),
+            backgroundColor: Colors.grey.shade800, // Fallback color
+          ),
+        );
+      },
     );
   }
 

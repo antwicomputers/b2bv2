@@ -1,5 +1,6 @@
 import 'package:b2bmobile/Screens/splash%20screen/splash_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,10 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'package:b2bmobile/firebase_options.dart';
+import 'package:b2bmobile/Screens/authenticate/login_screen.dart';
+import 'package:b2bmobile/responsive/responsive_layout_screen.dart';
+import 'package:b2bmobile/responsive/mobile_screen_layout.dart';
+import 'package:b2bmobile/responsive/web_screen_layout.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
@@ -22,7 +27,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (kDebugMode) {
+    try {
+      await FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: true);
+      debugPrint('App Verification Disabled for Testing');
+    } catch (e) {
+      debugPrint('Could not disable app verification: $e');
+    }
+  }
+  
+  debugPrint('FIREBASE INITIALIZED - RUNNING APP');
 
+  /*
   if (!kIsWeb) {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     await FirebaseMessaging.instance.getInitialMessage();
@@ -47,7 +63,8 @@ void main() async {
       debugPrint('User declined or has not accepted permission');
     }
   }
-
+  */
+  
   runApp(const MyApp());
 }
 
@@ -69,32 +86,31 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,
         ),
-        home: const SplashScreen(),
-        // home: StreamBuilder(
-        //   stream: FirebaseAuth.instance.authStateChanges(),
-        //   builder: (context, snapshot) {
-        //     if (snapshot.connectionState == ConnectionState.active) {
-        //       if (snapshot.hasData) {
-        //         return const ResponsiveLayout(
-        //           mobileScreenLayout: MobileScreenLayout(),
-        //           webScreenLayout: WebScreenLayout(),
-        //         );
-        //       } else if (snapshot.hasError) {
-        //         return Center(
-        //           child: Text('${snapshot.error}'),
-        //         );
-        //       }
-        //     }
-        //     if (snapshot.connectionState == ConnectionState.waiting) {
-        //       return const Center(
-        //         child: CircularProgressIndicator(
-        //           color: primaryColor,
-        //         ),
-        //       );
-        //     }
-        //     return const LoginScreen();
-        //   },
-        // ),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                return const ResponsiveLayout(
+                  mobileScreenLayout: MobileScreenLayout(),
+                  webScreenLayout: WebScreenLayout(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('${snapshot.error}'),
+                );
+              }
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor, // Ensure primaryColor is imported
+                ),
+              );
+            }
+            return const LoginScreen();
+          },
+        ),
       ),
     );
   }

@@ -18,13 +18,32 @@ class UserProvider with ChangeNotifier {
     Timer(
       const Duration(seconds: 2),
       () async {
-        _user = _auth.currentUser;
-        if (_user != null) {
-          await getUserData(_user!);
-          userDataStream(_user!);
-          navigateToTabsPage(_user);
-        } else {
-          Get.offAll(() => const LoginScreen());
+        try {
+          _user = _auth.currentUser;
+          if (_user != null) {
+            bool userExists = false;
+            try {
+              userExists = await getUserData(_user!);
+            } catch (e) {
+              debugPrint("Error fetching user data: $e");
+              userExists = false; // Treat error as missing user
+            }
+
+            if (userExists) {
+              userDataStream(_user!);
+              navigateToTabsPage(_user);
+            } else {
+              debugPrint("User missing or error. Signing out.");
+              await _auth.signOut();
+              Get.offAll(() => const LoginScreen());
+            }
+          } else {
+            Get.offAll(() => const LoginScreen());
+          }
+        } catch (e) {
+           debugPrint("Critical UserProvider Error: $e");
+           await _auth.signOut();
+           Get.offAll(() => const LoginScreen());
         }
       },
     );
@@ -92,27 +111,84 @@ class UserProvider with ChangeNotifier {
       if (email.isNotEmpty ||
           password.isNotEmpty ||
           fullname.isNotEmpty ||
-          username.isNotEmpty) {}
-      UserCredential cred = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      if (kDebugMode) {
-        debugPrint(cred.user!.uid);
+          username.isNotEmpty) {
+        
+        // 1. AUTHENTICATION
+        UserCredential cred;
+        try {
+           cred = await _auth.createUserWithEmailAndPassword(
+              email: email, password: password);
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            return 'The password provided is too weak.';
+          } else if (e.code == 'email-already-in-use') {
+            return 'The account already exists for that email.';
+          }
+          return "Auth Failed [${e.code}]: ${e.message}";
+        } catch (e) {
+          return "Auth Failed (Generic): ${e.toString()}";
+        }
+        
+        if (kDebugMode) {
+          debugPrint("Auth Success: ${cred.user!.uid}");
+        }
+
+        // 2. STORAGE UPLOAD
+        String photoUrl;
+        try {
+          photoUrl = await StorageMethods()
+            .uploadImageToStoage('users', file, false);
+        } catch (e) {
+           return "Storage Failed: ${e.toString()}";
+        }
+
+        // 3. DATABASE WRITE
+        try {
+          //add user to database
+          UserModel user = UserModel(
+            username: username,
+            uid: cred.user!.uid,
+            email: email,
+            fullname: fullname,
+            photoUrl: photoUrl,
+          );
+          
+          if (kDebugMode) {
+            debugPrint("Attempting to write to Firestore: users/${cred.user!.uid}");
+          }
+
+          await _firestore
+              .collection('users')
+              .doc(cred.user!.uid)
+              .set(user.toMap());
+              
+           if (kDebugMode) {
+              debugPrint("Firestore Write SUCCESS");
+           }
+           
+           // UPDATE LOCAL STATE
+           _user = cred.user;
+           userModel = user;
+           userDataStream(cred.user!);
+           notifyListeners();
+
+        } on FirebaseException catch (e) {
+           if (kDebugMode) {
+             debugPrint("FIRESTORE ERROR: Code=${e.code}, Message=${e.message}");
+           }
+           if (e.code == 'permission-denied') {
+             return "Firestore Permission Denied. Please check Database Rules.";
+           }
+           rethrow;
+        } catch (e) {
+           if (kDebugMode) {
+             debugPrint("Generic Firestore Error: $e");
+           }
+           return "Database Failed: ${e.toString()}";
+        }
+
+        res = "success";
       }
-      String photoUrl = await StorageMethods()
-          .uploadImageToStoage('profilePics', file, false);
-      //add user to database
-      UserModel user = UserModel(
-        username: username,
-        uid: cred.user!.uid,
-        email: email,
-        fullname: fullname,
-        photoUrl: photoUrl,
-      );
-      await _firestore
-          .collection('users')
-          .doc(cred.user!.uid)
-          .set(user.toMap());
-      res = "success";
     } catch (err) {
       res = err.toString();
     }

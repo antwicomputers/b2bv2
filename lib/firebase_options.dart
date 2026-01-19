@@ -61,20 +61,20 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCezML05inYaVmmvRcR4hSdgTnBB1nrpN0',
-    appId: '1:916287429194:ios:74501e247ba4c31b05e4b3',
-    messagingSenderId: '916287429194',
-    projectId: 'uy19421sbw0axl2htpfhuglpl7z0u1',
-    storageBucket: 'uy19421sbw0axl2htpfhuglpl7z0u1.firebasestorage.app',
+    apiKey: 'AIzaSyCYL28s3jkkosTcl84v4IN4OSxecW8uy9w',
+    appId: '1:206154666856:ios:d2ea87b855413cf29dbcdd',
+    messagingSenderId: '206154666856',
+    projectId: 'officialb2b',
+    storageBucket: 'officialb2b.firebasestorage.app',
     iosBundleId: 'com.example.b2bmobile',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCezML05inYaVmmvRcR4hSdgTnBB1nrpN0',
-    appId: '1:916287429194:ios:74501e247ba4c31b05e4b3',
-    messagingSenderId: '916287429194',
-    projectId: 'uy19421sbw0axl2htpfhuglpl7z0u1',
-    storageBucket: 'uy19421sbw0axl2htpfhuglpl7z0u1.firebasestorage.app',
+    apiKey: 'AIzaSyCYL28s3jkkosTcl84v4IN4OSxecW8uy9w',
+    appId: '1:206154666856:ios:d2ea87b855413cf29dbcdd',
+    messagingSenderId: '206154666856',
+    projectId: 'officialb2b',
+    storageBucket: 'officialb2b.firebasestorage.app',
     iosBundleId: 'com.example.b2bmobile',
   );
 }

@@ -14,9 +14,21 @@ class StorageMethods {
           DateTime.now().microsecondsSinceEpoch.toString(),
         );
 
+    if (kDebugMode) {
+      debugPrint('Storage Bucket: ${_storage.app.options.storageBucket}');
+      debugPrint('Uploading to: ${ref.fullPath}');
+      debugPrint('File size: ${file.length} bytes');
+    }
+
     UploadTask uploadTask = ref.putData(file);
 
     TaskSnapshot snap = await uploadTask;
+    
+    if (kDebugMode) {
+      debugPrint('Upload State: ${snap.state}');
+      debugPrint('Bytes Transferred: ${snap.bytesTransferred} / ${snap.totalBytes}');
+    }
+
     String downloadUrl = await snap.ref.getDownloadURL();
     return downloadUrl;
   }

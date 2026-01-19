@@ -3,7 +3,31 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCezML05inYaVmmvRcR4hSdgTnBB1nrpN0</string>
+	<string>AIzaSyCYL28s3jkkosTcl84v4IN4OSxecW8uy9w</string>
+	<key>GCM_SENDER_ID</key>
+	<string>206154666856</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.b2bmobile</string>
+	<key>PROJECT_ID</key>
+	<string>officialb2b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>officialb2b.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:206154666856:ios:d2ea87b855413cf29dbcdd</string>
+</dict>
+</plist>
 	<key>GCM_SENDER_ID</key>
 	<string>916287429194</string>
 	<key>PLIST_VERSION</key>

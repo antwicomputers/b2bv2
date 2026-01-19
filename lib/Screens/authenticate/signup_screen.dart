@@ -1,4 +1,6 @@
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 import 'package:b2bmobile/Screens/authenticate/login_screen.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
@@ -171,31 +173,46 @@ class _LoginScreenState extends State<SignupScreen> {
                     setState(() {
                       _isLoading = true;
                     });
-                    String res = await value.signUpUser(
-                      email: _emailController.text,
-                      password: _passwordController.text,
-                      fullname: _fullName.text,
-                      username: _userName.text,
-                      file: _image!,
-                    );
+                    try {
+                      Uint8List fileData = _image ??
+                          (await rootBundle.load('assets/default_profile.png'))
+                              .buffer
+                              .asUint8List();
 
-                    setState(() {
-                      _isLoading = false;
-                    });
-
-                    if (res != 'success') {
-                      if (!context.mounted) return;
-                      showSnackBar(res, context);
-                    } else {
-                      if (!context.mounted) return;
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const ResponsiveLayout(
-                            mobileScreenLayout: MobileScreenLayout(),
-                            webScreenLayout: WebScreenLayout(),
-                          ),
-                        ),
+                      String res = await value.signUpUser(
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        fullname: _fullName.text,
+                        username: _userName.text,
+                        file: fileData,
                       );
+
+                      if (res != 'success') {
+                        if (!context.mounted) return;
+                        showSnackBar(res, context);
+                      } else {
+                        if (!context.mounted) return;
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const ResponsiveLayout(
+                              mobileScreenLayout: MobileScreenLayout(),
+                              webScreenLayout: WebScreenLayout(),
+                            ),
+                          ),
+                        );
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      if (!context.mounted) return;
+                      showSnackBar("Auth Error: ${e.code} - ${e.message}", context);
+                    } catch (e) {
+                      if (!context.mounted) return;
+                      showSnackBar("Error: ${e.toString()}", context);
+                    } finally {
+                      if (mounted) {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
                     }
                   },
                   child: _isLoading
