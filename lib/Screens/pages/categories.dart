@@ -142,7 +142,7 @@ class _CategoryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: _borderColor),
           boxShadow: [
-            BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4)),
+            BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 10, offset: const Offset(0, 4)),
           ],
         ),
         child: ClipRRect(
@@ -160,7 +160,7 @@ class _CategoryCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.black.withValues(alpha: 0.2), Colors.black.withValues(alpha: 0.9)],
+                      colors: [Colors.black.withOpacity(0.2), Colors.black.withOpacity(0.9)],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
@@ -176,7 +176,7 @@ class _CategoryCard extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(color: _silver.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(color: _silver.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
                       child: Icon(icon, color: _silver, size: 24),
                     ),
                     const SizedBox(height: 12),

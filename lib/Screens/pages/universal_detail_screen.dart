@@ -95,7 +95,6 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
 
           return CustomScrollView(
             slivers: [
-              // ── Modern Sliver AppBar ──────────────────────────────────────
               SliverAppBar(
                 expandedHeight: 350,
                 pinned: true,
@@ -107,7 +106,7 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.report_gmailerrorred, color: Colors.white70),
-                    onPressed: () {}, // report
+                    onPressed: () {},
                   ),
                 ],
                 flexibleSpace: FlexibleSpaceBar(
@@ -151,18 +150,16 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                 ),
               ),
 
-              // ── Content ────────────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Category Tag
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: _silver.withValues(alpha: 0.1),
+                          color: _silver.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -177,7 +174,6 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Location & Date
                       _InfoRow(
                         icon: Icons.location_on_rounded,
                         content: item.address,
@@ -216,7 +212,6 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                       ),
                       const SizedBox(height: 20),
 
-                      // ── Social Icons Wrap (Requested: Wrap instead of scroll) ──
                       Wrap(
                         spacing: 16,
                         runSpacing: 16,
@@ -272,10 +267,9 @@ class _InteractionBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.6),
+          color: Colors.black.withOpacity(0.6),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-          backdropFilter: const ColorFilter.mode(Colors.black26, BlendMode.darken),
+          border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Row(
           children: [
