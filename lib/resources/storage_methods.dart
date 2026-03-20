@@ -8,11 +8,20 @@ class StorageMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //adding image to firebase storage
-  Future<String> uploadImageToStoage(String childName, Uint8List file, bool isPost) async {
-    //pointer to file in storage
-    Reference ref = _storage.ref().child(childName).child(_auth.currentUser!.uid).child(
-          DateTime.now().microsecondsSinceEpoch.toString(),
-        );
+  Future<String> uploadImageToStorage(String childName, Uint8List file, bool isPost, {String? customId}) async {
+    Reference ref;
+    
+    if (customId != null) {
+      // New logic: Store directly under the collection/entityID
+      // e.g., 'businesses/business_123'
+      ref = _storage.ref().child(childName).child(customId);
+    } else {
+      // Legacy logic: Store under users/uid/timestamp
+      // Used for profile pics or non-ID posts
+      ref = _storage.ref().child(childName).child(_auth.currentUser!.uid).child(
+            DateTime.now().microsecondsSinceEpoch.toString(),
+          );
+    }
 
     if (kDebugMode) {
       debugPrint('Storage Bucket: ${_storage.app.options.storageBucket}');
@@ -31,5 +40,13 @@ class StorageMethods {
 
     String downloadUrl = await snap.ref.getDownloadURL();
     return downloadUrl;
+  }
+
+  Future<void> deleteImageFromStorage(String url) async {
+    try {
+      await _storage.refFromURL(url).delete();
+    } catch (e) {
+      debugPrint("Error deleting image: $e");
+    }
   }
 }

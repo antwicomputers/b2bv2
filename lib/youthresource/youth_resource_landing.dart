@@ -1,4 +1,5 @@
 import 'package:b2bmobile/Screens/pages/youth_resource.dart';
+import 'package:b2bmobile/youthresource/my_youth_resources.dart';
 import 'package:flutter/material.dart';
 import '../Screens/admin_panel/youth_requests/all_youth_support.dart';
 
@@ -45,6 +46,36 @@ class _YouthResourceLandingState extends State<YouthResourceLanding> {
                   children: [
                     Text('Share a Resource'),
                   ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const MyYouthResources()),
+                  );
+                },
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  leading: const Icon(
+                    Icons.folder_shared,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  title: const Row(
+                    children: [
+                      Text('My Shared Resources'),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(

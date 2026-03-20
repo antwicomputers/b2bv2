@@ -8,6 +8,7 @@ import 'package:b2bmobile/models/business.dart' as model;
 import 'package:b2bmobile/models/events.dart' as model;
 import 'package:b2bmobile/models/support.dart' as model;
 import 'package:get/get.dart';
+import 'package:geocoding/geocoding.dart';
 import '../Screens/authenticate/login_screen.dart';
 import '../responsive/mobile_screen_layout.dart';
 import '../responsive/responsive_layout_screen.dart';
@@ -137,7 +138,7 @@ class UserProvider with ChangeNotifier {
         String photoUrl;
         try {
           photoUrl = await StorageMethods()
-            .uploadImageToStoage('users', file, false);
+            .uploadImageToStorage('users', file, false);
         } catch (e) {
            return "Storage Failed: ${e.toString()}";
         }
@@ -221,6 +222,9 @@ class UserProvider with ChangeNotifier {
       required String businessDescription,
       required String businessAddress,
       required String businessCategory,
+      bool isBlackOwned = false,
+      bool isEsential = false,
+      bool womenOriented = false,
       required String phone,
       required String email,
       required String website,
@@ -234,12 +238,33 @@ class UserProvider with ChangeNotifier {
       required String youtube,
       required Uint8List businessFile}) async {
     String message = 'some error occured';
-    String businessUrl = await StorageMethods()
-        .uploadImageToStoage('businessPics', businessFile, false);
+    
+    // 1. Generate ID first
     final ref = FirebaseFirestore.instance.collection('businesses').doc().id;
+    
+    // 2. Upload Image using that ID
+    String businessUrl = await StorageMethods()
+        .uploadImageToStorage('businesses', businessFile, false, customId: ref);
+        
+    // 3. Geocode Address
+    double latitude = 0.0;
+    double longitude = 0.0;
+    try {
+      List<Location> locations = await locationFromAddress(businessAddress);
+      if (locations.isNotEmpty) {
+        latitude = locations.first.latitude;
+        longitude = locations.first.longitude;
+      }
+    } catch (e) {
+      debugPrint("Geocoding Error: $e");
+    }
+
+    // 4. Create Model
     model.Business business = model.Business(
       businessName: businessName,
       businessId: ref,
+      latitude: latitude,
+      longitude: longitude,
       businessDescription: businessDescription,
       businessAddress: businessAddress,
       isVerified: false,
@@ -248,11 +273,11 @@ class UserProvider with ChangeNotifier {
       createdAt: DateTime.now(),
       phone: phone,
       youtube: youtube,
-      isBlackOwned: false,
-      isEsential: false,
+      isBlackOwned: isBlackOwned,
+      isEsential: isEsential,
       isFeatured: false,
       isSponsored: false,
-      womenOriented: false,
+      womenOriented: womenOriented,
       email: email,
       website: website,
       twitter: twitter,
@@ -271,6 +296,97 @@ class UserProvider with ChangeNotifier {
       await FirebaseFirestore.instance.collection('businesses').doc(ref).set(
             business.toMap(),
           );
+      message = 'success';
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
+
+  // update business
+  Future<String> updateBusiness({
+    required String businessId,
+    required String businessName,
+    required String businessDescription,
+    required String businessAddress,
+    required String businessCategory,
+    bool isBlackOwned = false,
+    bool isEsential = false,
+    bool womenOriented = false,
+    required String phone,
+    required String email,
+    required String website,
+    required String twitter,
+    required String facebook,
+    required String linkedIn,
+    required String instagram,
+    required String tiktok,
+    required String twitch,
+    required String podcast,
+    required String youtube,
+    required String currentBusinessUrl,
+    Uint8List? businessFile,
+  }) async {
+    String message = 'some error occurred';
+
+    try {
+      String businessUrl = currentBusinessUrl;
+      // 1. Upload new image if provided
+      if (businessFile != null) {
+        businessUrl = await StorageMethods().uploadImageToStorage(
+            'businesses', businessFile, false,
+            customId: businessId);
+      }
+
+      // 2. Geocode Address (always re-geocode to be safe, or check if changed)
+      double latitude = 0.0;
+      double longitude = 0.0;
+      try {
+        List<Location> locations = await locationFromAddress(businessAddress);
+        if (locations.isNotEmpty) {
+          latitude = locations.first.latitude;
+          longitude = locations.first.longitude;
+        }
+      } catch (e) {
+        debugPrint("Geocoding Error: $e");
+      }
+
+      // 3. Update Firestore
+      // We don't need to recreate the whole model if we just update fields, 
+      // but creating a map is cleaner.
+      // Note: We should preserve existing fields like 'createdAt', 'isVerified', 'userId', 'isLiked', 'isFavorite', 'isFeatured', 'isSponsored'.
+      // Since we don't have the old model here, we typically merge.
+      
+      Map<String, dynamic> dataToUpdate = {
+        'businessName': businessName,
+        'businessDescription': businessDescription,
+        'businessAddress': businessAddress,
+        'businessCategory': businessCategory,
+        'phone': phone,
+        'email': email,
+        'website': website,
+        'twitter': twitter,
+        'facebook': facebook,
+        'linkedIn': linkedIn,
+        'instagram': instagram,
+        'tiktok': tiktok,
+        'twitch': twitch,
+        'podcast': podcast,
+        'youtube': youtube,
+        'businessUrl': businessUrl,
+        'isBlackOwned': isBlackOwned,
+        'isEsential': isEsential,
+        'womenOriented': womenOriented,
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+
+      await FirebaseFirestore.instance
+          .collection('businesses')
+          .doc(businessId)
+          .update(dataToUpdate);
+
+      message = 'success';
     } catch (err) {
       message = err.toString();
     }
@@ -296,10 +412,16 @@ class UserProvider with ChangeNotifier {
       required String youtube,
       required Uint8List businessFile}) async {
     String message = 'some error occured';
-    String supportUrl = await StorageMethods()
-        .uploadImageToStoage('supportPics', businessFile, false);
+    
+    // 1. Generate ID first
     final ref =
         FirebaseFirestore.instance.collection('supportbusinesses').doc().id;
+
+    // 2. Upload Image using that ID
+    String supportUrl = await StorageMethods()
+        .uploadImageToStorage('supportbusinesses', businessFile, false, customId: ref);
+        
+    // 3. Create Model
     model.Support support = model.Support(
       supportName: supportName,
       supportId: ref,
@@ -335,6 +457,7 @@ class UserProvider with ChangeNotifier {
           .set(
             support.toMap(),
           );
+      message = 'success';
     } catch (err) {
       message = err.toString();
     }
@@ -362,9 +485,15 @@ class UserProvider with ChangeNotifier {
       required String podcast,
       required Uint8List eventFile}) async {
     String message = 'some error occured';
-    String eventUrl = await StorageMethods()
-        .uploadImageToStoage('eventPics', eventFile, false);
+    
+    // 1. Generate ID first
     String ref = FirebaseFirestore.instance.collection('events').doc().id;
+
+    // 2. Upload Image using that ID
+    String eventUrl = await StorageMethods()
+        .uploadImageToStorage('events', eventFile, false, customId: ref);
+        
+    // 3. Create Model
     model.Events business = model.Events(
       eventName: eventName,
       eventId: ref,
@@ -396,6 +525,76 @@ class UserProvider with ChangeNotifier {
       await FirebaseFirestore.instance.collection('events').doc(ref).set(
             business.toMap(),
           );
+      message = 'success';
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
+
+  // update event
+  Future<String> updateEvent({
+    required String eventId,
+    required String eventName,
+    required String eventDescription,
+    required String eventAddress,
+    required String eventCategory,
+    required String phone,
+    required String email,
+    required String website,
+    required String twitter,
+    required String facebook,
+    required String linkedIn,
+    required String instagram,
+    required String tiktok,
+    required DateTime eventDate,
+    required String twitch,
+    required String youtube,
+    required bool isOnline,
+    required String podcast,
+    required String currentEventUrl,
+    Uint8List? eventFile,
+  }) async {
+    String message = 'some error occurred';
+
+    try {
+      String eventUrl = currentEventUrl;
+      // 1. Upload new image if provided
+      if (eventFile != null) {
+        eventUrl = await StorageMethods().uploadImageToStorage(
+            'events', eventFile, false,
+            customId: eventId);
+      }
+
+      // 2. Update Firestore
+      Map<String, dynamic> dataToUpdate = {
+        'eventName': eventName,
+        'eventDescription': eventDescription,
+        'eventAddress': eventAddress,
+        'eventCategory': eventCategory,
+        'phone': phone,
+        'email': email,
+        'website': website,
+        'twitter': twitter,
+        'facebook': facebook,
+        'linkedIn': linkedIn,
+        'instagram': instagram,
+        'tiktok': tiktok,
+        'twitch': twitch,
+        'podcast': podcast,
+        'youtube': youtube,
+        'eventUrl': eventUrl,
+        'eventDate': eventDate,
+        'asTimeStamp': eventDate,
+        'isOnlineEvent': isOnline,
+      };
+
+      await FirebaseFirestore.instance
+          .collection('events')
+          .doc(eventId)
+          .update(dataToUpdate);
+
+      message = 'success';
     } catch (err) {
       message = err.toString();
     }
@@ -421,10 +620,16 @@ class UserProvider with ChangeNotifier {
       required String youtube,
       required Uint8List businessFile}) async {
     String message = 'some error occured';
-    String supportUrl = await StorageMethods()
-        .uploadImageToStoage('supportPics', businessFile, false);
+    
+    // 1. Generate ID First
     final ref =
         FirebaseFirestore.instance.collection('userresourcesupport').doc().id;
+    
+    // 2. Upload Image using that ID
+    String supportUrl = await StorageMethods()
+        .uploadImageToStorage('userresourcesupport', businessFile, false, customId: ref);
+        
+    // 3. Create Model
     model.Support support = model.Support(
       supportName: supportName,
       supportId: ref,
@@ -460,6 +665,7 @@ class UserProvider with ChangeNotifier {
           .set(
             support.toMap(),
           );
+      message = 'success';
     } catch (err) {
       message = err.toString();
     }
@@ -485,9 +691,15 @@ class UserProvider with ChangeNotifier {
       required String youtube,
       required Uint8List businessFile}) async {
     String message = 'some error occured';
-    String supportUrl = await StorageMethods()
-        .uploadImageToStoage('youthPics', businessFile, false);
+    
+    // 1. Generate ID first
     final ref = FirebaseFirestore.instance.collection('youthresource').doc().id;
+
+    // 2. Upload Image using that ID
+    String supportUrl = await StorageMethods()
+        .uploadImageToStorage('youthresource', businessFile, false, customId: ref);
+        
+    // 3. Create Model
     model.Support support = model.Support(
       supportName: supportName,
       supportId: ref,
@@ -520,6 +732,135 @@ class UserProvider with ChangeNotifier {
       await FirebaseFirestore.instance.collection('youthresource').doc(ref).set(
             support.toMap(),
           );
+      message = 'success';
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
+
+  // update user resource
+  Future<String> updateUserResource({
+    required String supportId,
+    required String supportName,
+    required String supportDescription,
+    required String supportAddress,
+    required String supportCategory,
+    required String phone,
+    required String email,
+    required String website,
+    required String twitter,
+    required String facebook,
+    required String linkedIn,
+    required String instagram,
+    required String tiktok,
+    required String twitch,
+    required String podcast,
+    required String youtube,
+    required String currentSupportUrl,
+    Uint8List? businessFile,
+  }) async {
+    String message = 'some error occurred';
+
+    try {
+      String supportUrl = currentSupportUrl;
+      // 1. Upload new image if provided
+      if (businessFile != null) {
+        supportUrl = await StorageMethods().uploadImageToStorage(
+            'userresourcesupport', businessFile, false,
+            customId: supportId);
+      }
+
+      // 2. Update Firestore
+      Map<String, dynamic> dataToUpdate = {
+        'supportName': supportName,
+        'supportDescription': supportDescription,
+        'supportAddress': supportAddress,
+        'supportCategory': supportCategory,
+        'phone': phone,
+        'email': email,
+        'website': website,
+        'twitter': twitter,
+        'facebook': facebook,
+        'linkedIn': linkedIn,
+        'instagram': instagram,
+        'tiktok': tiktok,
+        'twitch': twitch,
+        'podcast': podcast,
+        'youtube': youtube,
+        'supportUrl': supportUrl,
+      };
+
+      await FirebaseFirestore.instance
+          .collection('userresourcesupport')
+          .doc(supportId)
+          .update(dataToUpdate);
+
+      message = 'success';
+    } catch (err) {
+      message = err.toString();
+    }
+    return message;
+  }
+
+  // update youth resource
+  Future<String> updateYouthResource({
+    required String supportId,
+    required String supportName,
+    required String supportDescription,
+    required String supportAddress,
+    required String supportCategory,
+    required String phone,
+    required String email,
+    required String website,
+    required String twitter,
+    required String facebook,
+    required String linkedIn,
+    required String instagram,
+    required String tiktok,
+    required String twitch,
+    required String podcast,
+    required String youtube,
+    required String currentSupportUrl,
+    Uint8List? businessFile,
+  }) async {
+    String message = 'some error occurred';
+
+    try {
+      String supportUrl = currentSupportUrl;
+      // 1. Upload new image if provided
+      if (businessFile != null) {
+        supportUrl = await StorageMethods().uploadImageToStorage(
+            'youthresource', businessFile, false,
+            customId: supportId);
+      }
+
+      // 2. Update Firestore
+      Map<String, dynamic> dataToUpdate = {
+        'supportName': supportName,
+        'supportDescription': supportDescription,
+        'supportAddress': supportAddress,
+        'supportCategory': supportCategory,
+        'phone': phone,
+        'email': email,
+        'website': website,
+        'twitter': twitter,
+        'facebook': facebook,
+        'linkedIn': linkedIn,
+        'instagram': instagram,
+        'tiktok': tiktok,
+        'twitch': twitch,
+        'podcast': podcast,
+        'youtube': youtube,
+        'supportUrl': supportUrl,
+      };
+
+      await FirebaseFirestore.instance
+          .collection('youthresource')
+          .doc(supportId)
+          .update(dataToUpdate);
+
+      message = 'success';
     } catch (err) {
       message = err.toString();
     }

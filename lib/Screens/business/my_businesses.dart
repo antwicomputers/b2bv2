@@ -1,62 +1,56 @@
-import 'package:b2bmobile/Screens/pages/event%20detail%20page/event_details_screen.dart';
-import 'package:b2bmobile/models/events.dart';
+import 'package:b2bmobile/Screens/business/edit_business_screen.dart';
+import 'package:b2bmobile/Screens/pages/business%20detal/business_detail_screen.dart';
+import 'package:b2bmobile/models/business.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:b2bmobile/resources/storage_methods.dart';
 import 'package:b2bmobile/utils/app_constants.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:b2bmobile/Screens/drawer/edit_event_screen.dart';
-import 'package:b2bmobile/resources/storage_methods.dart';
 
-class MyEvents extends StatefulWidget {
-  const MyEvents({super.key});
+class MyBusinesses extends StatefulWidget {
+  const MyBusinesses({super.key});
 
   @override
-  State<MyEvents> createState() => _ViewAllEventsScreenState();
+  State<MyBusinesses> createState() => _MyBusinessesState();
 }
 
-class _ViewAllEventsScreenState extends State<MyEvents> {
+class _MyBusinessesState extends State<MyBusinesses> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
       builder: (context, value, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
-          title: const Text('My Events'),
+          title: const Text('My Businesses'),
+          centerTitle: true,
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('events')
-              .where(
-                'userId',
-                isEqualTo: value.getUser!.uid,
-              )
-              .where(
-                'userId',
-                isEqualTo: value.getUser!.uid,
-              )
+              .collection('businesses')
+              .where('userId', isEqualTo: value.getUser!.uid)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.data?.docs.isEmpty ?? true) {
-              return const Center(
-                child: Text('No Registered Events available'),
-              );
+              return const Center(child: Text('No Registered Businesses'));
             }
 
             return ListView.builder(
               itemCount: snapshot.data?.docs.length,
               itemBuilder: (context, index) {
-                Events event =
-                    Events.fromMap(snapshot.data!.docs[index].data());
-                return EventCardWidget(event: event);
+                // Handle potential parsing errors gracefully
+                try {
+                  Business business =
+                      Business.fromMap(snapshot.data!.docs[index].data());
+                  return BusinessCardWidget(business: business);
+                } catch (e) {
+                  return const SizedBox.shrink(); // Skip corrupted data
+                }
               },
             );
           },
@@ -66,19 +60,16 @@ class _ViewAllEventsScreenState extends State<MyEvents> {
   }
 }
 
-class EventCardWidget extends StatelessWidget {
-  const EventCardWidget({
-    super.key,
-    required this.event,
-  });
-  final Events event;
+class BusinessCardWidget extends StatelessWidget {
+  final Business business;
+  const BusinessCardWidget({super.key, required this.business});
 
-  Future<void> _deleteEvent(BuildContext context) async {
+  Future<void> _deleteBusiness(BuildContext context) async {
     bool confirm = await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Delete Event"),
-        content: const Text("Are you sure you want to delete this event? This action cannot be undone."),
+        title: const Text("Delete Business"),
+        content: const Text("Are you sure you want to delete this business? This action cannot be undone."),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -94,16 +85,16 @@ class EventCardWidget extends StatelessWidget {
 
     if (confirm) {
       // 1. Delete Image
-      await StorageMethods().deleteImageFromStorage(event.eventUrl);
+      await StorageMethods().deleteImageFromStorage(business.businessUrl);
       // 2. Delete Doc
       await FirebaseFirestore.instance
-          .collection('events')
-          .doc(event.eventId)
+          .collection('businesses')
+          .doc(business.businessId)
           .delete();
       
       if(context.mounted) {
            ScaffoldMessenger.of(context).showSnackBar(
-             const SnackBar(content: Text('Event Deleted')),
+             const SnackBar(content: Text('Business Deleted')),
            );
       }
     }
@@ -114,11 +105,11 @@ class EventCardWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => EventDetailsScreen(event: event));
+        Get.to(() => BusinessDetailScreen(business: business));
       },
       child: Container(
-        height: size.height * 0.18, // Increased height for buttons
-        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        height: size.height * 0.18, // Slightly taller for buttons
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -131,16 +122,14 @@ class EventCardWidget extends StatelessWidget {
             ),
           ],
         ),
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(8.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(7),
                 child: Image.network(
-                  event.eventUrl,
+                  business.businessUrl,
                   height: size.height * 0.15,
                   width: size.height * 0.13,
                   fit: BoxFit.cover,
@@ -148,52 +137,53 @@ class EventCardWidget extends StatelessWidget {
                       Container(color: Colors.grey, width: size.height * 0.13, height: size.height * 0.15, child: const Icon(Icons.error)),
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      event.eventName,
+                      business.businessName,
                       style: AppConstants.titleStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      event.eventDescription,
+                      business.businessDescription,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 12),
                     ),
                     const Spacer(),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                          Container(
                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                            decoration: BoxDecoration(
-                             color: event.isVerified ? Colors.green : Colors.orange,
+                             color: business.isVerified ? Colors.green : Colors.orange,
                              borderRadius: BorderRadius.circular(4)
                            ),
                            child: Text(
-                             event.isVerified ? "Verified" : "Pending",
+                             business.isVerified ? "Verified" : "Pending",
                              style: const TextStyle(color: Colors.white, fontSize: 10),
                            ),
                          ),
-                         const Spacer(),
-                         IconButton(
-                           icon: const Icon(Icons.edit, color: primaryColor),
-                           onPressed: () {
-                             Get.to(() => EditEventScreen(event: event));
-                           },
-                         ),
-                         IconButton(
-                           icon: const Icon(Icons.delete, color: Colors.red),
-                           onPressed: () => _deleteEvent(context),
-                         ),
+                         Row(
+                           children: [
+                             IconButton(
+                               icon: const Icon(Icons.edit, color: primaryColor),
+                               onPressed: () {
+                                 Get.to(() => EditBusinessScreen(business: business));
+                               },
+                             ),
+                             IconButton(
+                               icon: const Icon(Icons.delete, color: Colors.red),
+                               onPressed: () => _deleteBusiness(context),
+                             ),
+                           ],
+                         )
                       ],
                     )
                   ],

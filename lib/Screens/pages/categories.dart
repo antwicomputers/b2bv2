@@ -8,6 +8,8 @@ import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
 import 'package:b2bmobile/Screens/drawer/mental_health.dart';
 import 'package:b2bmobile/Screens/drawer/new_events.dart';
 import 'package:b2bmobile/Screens/drawer/women.dart';
+import 'package:b2bmobile/Screens/business/my_businesses.dart';
+
 
 class Categories extends StatefulWidget {
   const Categories({super.key});
@@ -40,6 +42,19 @@ class _SettingsState extends State<Categories> {
             child: const CategoryWIdget(
               image: 'assets/register.jpg',
               title: 'Register Business',
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.back();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const MyBusinesses()),
+              );
+            },
+            child: const CategoryWIdget(
+              image: 'assets/register.jpg',
+              title: 'My Businesses',
             ),
           ),
           InkWell(

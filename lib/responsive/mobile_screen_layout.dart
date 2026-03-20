@@ -51,7 +51,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           builder: (context, value, child) => InkWell(
             child: const Text('Back2Black Mobile'),
             onLongPress: () {
-              if (value.userModel!.email == 'admin@b2bmobile.com') {
+              if (value.userModel!.email == 'info@antwicomputers.com') {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const AdminPanel(),

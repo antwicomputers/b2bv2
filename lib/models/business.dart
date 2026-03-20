@@ -28,6 +28,8 @@ class Business {
   final bool isSponsored;
   final List<String> isLiked;
   final List<String> isFavorite;
+  final double latitude;
+  final double longitude;
 
   const Business({
     required this.businessName,
@@ -57,6 +59,8 @@ class Business {
     required this.isSponsored,
     required this.isLiked,
     required this.isFavorite,
+    required this.latitude,
+    required this.longitude,
   });
 
   Business copyWith({
@@ -87,6 +91,8 @@ class Business {
     bool? isSponsored,
     List<String>? isLiked,
     List<String>? isFavorite,
+    double? latitude,
+    double? longitude,
   }) {
     return Business(
       businessName: businessName ?? this.businessName,
@@ -116,6 +122,8 @@ class Business {
       isSponsored: isSponsored ?? this.isSponsored,
       isLiked: isLiked ?? this.isLiked,
       isFavorite: isFavorite ?? this.isFavorite,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 
@@ -148,6 +156,8 @@ class Business {
       'isSponsored': isSponsored,
       'isLiked': isLiked,
       'isFavorite': isFavorite,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -182,6 +192,8 @@ class Business {
       isSponsored: map['isSponsored'] ?? false,
       isLiked: List<String>.from(map['isLiked'] ?? []),
       isFavorite: List<String>.from(map['isFavorite'] ?? []),
+      latitude: map['latitude']?.toDouble() ?? 0.0,
+      longitude: map['longitude']?.toDouble() ?? 0.0,
     );
   }
 
@@ -192,7 +204,7 @@ class Business {
 
   @override
   String toString() {
-    return 'Business(businessName: $businessName, youtube: $youtube,businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored, isLiked: $isLiked, isFavorite: $isFavorite)';
+    return 'Business(businessName: $businessName, youtube: $youtube,businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored, isLiked: $isLiked, isFavorite: $isFavorite, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -227,7 +239,9 @@ class Business {
         other.isFeatured == isFeatured &&
         other.isSponsored == isSponsored &&
         other.isLiked == isLiked &&
-        other.isFavorite == isFavorite;
+        other.isFavorite == isFavorite &&
+        other.latitude == latitude &&
+        other.longitude == longitude;
   }
 
   @override

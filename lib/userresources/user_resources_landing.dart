@@ -1,5 +1,6 @@
 import 'package:b2bmobile/Screens/user_resource.dart';
 import 'package:b2bmobile/userresources/user_resources.dart';
+import 'package:b2bmobile/userresources/my_resources.dart';
 import 'package:flutter/material.dart';
 
 class ResourceLanding extends StatefulWidget {
@@ -45,6 +46,36 @@ class _ResourceLandingState extends State<ResourceLanding> {
                   children: [
                     Text('Share a Resource'),
                   ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const MyResources()),
+                  );
+                },
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  leading: const Icon(
+                    Icons.folder_shared,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  title: const Row(
+                    children: [
+                      Text('My Shared Resources'),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(

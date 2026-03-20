@@ -124,6 +124,7 @@ class _FavoritesState extends State<HomePage> {
                     .collection('businesses')
                     .where('isSponsored', isEqualTo: true)
                     .where('isBlackOwned', isEqualTo: true)
+                    .where('isVerified', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
                 builder: (context,
@@ -197,6 +198,7 @@ class _FavoritesState extends State<HomePage> {
                 stream: FirebaseFirestore.instance
                     .collection('businesses')
                     .where('womenOriented', isEqualTo: true)
+                    .where('isVerified', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -269,6 +271,7 @@ class _FavoritesState extends State<HomePage> {
                     .collection('businesses')
                     .where('isBlackOwned', isEqualTo: true)
                     .where('isEsential', isEqualTo: true)
+                    .where('isVerified', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
                 builder: (context,
@@ -343,6 +346,7 @@ class _FavoritesState extends State<HomePage> {
                     .collection('businesses')
                     .where('isFeatured', isEqualTo: true)
                     .where('isBlackOwned', isEqualTo: true)
+                    .where('isVerified', isEqualTo: true)
                     .limit(30)
                     .snapshots(),
                 builder: (context,

@@ -1,3 +1,4 @@
+import 'package:b2bmobile/models/business.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
@@ -6,39 +7,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import '../../responsive/mobile_screen_layout.dart';
-import '../../responsive/responsive_layout_screen.dart';
-import '../../responsive/web_screen_layout.dart';
 import 'package:image_picker/image_picker.dart';
 
-class RegisterBusiness extends StatefulWidget {
-  const RegisterBusiness({super.key});
+class EditBusinessScreen extends StatefulWidget {
+  final Business business;
+  const EditBusinessScreen({super.key, required this.business});
 
   @override
-  State<RegisterBusiness> createState() => _RegisterBusinessState();
+  State<EditBusinessScreen> createState() => _EditBusinessScreenState();
 }
 
-class _RegisterBusinessState extends State<RegisterBusiness> {
-  final TextEditingController _businessName = TextEditingController();
-  final TextEditingController _businessDescription = TextEditingController();
-  final TextEditingController _businessAddress = TextEditingController();
-  final TextEditingController _businessCategory = TextEditingController();
-  final TextEditingController _phone = TextEditingController();
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _website = TextEditingController();
-  final TextEditingController _twitter = TextEditingController();
-  final TextEditingController _facebook = TextEditingController();
-  final TextEditingController _linkedIn = TextEditingController();
-  final TextEditingController _instagram = TextEditingController();
-  final TextEditingController _tiktok = TextEditingController();
-  final TextEditingController _twitch = TextEditingController();
-  final TextEditingController _youtube = TextEditingController();
-  final TextEditingController _podcast = TextEditingController();
+class _EditBusinessScreenState extends State<EditBusinessScreen> {
+  late TextEditingController _businessName;
+  late TextEditingController _businessDescription;
+  late TextEditingController _businessAddress;
+  late TextEditingController _businessCategory;
+  late TextEditingController _phone;
+  late TextEditingController _email;
+  late TextEditingController _website;
+  late TextEditingController _twitter;
+  late TextEditingController _facebook;
+  late TextEditingController _linkedIn;
+  late TextEditingController _instagram;
+  late TextEditingController _tiktok;
+  late TextEditingController _twitch;
+  late TextEditingController _youtube;
+  late TextEditingController _podcast;
+  
   Uint8List? _image;
   bool isBlack = false;
   bool isEssential = false;
   bool isWomen = false;
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _businessName = TextEditingController(text: widget.business.businessName);
+    _businessDescription = TextEditingController(text: widget.business.businessDescription);
+    _businessAddress = TextEditingController(text: widget.business.businessAddress);
+    _businessCategory = TextEditingController(text: widget.business.businessCategory);
+    _phone = TextEditingController(text: widget.business.phone);
+    _email = TextEditingController(text: widget.business.email);
+    _website = TextEditingController(text: widget.business.website);
+    _twitter = TextEditingController(text: widget.business.twitter);
+    _facebook = TextEditingController(text: widget.business.facebook);
+    _linkedIn = TextEditingController(text: widget.business.linkedIn);
+    _instagram = TextEditingController(text: widget.business.instagram);
+    _tiktok = TextEditingController(text: widget.business.tiktok);
+    _twitch = TextEditingController(text: widget.business.twitch);
+    _youtube = TextEditingController(text: widget.business.youtube);
+    _podcast = TextEditingController(text: widget.business.podcast);
+
+    isBlack = widget.business.isBlackOwned;
+    isEssential = widget.business.isEsential;
+    isWomen = widget.business.womenOriented;
+  }
 
   @override
   void dispose() {
@@ -57,14 +81,12 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     _twitch.dispose();
     _youtube.dispose();
     _podcast.dispose();
-
     super.dispose();
   }
 
   Future<void> selectImage() async {
     Uint8List? im = await pickImage(ImageSource.gallery);
     if (im != null) {
-      // set state because we need to display the image we selected on the circle avatar
       setState(() {
         _image = im;
       });
@@ -72,12 +94,13 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   }
 
   final _formsKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('Register Business'),
+        title: const Text('Edit Business'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -89,59 +112,53 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
               autovalidateMode: AutovalidateMode.always,
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   Center(
                     child: Stack(
                       children: <Widget>[
                         Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: _image != null
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: _image == null
-                                        ? const SizedBox(
-                                            height: 150,
-                                            width: 50,
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        : Container(
-                                            height: 250,
-                                            width: 250,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              image: DecorationImage(
-                                                image: MemoryImage(_image!),
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                          ))
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      height: 150,
-                                      width: 150,
-                                      child: IconButton(
-                                        icon: const Icon(
-                                          Icons.add_a_photo,
-                                        ),
-                                        iconSize: 50,
-                                        onPressed: selectImage,
-                                      ),
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: _image != null
+                              ? Container(
+                                  height: 250,
+                                  width: 250,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(),
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: DecorationImage(
+                                      image: MemoryImage(_image!),
+                                      fit: BoxFit.fill,
                                     ),
-                                  )),
+                                  ),
+                                )
+                              : Container(
+                                  height: 250,
+                                  width: 250,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(),
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: DecorationImage(
+                                      image: NetworkImage(widget.business.businessUrl),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 200,
+                          child: IconButton(
+                            onPressed: selectImage,
+                            icon: const Icon(Icons.add_a_photo, size: 30),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
+                  const SizedBox(height: 30.0),
                   SwitchListTile(
                     title: const Text('Black Owned Business?'),
                     value: isBlack,
@@ -232,40 +249,32 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                         label: Text('email'),
                         prefixIcon: Icon(FontAwesomeIcons.at)),
                   ),
-                  TextFormField(
+                  // Social Media Fields
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _website,
                     decoration: const InputDecoration(
                       label: Text('Website'),
                       prefixIcon: Icon(FontAwesomeIcons.intercom),
-                      prefix: Text(
-                        'https://www.',
-                      ),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _twitter,
                     decoration: const InputDecoration(
                       label: Text('Twitter'),
                       prefixIcon: Icon(FontAwesomeIcons.twitter),
-                      prefix: Text(
-                        'https://twitter.com/',
-                      ),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _facebook,
                     decoration: const InputDecoration(
                       label: Text('Facebook'),
                       prefixIcon: Icon(FontAwesomeIcons.facebook),
-                      prefix: Text(
-                        'https://www.facebook.com/',
-                      ),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _youtube,
                     decoration: const InputDecoration(
@@ -273,66 +282,52 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                       prefixIcon: Icon(FontAwesomeIcons.youtube),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _linkedIn,
                     decoration: const InputDecoration(
                       label: Text('LinkedIn'),
                       prefixIcon: Icon(FontAwesomeIcons.linkedin),
-                      prefix: Text(
-                        'https://www.linkedin.com/in/',
-                      ),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _instagram,
                     decoration: const InputDecoration(
                       label: Text('Instagram'),
                       prefixIcon: Icon(FontAwesomeIcons.instagram),
-                      prefix: Text(
-                        'https://www.instagram.com/',
-                      ),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _tiktok,
                     decoration: const InputDecoration(
                       label: Text('Tik Tok'),
                       prefixIcon: Icon(Icons.tiktok),
-                      prefix: Text(
-                        'https://www.tiktok.com/',
-                      ),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _twitch,
                     decoration: const InputDecoration(
                       label: Text('Twitch'),
                       prefixIcon: Icon(FontAwesomeIcons.twitch),
-                      prefix: Text(
-                        'https://www.twitch.tv/',
-                      ),
                     ),
                   ),
-                  TextFormField(
+                   TextFormField(
                     keyboardType: TextInputType.text,
                     controller: _podcast,
                     decoration: const InputDecoration(
                         label: Text('Podcast'),
                         prefixIcon: Icon(FontAwesomeIcons.podcast)),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const AddressScreen()));
                     },
-                    child: const Text('Select Address'),
+                    child: const Text('Change Address'),
                   ),
                   Consumer<UserProvider>(
                     builder: (context, value, child) => ElevatedButton(
@@ -340,43 +335,42 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                         setState(() {
                           _isLoading = true;
                         });
-                        String message = await value.registerBusiness(
-                            businessName: _businessName.text,
-                            businessDescription: _businessDescription.text,
-                            businessAddress: _businessAddress.text,
-                            businessCategory: _businessCategory.text,
-                            phone: _phone.text,
-                            isBlackOwned: isBlack,
-                            isEsential: isEssential,
-                            womenOriented: isWomen,
-                            youtube: _youtube.text,
-                            email: _email.text,
-                            website: _website.text,
-                            twitter: _twitter.text,
-                            facebook: _facebook.text,
-                            linkedIn: _linkedIn.text,
-                            instagram: _instagram.text,
-                            tiktok: _tiktok.text,
-                            twitch: _twitch.text,
-                            podcast: _podcast.text,
-                            businessFile: _image!);
+                        String message = await value.updateBusiness(
+                          businessId: widget.business.businessId,
+                          businessName: _businessName.text,
+                          businessDescription: _businessDescription.text,
+                          businessAddress: _businessAddress.text,
+                          businessCategory: _businessCategory.text,
+                          phone: _phone.text,
+                          isBlackOwned: isBlack,
+                          isEsential: isEssential,
+                          womenOriented: isWomen,
+                          youtube: _youtube.text,
+                          email: _email.text,
+                          website: _website.text,
+                          twitter: _twitter.text,
+                          facebook: _facebook.text,
+                          linkedIn: _linkedIn.text,
+                          instagram: _instagram.text,
+                          tiktok: _tiktok.text,
+                          twitch: _twitch.text,
+                          podcast: _podcast.text,
+                          currentBusinessUrl: widget.business.businessUrl,
+                          businessFile: _image,
+                        );
                         setState(() {
                           _isLoading = false;
                         });
 
                         if (message == 'success') {
                           if (!context.mounted) return;
-                          showSnackBar(message, context);
-                        } else {
-                          if (!context.mounted) return;
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const ResponsiveLayout(
-                                mobileScreenLayout: MobileScreenLayout(),
-                                webScreenLayout: WebScreenLayout(),
-                              ),
-                            ),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Business Updated Successfully')),
                           );
+                          Navigator.pop(context); // Return to MyBusinesses
+                        } else {
+                           if (!context.mounted) return;
+                           showSnackBar(message, context);
                         }
                       },
                       child: _isLoading
@@ -385,7 +379,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                                 color: primaryColor,
                               ),
                             )
-                          : const Text('Register Business'),
+                          : const Text('Update Business'),
                     ),
                   )
                 ],

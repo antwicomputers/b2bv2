@@ -3,6 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:b2bmobile/models/business.dart';
+import 'package:b2bmobile/Screens/pages/business detal/business_detail_screen.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Maps extends StatefulWidget {
   const Maps({super.key});
@@ -44,42 +48,97 @@ class _MapsState extends State<Maps> {
   }
 
   void fetchBusinesses() async {
-    // Assuming you have already initialized Firebase
-    final businessesSnapshot =
-        await FirebaseFirestore.instance.collection('addresses').get();
+    try {
+      final businessesSnapshot = await FirebaseFirestore.instance
+          .collection('businesses')
+          .where('isVerified', isEqualTo: true)
+          .get();
 
-    setState(() {
-      markers = businessesSnapshot.docs.map((document) {
-        final business = document.data();
-        final businessAddress = business['addresses'];
+      setState(() {
+        markers = businessesSnapshot.docs.map((document) {
+          final data = document.data();
+          // Safely deserialize
+          Business business;
+          try {
+             business = Business.fromMap(data);
+          } catch (e) {
+             debugPrint("Error parsing business ${document.id}: $e");
+             return null;
+          }
 
-        if (businessAddress != null &&
-            businessAddress['latitude'] != null &&
-            businessAddress['longitude'] != null) {
-          final latLng = LatLng(
-            businessAddress['latitude'] as double,
-            businessAddress['longitude'] as double,
-          );
+          if (business.latitude != 0.0 && business.longitude != 0.0) {
+            final latLng = LatLng(business.latitude, business.longitude);
 
-          return Marker(
-            markerId: MarkerId(document.id),
-            position: latLng,
-          );
-        } else {
-          // Handle missing or invalid latitude/longitude values
-          // You can choose to skip adding the marker or use a default location
-          // For example:
-          // return Marker(
-          //   markerId: MarkerId(document.id),
-          //   position: LatLng(0, 0),
-          // );
-          return Marker(
-            markerId: MarkerId(document.id),
-            position: const LatLng(0, 0),
-          );
-        }
-      }).toSet();
-    });
+            return Marker(
+              markerId: MarkerId(document.id),
+              position: latLng,
+              infoWindow: InfoWindow(
+                title: business.businessName,
+                snippet: "Tap for options",
+                onTap: () {
+                  _showBusinessOptions(business);
+                }
+              ),
+            );
+          }
+          return null;
+        }).whereType<Marker>().toSet(); // Filter out nulls
+      });
+    } catch (e) {
+      debugPrint("Error fetching businesses: $e");
+    }
+  }
+
+  void _showBusinessOptions(Business business) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          height: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                business.businessName,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(business.businessAddress),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                   ElevatedButton.icon(
+                    onPressed: () {
+                      _launchMaps(business.latitude, business.longitude);
+                    },
+                    icon: const Icon(Icons.directions),
+                    label: const Text("Navigate"),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                       Get.to(() => BusinessDetailScreen(business: business));
+                    },
+                    icon: const Icon(Icons.info),
+                    label: const Text("Details"),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _launchMaps(double lat, double lng) async {
+    final googleMapsUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=$lat,$lng");
+    if (await canLaunchUrl(googleMapsUrl)) {
+      await launchUrl(googleMapsUrl);
+    } else {
+      debugPrint("Could not launch maps.");
+    }
   }
 
   void getCurrentLocation() async {
@@ -96,9 +155,15 @@ class _MapsState extends State<Maps> {
               currentPosition!.latitude,
               currentPosition!.longitude,
             ),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            infoWindow: const InfoWindow(title: "You are here"),
           ),
         );
       });
+      mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(
+            LatLng(position.latitude, position.longitude), 14),
+      );
     } catch (e) {
       debugPrint('Error getting location: $e');
     }
@@ -112,20 +177,29 @@ class _MapsState extends State<Maps> {
           GoogleMap(
             initialCameraPosition: CameraPosition(
               target: LatLng(
-                currentPosition?.latitude ?? 0.0,
-                currentPosition?.longitude ?? 0.0,
+                currentPosition?.latitude ?? 37.0902, // Default US
+                currentPosition?.longitude ?? -95.7129,
               ),
-              zoom: 14.0, // Set a reasonable zoom level
+              zoom: currentPosition != null ? 14.0 : 4.0, 
             ),
             markers: markers,
+            myLocationEnabled: true, // Shows blue dot if permission granted
+            myLocationButtonEnabled: false, // We use custom button
             onMapCreated: (GoogleMapController controller) {
               mapController = controller;
+              if (currentPosition != null) {
+                 mapController?.animateCamera(
+                    CameraUpdate.newLatLngZoom(
+                      LatLng(currentPosition!.latitude, currentPosition!.longitude), 14)
+                 );
+              }
             },
           ),
           Positioned(
             top: 40,
             right: 16,
             child: FloatingActionButton(
+              backgroundColor: Colors.white,
               onPressed: () {
                 // Handle current location button press
                 if (currentPosition != null) {
@@ -140,9 +214,11 @@ class _MapsState extends State<Maps> {
                       ),
                     ),
                   );
+                } else {
+                   getCurrentLocation();
                 }
               },
-              child: const Icon(Icons.my_location),
+              child: const Icon(Icons.my_location, color: Colors.black),
             ),
           ),
         ],
