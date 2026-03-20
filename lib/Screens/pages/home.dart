@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:b2bmobile/Screens/pages/business%20detal/business_detail_screen.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:b2bmobile/models/business.dart';
 
 import 'all_women.dart';
@@ -52,7 +53,7 @@ class _FavoritesState extends State<HomePage> {
               child: Text(
                 'Shop Black Owned Businesses!',
                 style: GoogleFonts.bebasNeue(
-                  fontSize: 39,
+                  fontSize: 22,
                 ),
               ),
             ),
@@ -90,12 +91,14 @@ class _FavoritesState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Back2Black Sponsors',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 18,
+                  Flexible(
+                    child: Text(
+                      'Back2Black Sponsors',
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -105,9 +108,7 @@ class _FavoritesState extends State<HomePage> {
                     },
                     child: Text(
                       'Show All',
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 18,
-                      ),
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
                     ),
                   ),
                 ],
@@ -165,12 +166,14 @@ class _FavoritesState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Edwina\'s Move Her Forward',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 18,
+                  Flexible(
+                    child: Text(
+                      'Edwina\'s Move Her Forward',
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -180,9 +183,7 @@ class _FavoritesState extends State<HomePage> {
                     },
                     child: Text(
                       'Show All',
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 18,
-                      ),
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
                     ),
                   ),
                 ],
@@ -237,12 +238,14 @@ class _FavoritesState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Back2Black Mobile Essential Services',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 18,
+                  Flexible(
+                    child: Text(
+                      'Back2Black Mobile Essential Services',
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -252,9 +255,7 @@ class _FavoritesState extends State<HomePage> {
                     },
                     child: Text(
                       'Show All',
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 18,
-                      ),
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
                     ),
                   ),
                 ],
@@ -312,12 +313,14 @@ class _FavoritesState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Back2Black Mobile Featured Brands',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 18,
+                  Flexible(
+                    child: Text(
+                      'Back2Black Mobile Featured Brands',
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -327,9 +330,7 @@ class _FavoritesState extends State<HomePage> {
                     },
                     child: Text(
                       'Show All',
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 18,
-                      ),
+                      style: GoogleFonts.bebasNeue(fontSize: 18),
                     ),
                   ),
                 ],
@@ -414,7 +415,7 @@ class HomeBusinessTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => BusinessDetailScreen(business: business));
+        Get.to(() => UniversalDetailScreen(item: business.toDetailItem()));
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),

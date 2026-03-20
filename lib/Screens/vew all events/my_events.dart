@@ -1,4 +1,5 @@
-import 'package:b2bmobile/Screens/pages/event%20detail%20page/event_details_screen.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:b2bmobile/models/events.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/app_constants.dart';
@@ -27,18 +28,16 @@ class _ViewAllEventsScreenState extends State<MyEvents> {
           backgroundColor: Colors.black,
           title: const Text('My Events'),
         ),
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('events')
-              .where(
-                'userId',
-                isEqualTo: value.getUser!.uid,
-              )
-              .where(
-                'userId',
-                isEqualTo: value.getUser!.uid,
-              )
-              .snapshots(),
+        body: value.getUser == null
+            ? const Center(child: CircularProgressIndicator())
+            : StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('events')
+                    .where(
+                      'userId',
+                      isEqualTo: value.getUser!.uid,
+                    )
+                    .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -114,7 +113,7 @@ class EventCardWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => EventDetailsScreen(event: event));
+        Get.to(() => UniversalDetailScreen(item: event.toDetailItem()));
       },
       child: Container(
         height: size.height * 0.18, // Increased height for buttons

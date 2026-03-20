@@ -2,6 +2,13 @@ import 'package:b2bmobile/Screens/user_resource.dart';
 import 'package:b2bmobile/userresources/user_resources.dart';
 import 'package:b2bmobile/userresources/my_resources.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+// ── Design constants ──────────────────────────────────────────────────────────
+const _silver = Color(0xFFF5F5F7);
+const _silverDark = Color(0xFF8E8E93);
+const _cardBg = Color(0xFF141414);
+const _borderColor = Color(0xFF2A2A2A);
 
 class ResourceLanding extends StatefulWidget {
   const ResourceLanding({super.key});
@@ -14,119 +21,164 @@ class _ResourceLandingState extends State<ResourceLanding> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text('Resources'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const AddResource()),
-            );
-          },
-          child: ListView(
-            children: [
-              ListTile(
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                leading: const Icon(
-                  Icons.add_moderator,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                title: const Row(
-                  children: [
-                    Text('Share a Resource'),
-                  ],
-                ),
+      backgroundColor: Colors.black,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 180,
+            pinned: true,
+            backgroundColor: Colors.black,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+              onPressed: () => Get.back(),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text(
+                'B2B Resources',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const MyResources()),
-                  );
-                },
-                child: ListTile(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      color: Colors.white,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF2C2C2E), Color(0xFF000000)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  leading: const Icon(
-                    Icons.folder_shared,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                  title: const Row(
-                    children: [
-                      Text('My Shared Resources'),
-                    ],
+                ),
+                child: Center(
+                  child: Opacity(
+                    opacity: 0.15,
+                    child: Icon(Icons.folder_shared_rounded, size: 100, color: _silver),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const UserResources()),
-                  );
-                },
-                child: ListTile(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      color: Colors.white,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  leading: const Icon(
-                    Icons.youtube_searched_for,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                  title: const Row(
-                    children: [
-                      Text('Browse Resources'),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ListTile(
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                title: const Text(
-                    '\nAccess to resources such as education, healthcare, and job opportunities can help break down systemic barriers that have historically prevented Black people from achieving economic and social mobility. With access to resources, Black individuals can gain the skills, knowledge, and experience necessary to succeed in various fields and industries.\n'),
-              ),
-            ],
+            ),
           ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'RESOURCE HUB',
+                    style: TextStyle(color: _silverDark, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  _ResourceOptionCard(
+                    title: 'Share a Resource',
+                    subtitle: 'Add a new educational or professional resource.',
+                    icon: Icons.add_moderator_rounded,
+                    onTap: () => Get.to(() => const AddResource()),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  _ResourceOptionCard(
+                    title: 'My Shared Resources',
+                    subtitle: 'Manage the resources you have posted.',
+                    icon: Icons.personal_video_rounded,
+                    onTap: () => Get.to(() => const MyResources()),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  _ResourceOptionCard(
+                    title: 'Browse All Resources',
+                    subtitle: 'Discover verified resources from the community.',
+                    icon: Icons.search_rounded,
+                    onTap: () => Get.to(() => const UserResources()),
+                  ),
+                  
+                  const SizedBox(height: 40),
+                  
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: _cardBg,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: _borderColor),
+                    ),
+                    child: const Column(
+                      children: [
+                        Icon(Icons.workspace_premium_outlined, color: _silver, size: 32),
+                        SizedBox(height: 16),
+                        Text(
+                          'Empowering Information',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Access to education, healthcare, and job opportunities breaks systemic barriers, providing skills and knowledge for social mobility and success.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.6),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ResourceOptionCard extends StatelessWidget {
+  const _ResourceOptionCard({required this.title, required this.subtitle, required this.icon, required this.onTap});
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _cardBg,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: _borderColor, width: 1.5),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(colors: [Color(0xFF3A3A3C), Color(0xFF1C1C1E)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white10),
+              ),
+              child: Icon(icon, color: _silver, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(color: Colors.white38, fontSize: 12, height: 1.2),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, color: Colors.white24, size: 14),
+          ],
         ),
       ),
     );

@@ -24,7 +24,7 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   Future<List<String>> _getAddressPredictions(String input) async {
-    const apiKey = 'AIzaSyADCVeLD0o5fhX2uFj6qfAnNzUlA96KJ1Q';
+    const apiKey = 'AIzaSyCMyizsGhZlbTpns3G5vRlTEZkYvgkXK-w';
     const endpoint =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
     final requestUrl = '$endpoint?input=$input&key=$apiKey';

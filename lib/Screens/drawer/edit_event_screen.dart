@@ -1,18 +1,29 @@
-import 'package:b2bmobile/models/events.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/colors.dart';
 import 'package:b2bmobile/utils/utils.dart';
+import 'package:b2bmobile/widgets/address_autocomplete_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-    as picker;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../../responsive/mobile_screen_layout.dart';
+import '../../responsive/responsive_layout_screen.dart';
+import '../../responsive/web_screen_layout.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as picker;
+import 'package:b2bmobile/models/events.dart' as model;
+
+// ── Design constants ──────────────────────────────────────────────────────────
+const _silver = Color(0xFFF5F5F7);
+const _silverDark = Color(0xFF8E8E93);
+const _cardBg = Color(0xFF141414);
+const _inputBg = Color(0xFF1E1E1E);
+const _borderColor = Color(0xFF2A2A2A);
 
 class EditEventScreen extends StatefulWidget {
-  final Events event;
+  final model.Events event;
   const EditEventScreen({super.key, required this.event});
 
   @override
@@ -24,22 +35,22 @@ class _EditEventScreenState extends State<EditEventScreen> {
   late TextEditingController _eventDescription;
   late TextEditingController _eventAddress;
   late TextEditingController _eventCategory;
+  late TextEditingController _eventWebsite;
   late TextEditingController _phone;
   late TextEditingController _email;
-  late TextEditingController _website;
   late TextEditingController _twitter;
   late TextEditingController _facebook;
   late TextEditingController _linkedIn;
   late TextEditingController _instagram;
-  late TextEditingController _youtube;
   late TextEditingController _tiktok;
   late TextEditingController _twitch;
+  late TextEditingController _youtube;
   late TextEditingController _podcast;
-
+  
+  DateTime? _selectedDate;
   Uint8List? _image;
-  bool _isLoading = false;
   late bool isOnline;
-  late DateTime eventDate;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -48,20 +59,19 @@ class _EditEventScreenState extends State<EditEventScreen> {
     _eventDescription = TextEditingController(text: widget.event.eventDescription);
     _eventAddress = TextEditingController(text: widget.event.eventAddress);
     _eventCategory = TextEditingController(text: widget.event.eventCategory);
+    _eventWebsite = TextEditingController(text: widget.event.website);
     _phone = TextEditingController(text: widget.event.phone);
     _email = TextEditingController(text: widget.event.email);
-    _website = TextEditingController(text: widget.event.website);
     _twitter = TextEditingController(text: widget.event.twitter);
     _facebook = TextEditingController(text: widget.event.facebook);
     _linkedIn = TextEditingController(text: widget.event.linkedIn);
     _instagram = TextEditingController(text: widget.event.instagram);
-    _youtube = TextEditingController(text: widget.event.youtube);
     _tiktok = TextEditingController(text: widget.event.tiktok);
     _twitch = TextEditingController(text: widget.event.twitch);
+    _youtube = TextEditingController(text: widget.event.youtube);
     _podcast = TextEditingController(text: widget.event.podcast);
-    
     isOnline = widget.event.isOnlineEvent;
-    eventDate = widget.event.eventDate;
+    _selectedDate = widget.event.eventDate;
   }
 
   @override
@@ -70,27 +80,23 @@ class _EditEventScreenState extends State<EditEventScreen> {
     _eventDescription.dispose();
     _eventAddress.dispose();
     _eventCategory.dispose();
+    _eventWebsite.dispose();
     _phone.dispose();
-    _youtube.dispose();
     _email.dispose();
-    _website.dispose();
     _twitter.dispose();
     _facebook.dispose();
     _linkedIn.dispose();
     _instagram.dispose();
     _tiktok.dispose();
     _twitch.dispose();
+    _youtube.dispose();
     _podcast.dispose();
     super.dispose();
   }
 
   Future<void> selectImage() async {
     Uint8List? im = await pickImage(ImageSource.gallery);
-    if (im != null) {
-      setState(() {
-        _image = im;
-      });
-    }
+    if (im != null) setState(() => _image = im);
   }
 
   final _formsKey = GlobalKey<FormState>();
@@ -98,336 +104,371 @@ class _EditEventScreenState extends State<EditEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text('Edit Event'),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          child: Center(
-            child: Form(
-              key: _formsKey,
-              autovalidateMode: AutovalidateMode.always,
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: _image != null
-                              ? Container(
-                                  height: 250,
-                                  width: 250,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                      image: MemoryImage(_image!),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  height: 250,
-                                  width: 250,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                      image: NetworkImage(widget.event.eventUrl),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: 200,
-                          child: IconButton(
-                            onPressed: selectImage,
-                            icon: const Icon(Icons.add_a_photo, size: 30),
-                          ),
-                        ),
-                      ],
-                    ),
+      backgroundColor: Colors.black,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 180,
+            pinned: true,
+            backgroundColor: Colors.black,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+              onPressed: () => Get.back(),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text('Edit Event', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF2C2C2E), Color(0xFF000000)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  const SizedBox(height: 30.0),
-                  TextFormField(
-                    controller: _eventName,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      label: Text('Enter Event Name'),
-                      prefixIcon: Icon(Icons.monetization_on),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Event name is required';
-                      }
-                      return null;
-                    },
+                ),
+                child: const Center(
+                  child: Opacity(
+                    opacity: 0.12,
+                    child: Icon(Icons.edit_calendar, size: 120, color: _silver),
                   ),
-                  TextFormField(
-                    controller: _eventDescription,
-                    keyboardType: TextInputType.multiline,
-                    decoration: const InputDecoration(
-                      label: Text('Enter Event Description'),
-                      prefixIcon: Icon(Icons.info),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'event description is required';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _eventAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'event Address is required';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      label: Text('Event Address'),
-                      prefixIcon: Icon(Icons.location_city),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _eventCategory,
-                    decoration: const InputDecoration(
-                      label: Text('event Category'),
-                      prefixIcon: Icon(Icons.category),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'category is required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SwitchListTile(
-                    value: isOnline,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    onChanged: (val) {
-                      setState(() {
-                        isOnline = val;
-                      });
-                    },
-                    title: Row(
-                      children: [
-                        Icon(Icons.ondemand_video_outlined,
-                            color: Theme.of(context).hintColor.withOpacity(0.7)),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Online event',
-                          style: TextStyle(
-                              color: Theme.of(context).hintColor.withOpacity(0.7)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: Theme.of(context).hintColor,
-                    thickness: 1,
-                    height: 8,
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      DateTime? selectedDate =
-                          await picker.DatePicker.showDateTimePicker(
-                        context,
-                        theme: const picker.DatePickerTheme(
-                          backgroundColor: Colors.black,
-                          itemStyle: TextStyle(color: Colors.white),
-                        ),
-                      );
-                      if (selectedDate != null) {
-                        setState(() {
-                          eventDate = selectedDate;
-                        });
-                      }
-                    },
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    leading: Icon(Icons.calendar_month,
-                        color: Theme.of(context).hintColor.withOpacity(0.7)),
-                    horizontalTitleGap: -5,
-                    title: Text(
-                      'Event Date',
-                      style: TextStyle(
-                          color: Theme.of(context).hintColor.withOpacity(0.7)),
-                    ),
-                    subtitle: Text(
-                      DateFormat('dd/MMM/yyyy hh:mm a').format(eventDate),
-                      style: TextStyle(
-                        color: Theme.of(context).hintColor.withOpacity(0.7),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: Theme.of(context).hintColor,
-                    thickness: 1,
-                    height: 8,
-                  ),
-                  TextFormField(
-                    controller: _phone,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    decoration: const InputDecoration(
-                      label: Text('Phone Number'),
-                      prefixIcon: Icon(Icons.phone),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _email,
-                    decoration: const InputDecoration(
-                      label: Text('email'),
-                      prefixIcon: Icon(Icons.email),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _website,
-                    decoration: const InputDecoration(
-                      label: Text('Website'),
-                      prefixIcon: Icon(FontAwesomeIcons.intercom),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _twitter,
-                    decoration: const InputDecoration(
-                      label: Text('Twitter'),
-                      prefixIcon: Icon(FontAwesomeIcons.twitter),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _facebook,
-                    decoration: const InputDecoration(
-                      label: Text('Facebook'),
-                      prefixIcon: Icon(FontAwesomeIcons.facebook),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _youtube,
-                    decoration: const InputDecoration(
-                      label: Text('Youtube'),
-                      prefixIcon: Icon(FontAwesomeIcons.youtube),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _linkedIn,
-                    decoration: const InputDecoration(
-                      label: Text('LinkedIn'),
-                      prefixIcon: Icon(FontAwesomeIcons.linkedin),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _instagram,
-                    decoration: const InputDecoration(
-                      label: Text('Instagram'),
-                      prefixIcon: Icon(FontAwesomeIcons.instagram),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _tiktok,
-                    decoration: const InputDecoration(
-                      label: Text('Tik Tok'),
-                      prefixIcon: Icon(Icons.tiktok),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _twitch,
-                    decoration: const InputDecoration(
-                      label: Text('Twitch'),
-                      prefixIcon: Icon(FontAwesomeIcons.twitch),
-                    ),
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: _podcast,
-                    decoration: const InputDecoration(
-                        label: Text('Podcast'),
-                        prefixIcon: Icon(FontAwesomeIcons.podcast)),
-                  ),
-                  const SizedBox(height: 20),
-                  Consumer<UserProvider>(
-                    builder: (context, value, child) => ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        String message = await value.updateEvent(
-                          eventId: widget.event.eventId,
-                          eventName: _eventName.text,
-                          eventDescription: _eventDescription.text,
-                          eventAddress: _eventAddress.text,
-                          eventCategory: _eventCategory.text,
-                          phone: _phone.text,
-                          email: _email.text,
-                          eventDate: eventDate,
-                          isOnline: isOnline,
-                          website: _website.text,
-                          twitter: _twitter.text,
-                          youtube: _youtube.text,
-                          facebook: _facebook.text,
-                          linkedIn: _linkedIn.text,
-                          instagram: _instagram.text,
-                          tiktok: _tiktok.text,
-                          twitch: _twitch.text,
-                          podcast: _podcast.text,
-                          currentEventUrl: widget.event.eventUrl,
-                          eventFile: _image,
-                        );
-                        setState(() {
-                          _isLoading = false;
-                        });
-
-                        if (message == 'success') {
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Event Updated Successfully')),
-                          );
-                          Navigator.pop(context);
-                        } else {
-                          if (!context.mounted) return;
-                          showSnackBar(message, context);
-                        }
-                      },
-                      child: _isLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: primaryColor,
-                              ),
-                            )
-                          : const Text('Update Event'),
-                    ),
-                  )
-                ],
+                ),
               ),
             ),
           ),
-        ),
+
+          SliverToBoxAdapter(
+            child: Form(
+              key: _formsKey,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 24),
+                    Center(
+                      child: GestureDetector(
+                        onTap: selectImage,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: 140,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            color: _inputBg,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: (_image != null || widget.event.eventUrl.isNotEmpty) ? _silver : _borderColor, width: 2.5),
+                            boxShadow: (_image != null || widget.event.eventUrl.isNotEmpty)
+                                ? [BoxShadow(color: _silver.withValues(alpha: 0.2), blurRadius: 20, spreadRadius: 2)]
+                                : [],
+                            image: _image != null
+                                ? DecorationImage(image: MemoryImage(_image!), fit: BoxFit.cover)
+                                : widget.event.eventUrl.isNotEmpty
+                                    ? DecorationImage(image: NetworkImage(widget.event.eventUrl), fit: BoxFit.cover)
+                                    : null,
+                          ),
+                          child: (_image == null && widget.event.eventUrl.isEmpty)
+                              ? const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add_a_photo, color: _silver, size: 36),
+                                    SizedBox(height: 6),
+                                    Text('Event Poster', style: TextStyle(color: Colors.white54, fontSize: 12)),
+                                  ],
+                                )
+                              : null,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+                    const _SectionHeader(icon: Icons.event_note, title: 'Event Details'),
+                    const SizedBox(height: 12),
+                    _FormCard(
+                      children: [
+                        _StyledField(controller: _eventName, label: 'Event Name', icon: Icons.title, required: true),
+                        _divider(),
+                        _StyledMultilineField(controller: _eventDescription, label: 'Description', icon: Icons.description, required: true),
+                        _divider(),
+                        _StyledField(controller: _eventCategory, label: 'Category', icon: Icons.category, required: true),
+                        _divider(),
+                        _DatePickerTile(
+                          selectedDate: _selectedDate,
+                          onTap: () {
+                            picker.DatePicker.showDateTimePicker(
+                              context,
+                              showTitleActions: true,
+                              minTime: DateTime.now().subtract(const Duration(days: 365)),
+                              onConfirm: (date) => setState(() => _selectedDate = date),
+                              currentTime: _selectedDate ?? DateTime.now(),
+                              locale: picker.LocaleType.en,
+                              theme: const picker.DatePickerTheme(
+                                backgroundColor: _cardBg,
+                                itemStyle: TextStyle(color: Colors.white, fontSize: 18),
+                                doneStyle: TextStyle(color: _silver, fontSize: 16, fontWeight: FontWeight.bold),
+                                cancelStyle: TextStyle(color: Colors.white70, fontSize: 16),
+                              ),
+                            );
+                          },
+                        ),
+                        _divider(),
+                        _StyledSwitch(title: 'Online Event?', value: isOnline, onChanged: (val) => setState(() => isOnline = val)),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+                    const _SectionHeader(icon: Icons.location_on_outlined, title: 'Location'),
+                    const SizedBox(height: 12),
+                    _FormCard(
+                      children: [
+                        _AdaptedAutocomplete(controller: _eventAddress, label: 'Event Address', icon: Icons.location_city),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+                    const _SectionHeader(icon: Icons.contact_phone_outlined, title: 'Contact'),
+                    const SizedBox(height: 12),
+                    _FormCard(
+                      children: [
+                        _StyledField(controller: _phone, label: 'Phone Number', icon: Icons.phone, keyboardType: TextInputType.phone, inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
+                        _divider(),
+                        _StyledField(controller: _email, label: 'Email Address', icon: Icons.email_outlined, keyboardType: TextInputType.emailAddress),
+                        _divider(),
+                        _StyledField(controller: _eventWebsite, label: 'Event Website', icon: Icons.language, prefix: 'https://'),
+                        _divider(),
+                        _StyledField(controller: _twitter, label: 'Twitter', icon: FontAwesomeIcons.twitter, prefix: 'twitter.com/', isFa: true),
+                        _divider(),
+                        _StyledField(controller: _facebook, label: 'Facebook', icon: FontAwesomeIcons.facebook, prefix: 'facebook.com/', isFa: true),
+                        _divider(),
+                        _StyledField(controller: _instagram, label: 'Instagram', icon: FontAwesomeIcons.instagram, prefix: 'instagram.com/', isFa: true),
+                        _divider(),
+                        _StyledField(controller: _youtube, label: 'YouTube', icon: FontAwesomeIcons.youtube, isFa: true),
+                      ],
+                    ),
+
+                    const SizedBox(height: 32),
+                    Consumer<UserProvider>(
+                      builder: (context, value, child) => GestureDetector(
+                        onTap: _isLoading
+                            ? null
+                            : () async {
+                                if (!_formsKey.currentState!.validate()) return;
+                                if (_selectedDate == null) {
+                                  showSnackBar('Please select an event date', context);
+                                  return;
+                                }
+                                
+                                setState(() => _isLoading = true);
+                                String message = await value.updateEvent(
+                                  eventId: widget.event.eventId,
+                                  eventName: _eventName.text,
+                                  eventDescription: _eventDescription.text,
+                                  eventAddress: _eventAddress.text,
+                                  eventCategory: _eventCategory.text,
+                                  phone: _phone.text,
+                                  email: _email.text,
+                                  website: _eventWebsite.text,
+                                  twitter: _twitter.text,
+                                  facebook: _facebook.text,
+                                  linkedIn: _linkedIn.text,
+                                  instagram: _instagram.text,
+                                  tiktok: _tiktok.text,
+                                  twitch: _twitch.text,
+                                  podcast: _podcast.text,
+                                  youtube: _youtube.text,
+                                  eventDate: _selectedDate!,
+                                  isOnline: isOnline,
+                                  currentEventUrl: widget.event.eventUrl,
+                                  eventFile: _image,
+                                );
+                                setState(() => _isLoading = false);
+                                
+                                if (message == 'success') {
+                                  if (!context.mounted) return;
+                                  Get.offAll(() => const ResponsiveLayout(mobileScreenLayout: MobileScreenLayout(), webScreenLayout: WebScreenLayout()));
+                                } else {
+                                  if (!context.mounted) return;
+                                  showSnackBar(message, context);
+                                }
+                              },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          height: 56,
+                          decoration: BoxDecoration(
+                            gradient: _isLoading
+                                ? const LinearGradient(colors: [Color(0xFF555555), Color(0xFF333333)])
+                                : const LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFC0C0C0)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: _isLoading ? [] : [BoxShadow(color: Colors.white.withValues(alpha: 0.15), blurRadius: 16, offset: const Offset(0, 6))],
+                          ),
+                          child: Center(
+                            child: _isLoading ? const SizedBox(height: 22, width: 22, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.black)) : const Text('Update Event', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16, letterSpacing: 0.5)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Reusable components
+// ─────────────────────────────────────────────────────────────────────────────
+
+Widget _divider() => const Divider(height: 1, thickness: 1, color: _borderColor, indent: 16, endIndent: 16);
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.icon, required this.title});
+  final IconData icon;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(color: _silver.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+          child: Icon(icon, color: _silver, size: 16),
+        ),
+        const SizedBox(width: 10),
+        Text(title.toUpperCase(), style: const TextStyle(color: _silver, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.4)),
+      ],
+    );
+  }
+}
+
+class _FormCard extends StatelessWidget {
+  const _FormCard({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: _cardBg, borderRadius: BorderRadius.circular(16), border: Border.all(color: _borderColor), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 12, offset: const Offset(0, 4))]),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
+    );
+  }
+}
+
+class _StyledField extends StatelessWidget {
+  const _StyledField({required this.controller, required this.label, required this.icon, this.prefix, this.keyboardType = TextInputType.text, this.inputFormatters, this.required = false, this.isFa = false});
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final String? prefix;
+  final TextInputType keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final bool required;
+  final bool isFa;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      style: const TextStyle(color: Colors.white, fontSize: 14),
+      validator: required ? (v) => (v == null || v.isEmpty) ? '$label is required' : null : null,
+      decoration: InputDecoration(
+        labelText: label + (required ? ' *' : ''),
+        labelStyle: const TextStyle(color: Colors.white38, fontSize: 13),
+        prefixIcon: Padding(padding: const EdgeInsets.all(12), child: isFa ? FaIcon(icon, color: Colors.white30, size: 16) : Icon(icon, color: Colors.white30, size: 18)),
+        prefix: prefix != null ? Text(prefix!, style: const TextStyle(color: Colors.white30, fontSize: 13)) : null,
+        filled: true,
+        fillColor: Colors.transparent,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        border: InputBorder.none,
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: _silver, width: 0.5)),
+        errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
+      ),
+    );
+  }
+}
+
+class _StyledMultilineField extends StatelessWidget {
+  const _StyledMultilineField({required this.controller, required this.label, required this.icon, this.required = false});
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final bool required;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.multiline,
+      maxLines: 4,
+      minLines: 2,
+      style: const TextStyle(color: Colors.white, fontSize: 14),
+      validator: required ? (v) => (v == null || v.isEmpty) ? '$label is required' : null : null,
+      decoration: InputDecoration(
+        labelText: label + (required ? ' *' : ''),
+        alignLabelWithHint: true,
+        labelStyle: const TextStyle(color: Colors.white38, fontSize: 13),
+        prefixIcon: Padding(padding: const EdgeInsets.only(left: 12, top: 14, right: 0), child: Icon(icon, color: Colors.white30, size: 18)),
+        filled: true,
+        fillColor: Colors.transparent,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        border: InputBorder.none,
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: _silver, width: 0.5)),
+        errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
+      ),
+    );
+  }
+}
+
+class _StyledSwitch extends StatelessWidget {
+  const _StyledSwitch({required this.title, required this.value, required this.onChanged});
+  final String title;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 14)),
+      value: value,
+      onChanged: onChanged,
+      activeColor: _silver,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+    );
+  }
+}
+
+class _DatePickerTile extends StatelessWidget {
+  const _DatePickerTile({required this.selectedDate, required this.onTap});
+  final DateTime? selectedDate;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      leading: const Padding(padding: EdgeInsets.only(left: 4), child: Icon(Icons.calendar_month, color: Colors.white30, size: 18)),
+      title: Text(selectedDate == null ? 'Select Event Date & Time' : DateFormat('MMM d, yyyy - h:mm a').format(selectedDate!), style: TextStyle(color: selectedDate == null ? Colors.white38 : Colors.white, fontSize: 13)),
+      trailing: const Icon(Icons.arrow_drop_down, color: Colors.white30),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    );
+  }
+}
+
+class _AdaptedAutocomplete extends StatelessWidget {
+  const _AdaptedAutocomplete({required this.controller, required this.label, required this.icon});
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(inputDecorationTheme: const InputDecorationTheme(labelStyle: TextStyle(color: Colors.white38, fontSize: 13), border: InputBorder.none, filled: true, fillColor: Colors.transparent)),
+      child: AddressAutocompleteField(controller: controller, label: label, prefixIcon: icon),
     );
   }
 }

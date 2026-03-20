@@ -15,49 +15,57 @@ class EventRequestScreen extends StatelessWidget {
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,
-        child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('events').snapshots(),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('events')
+              .where('isVerified', isEqualTo: false)
+              .snapshots(),
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final docs = snapshot.data?.docs ?? [];
+            if (docs.isEmpty) {
+              return const Center(child: Text('No pending events'));
+            }
             return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: docs.length,
               itemBuilder: (context, index) {
-                Events event = Events.fromMap(snapshot.data!.docs[index].data());
+                Events event = Events.fromMap(
+                    docs[index].data() as Map<String, dynamic>);
                 return Card(
                   child: Column(
                     children: [
-                      EventCardWidget(
-                        event: event,
-                      ),
+                      EventCardWidget(event: event),
                       SwitchListTile(
                         value: event.isVerified,
                         onChanged: (_) async {
-                          await FirebaseFirestore.instance.collection('events').doc(event.eventId).update(
-                            {
-                              'isVerified': !event.isVerified,
-                            },
-                          );
+                          await FirebaseFirestore.instance
+                              .collection('events')
+                              .doc(event.eventId)
+                              .update({'isVerified': !event.isVerified});
                         },
                         title: const Text('isVerified'),
                       ),
                       SwitchListTile(
                         value: event.isSponsered,
                         onChanged: (_) async {
-                          await FirebaseFirestore.instance.collection('events').doc(event.eventId).update(
-                            {
-                              'isSponsered': !event.isSponsered,
-                            },
-                          );
+                          await FirebaseFirestore.instance
+                              .collection('events')
+                              .doc(event.eventId)
+                              .update({'isSponsered': !event.isSponsered});
                         },
                         title: const Text('isSponsered'),
                       ),
                       SwitchListTile(
                         value: event.isWomenOriented,
                         onChanged: (_) async {
-                          await FirebaseFirestore.instance.collection('events').doc(event.eventId).update(
-                            {
-                              'isWomenOriented': !event.isWomenOriented,
-                            },
-                          );
+                          await FirebaseFirestore.instance
+                              .collection('events')
+                              .doc(event.eventId)
+                              .update({
+                            'isWomenOriented': !event.isWomenOriented
+                          });
                         },
                         title: const Text('isWomenOriented'),
                       ),

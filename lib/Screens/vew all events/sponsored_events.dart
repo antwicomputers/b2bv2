@@ -1,4 +1,5 @@
-import 'package:b2bmobile/Screens/pages/event%20detail%20page/event_details_screen.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:b2bmobile/models/events.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/app_constants.dart';
@@ -71,7 +72,7 @@ class EventCardWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => EventDetailsScreen(event: event));
+        Get.to(() => UniversalDetailScreen(item: event.toDetailItem()));
       },
       child: Container(
         height: size.height * 0.15,

@@ -1,10 +1,22 @@
+import 'dart:async';
 import 'package:b2bmobile/models/business.dart';
+import 'package:b2bmobile/models/events.dart';
+import 'package:b2bmobile/models/support.dart';
+import 'package:b2bmobile/models/detail_item.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import 'business detal/business_detail_screen.dart';
+// ──────────────────────────────────────────────────────────────────────────────
+// Favorites screen — shows every item the current user has favorited,
+// spanning all collections (businesses, events, support, resources, youth).
+// Data structure: each doc has favoriteBy: { uid: true }
+// ──────────────────────────────────────────────────────────────────────────────
+
+enum _ItemType { business, event, support }
 
 class Favorites extends StatefulWidget {
   const Favorites({super.key});
@@ -14,73 +26,269 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites> {
-  late String currentUserUid = '';
+  static const List<Map<String, dynamic>> _collections = [
+    {'col': 'businesses', 'type': _ItemType.business},
+    {'col': 'events', 'type': _ItemType.event},
+    {'col': 'supportbusinesses', 'type': _ItemType.support},
+    {'col': 'userresourcesupport', 'type': _ItemType.support},
+    {'col': 'youthresource', 'type': _ItemType.support},
+  ];
+
+  String get _uid => FirebaseAuth.instance.currentUser?.uid ?? '';
+
+  // Merges multiple Firestore snapshots into one list, updated live
+  StreamSubscription? _subscription;
+  List<_FavItem> _items = [];
+  final List<List<_FavItem>> _buckets = [];
 
   @override
   void initState() {
     super.initState();
-    final User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      currentUserUid = currentUser.uid;
-    } else {
-      // Handle the case when the user is not authenticated
-      // You can show a login screen or redirect to the login page
+    if (_uid.isNotEmpty) _subscribe();
+  }
+
+  void _subscribe() {
+    _buckets.clear();
+    _buckets.addAll(List.generate(_collections.length, (_) => []));
+
+    for (int i = 0; i < _collections.length; i++) {
+      final col = _collections[i]['col'] as String;
+      final type = _collections[i]['type'] as _ItemType;
+      final idx = i;
+
+      FirebaseFirestore.instance
+          .collection(col)
+          .where('favoriteBy.$_uid', isEqualTo: true)
+          .snapshots()
+          .listen((qs) {
+        final parsed = <_FavItem>[];
+        for (final doc in qs.docs) {
+          try {
+            parsed.add(_FavItem.fromDoc(doc, col, type));
+          } catch (_) {}
+        }
+        if (mounted) {
+          setState(() {
+            _buckets[idx] = parsed;
+            _items = _buckets.expand((x) => x).toList();
+          });
+        }
+      });
     }
   }
 
   @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_uid.isEmpty) {
+      return const Scaffold(
+        body: Center(child: Text('Please log in to view favorites')),
+      );
+    }
+
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseFirestore.instance
-            .collection('businesses')
-            .where('favoriteBy.$currentUserUid', isEqualTo: true)
-            .snapshots(),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-
-          final businesses = snapshot.data!.docs;
-
-          if (businesses.isEmpty) {
-            return const Center(
-              child: Text('You have not favorited any businesses'),
-            );
-          }
-
-          return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 15,
-              childAspectRatio: .8,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          '❤️  My Favorites',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: _items.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.favorite_border, size: 60, color: Colors.white24),
+                  SizedBox(height: 16),
+                  Text(
+                    'No favorites yet!',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Tap ❤️ on any business, event, or resource\nto save it here.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white38),
+                  ),
+                ],
+              ),
+            )
+          : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.78,
+              ),
+              padding: const EdgeInsets.all(12),
+              itemCount: _items.length,
+              itemBuilder: (context, i) => _FavCard(item: _items[i]),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            itemCount: businesses.length,
-            itemBuilder: (BuildContext context, int index) {
-              Business business =
-                  Business.fromMap(snapshot.data!.docs[index].data());
+    );
+  }
+}
 
-              return CategoryWidget(
-                image: business.businessUrl,
-                title: business.businessName,
-                onTap: () {
-                  Get.to(() => BusinessDetailScreen(business: business));
-                },
-              );
-            },
-          );
-        },
+// ── Favorite card ─────────────────────────────────────────────────────────────
+
+class _FavCard extends StatelessWidget {
+  const _FavCard({required this.item});
+  final _FavItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Get.to(() => UniversalDetailScreen(item: item.detailItem)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.redAccent.withValues(alpha: 0.12),
+              blurRadius: 8,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(14)),
+              child: Image.network(
+                item.imageUrl,
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  height: 120,
+                  color: const Color(0xFF2A2A2A),
+                  child: const Icon(Icons.image_not_supported,
+                      color: Colors.white24),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  _TypeChip(type: item.type),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+class _TypeChip extends StatelessWidget {
+  const _TypeChip({required this.type});
+  final _ItemType type;
+
+  @override
+  Widget build(BuildContext context) {
+    String label;
+    Color color;
+    if (type == _ItemType.business) {
+      label = 'Business';
+      color = Colors.white70;
+    } else if (type == _ItemType.event) {
+      label = 'Event';
+      color = Colors.blueAccent;
+    } else {
+      label = 'Resource';
+      color = Colors.greenAccent;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+            color: color, fontSize: 10, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+}
+
+// ── Data model ────────────────────────────────────────────────────────────────
+
+class _FavItem {
+  const _FavItem({
+    required this.name,
+    required this.imageUrl,
+    required this.type,
+    required this.detailItem,
+  });
+
+  final String name;
+  final String imageUrl;
+  final _ItemType type;
+  final DetailItem detailItem;
+
+  static _FavItem fromDoc(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+    String collection,
+    _ItemType type,
+  ) {
+    final data = doc.data();
+    if (type == _ItemType.business) {
+      final b = Business.fromMap(data);
+      return _FavItem(
+        name: b.businessName,
+        imageUrl: b.businessUrl,
+        type: _ItemType.business,
+        detailItem: b.toDetailItem(),
+      );
+    } else if (type == _ItemType.event) {
+      final e = Events.fromMap(data);
+      return _FavItem(
+        name: e.eventName,
+        imageUrl: e.eventUrl,
+        type: _ItemType.event,
+        detailItem: e.toDetailItem(),
+      );
+    } else {
+      final s = Support.fromMap(data);
+      return _FavItem(
+        name: s.supportName,
+        imageUrl: s.supportUrl,
+        type: _ItemType.support,
+        detailItem: s.toDetailItem(),
+      );
+    }
+  }
+}
+
+// ── Legacy widget kept for import compatibility in older screens ───────────────
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({
@@ -96,7 +304,7 @@ class CategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -116,15 +324,11 @@ class CategoryWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
-              image: NetworkImage(image),
-              height: size.height * 0.2,
-              width: size.width * 0.5,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(
-              height: 9,
-            ),
+            Image.network(image,
+                height: size.height * 0.2,
+                width: size.width * 0.5,
+                fit: BoxFit.cover),
+            const SizedBox(height: 9),
             Text(title),
           ],
         ),

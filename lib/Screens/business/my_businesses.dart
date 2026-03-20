@@ -1,5 +1,6 @@
 import 'package:b2bmobile/Screens/business/edit_business_screen.dart';
-import 'package:b2bmobile/Screens/pages/business%20detal/business_detail_screen.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:b2bmobile/models/business.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/resources/storage_methods.dart';
@@ -27,18 +28,23 @@ class _MyBusinessesState extends State<MyBusinesses> {
           title: const Text('My Businesses'),
           centerTitle: true,
         ),
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('businesses')
-              .where('userId', isEqualTo: value.getUser!.uid)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.data?.docs.isEmpty ?? true) {
-              return const Center(child: Text('No Registered Businesses'));
-            }
+        body: value.getUser == null 
+            ? const Center(child: CircularProgressIndicator()) 
+            : StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('businesses')
+                    .where('userId', isEqualTo: value.getUser!.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(child: Text('Error loading businesses'));
+                  }
+                  if (snapshot.data?.docs.isEmpty ?? true) {
+                    return const Center(child: Text('No Registered Businesses'));
+                  }
 
             return ListView.builder(
               itemCount: snapshot.data?.docs.length,
@@ -105,7 +111,7 @@ class BusinessCardWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => BusinessDetailScreen(business: business));
+        Get.to(() => UniversalDetailScreen(item: business.toDetailItem()));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

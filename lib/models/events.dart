@@ -24,11 +24,15 @@ class Events {
   final String eventUrl;
   final bool isSponsered;
   final String youtube;
+  final double latitude;
+  final double longitude;
   final bool isWomenOriented;
   final DateTime? asTimeStamp;
   Events({
     required this.eventName,
     required this.youtube,
+    this.latitude = 0.0,
+    this.longitude = 0.0,
     required this.eventDescription,
     required this.eventAddress,
     required this.eventCategory,
@@ -63,6 +67,8 @@ class Events {
     String? userId,
     bool? isOnlineEvent,
     String? youtube,
+    double? latitude,
+    double? longitude,
     String? email,
     bool? isVerified,
     String? website,
@@ -89,6 +95,8 @@ class Events {
       phone: phone ?? this.phone,
       userId: userId ?? this.userId,
       youtube: youtube ?? this.youtube,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       isOnlineEvent: isOnlineEvent ?? this.isOnlineEvent,
       email: email ?? this.email,
       isVerified: isVerified ?? this.isVerified,
@@ -128,6 +136,8 @@ class Events {
       'linkedIn': linkedIn,
       'instagram': instagram,
       'youtube': youtube,
+      'latitude': latitude,
+      'longitude': longitude,
       'tiktok': tiktok,
       'twitch': twitch,
       'createdAt': createdAt.millisecondsSinceEpoch,
@@ -148,6 +158,8 @@ class Events {
       eventCategory: map['eventCategory'] ?? '',
       phone: map['phone'] ?? '',
       youtube: map['youtube'] ?? '',
+      latitude: map['latitude']?.toDouble() ?? 0.0,
+      longitude: map['longitude']?.toDouble() ?? 0.0,
       userId: map['userId'] ?? '',
       isOnlineEvent: map['isOnlineEvent'] ?? false,
       email: map['email'] ?? '',

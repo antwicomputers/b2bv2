@@ -421,8 +421,23 @@ class UserProvider with ChangeNotifier {
     String supportUrl = await StorageMethods()
         .uploadImageToStorage('supportbusinesses', businessFile, false, customId: ref);
         
-    // 3. Create Model
+    // 3. Geocode Address
+    double latitude = 0.0;
+    double longitude = 0.0;
+    try {
+      List<Location> locations = await locationFromAddress(supportAddress);
+      if (locations.isNotEmpty) {
+        latitude = locations.first.latitude;
+        longitude = locations.first.longitude;
+      }
+    } catch (e) {
+      debugPrint("Geocoding Error: $e");
+    }
+        
+    // 4. Create Model
     model.Support support = model.Support(
+      latitude: latitude,
+      longitude: longitude,
       supportName: supportName,
       supportId: ref,
       supportDescription: supportDescription,
@@ -493,8 +508,23 @@ class UserProvider with ChangeNotifier {
     String eventUrl = await StorageMethods()
         .uploadImageToStorage('events', eventFile, false, customId: ref);
         
-    // 3. Create Model
+    // 3. Geocode Address
+    double latitude = 0.0;
+    double longitude = 0.0;
+    try {
+      List<Location> locations = await locationFromAddress(eventAddress);
+      if (locations.isNotEmpty) {
+        latitude = locations.first.latitude;
+        longitude = locations.first.longitude;
+      }
+    } catch (e) {
+      debugPrint("Geocoding Error: $e");
+    }
+
+    // 4. Create Model
     model.Events business = model.Events(
+      latitude: latitude,
+      longitude: longitude,
       eventName: eventName,
       eventId: ref,
       youtube: youtube,
@@ -566,7 +596,20 @@ class UserProvider with ChangeNotifier {
             customId: eventId);
       }
 
-      // 2. Update Firestore
+      // 2. Geocode Address
+      double latitude = 0.0;
+      double longitude = 0.0;
+      try {
+        List<Location> locations = await locationFromAddress(eventAddress);
+        if (locations.isNotEmpty) {
+          latitude = locations.first.latitude;
+          longitude = locations.first.longitude;
+        }
+      } catch (e) {
+        debugPrint("Geocoding Error: $e");
+      }
+
+      // 3. Update Firestore
       Map<String, dynamic> dataToUpdate = {
         'eventName': eventName,
         'eventDescription': eventDescription,
@@ -585,6 +628,8 @@ class UserProvider with ChangeNotifier {
         'youtube': youtube,
         'eventUrl': eventUrl,
         'eventDate': eventDate,
+        'latitude': latitude,
+        'longitude': longitude,
         'asTimeStamp': eventDate,
         'isOnlineEvent': isOnline,
       };
@@ -629,8 +674,23 @@ class UserProvider with ChangeNotifier {
     String supportUrl = await StorageMethods()
         .uploadImageToStorage('userresourcesupport', businessFile, false, customId: ref);
         
-    // 3. Create Model
+    // 3. Geocode Address
+    double latitude = 0.0;
+    double longitude = 0.0;
+    try {
+      List<Location> locations = await locationFromAddress(supportAddress);
+      if (locations.isNotEmpty) {
+        latitude = locations.first.latitude;
+        longitude = locations.first.longitude;
+      }
+    } catch (e) {
+      debugPrint("Geocoding Error: $e");
+    }
+        
+    // 4. Create Model
     model.Support support = model.Support(
+      latitude: latitude,
+      longitude: longitude,
       supportName: supportName,
       supportId: ref,
       supportDescription: supportDescription,
@@ -699,8 +759,23 @@ class UserProvider with ChangeNotifier {
     String supportUrl = await StorageMethods()
         .uploadImageToStorage('youthresource', businessFile, false, customId: ref);
         
-    // 3. Create Model
+    // 3. Geocode Address
+    double latitude = 0.0;
+    double longitude = 0.0;
+    try {
+      List<Location> locations = await locationFromAddress(supportAddress);
+      if (locations.isNotEmpty) {
+        latitude = locations.first.latitude;
+        longitude = locations.first.longitude;
+      }
+    } catch (e) {
+      debugPrint("Geocoding Error: $e");
+    }
+        
+    // 4. Create Model
     model.Support support = model.Support(
+      latitude: latitude,
+      longitude: longitude,
       supportName: supportName,
       supportId: ref,
       supportDescription: supportDescription,
@@ -771,7 +846,20 @@ class UserProvider with ChangeNotifier {
             customId: supportId);
       }
 
-      // 2. Update Firestore
+      // 2. Geocode Address
+      double latitude = 0.0;
+      double longitude = 0.0;
+      try {
+        List<Location> locations = await locationFromAddress(supportAddress);
+        if (locations.isNotEmpty) {
+          latitude = locations.first.latitude;
+          longitude = locations.first.longitude;
+        }
+      } catch (e) {
+        debugPrint("Geocoding Error: $e");
+      }
+
+      // 3. Update Firestore
       Map<String, dynamic> dataToUpdate = {
         'supportName': supportName,
         'supportDescription': supportDescription,
@@ -789,6 +877,8 @@ class UserProvider with ChangeNotifier {
         'podcast': podcast,
         'youtube': youtube,
         'supportUrl': supportUrl,
+        'latitude': latitude,
+        'longitude': longitude,
       };
 
       await FirebaseFirestore.instance
@@ -835,7 +925,20 @@ class UserProvider with ChangeNotifier {
             customId: supportId);
       }
 
-      // 2. Update Firestore
+      // 2. Geocode Address
+      double latitude = 0.0;
+      double longitude = 0.0;
+      try {
+        List<Location> locations = await locationFromAddress(supportAddress);
+        if (locations.isNotEmpty) {
+          latitude = locations.first.latitude;
+          longitude = locations.first.longitude;
+        }
+      } catch (e) {
+        debugPrint("Geocoding Error: $e");
+      }
+
+      // 3. Update Firestore
       Map<String, dynamic> dataToUpdate = {
         'supportName': supportName,
         'supportDescription': supportDescription,
@@ -853,6 +956,8 @@ class UserProvider with ChangeNotifier {
         'podcast': podcast,
         'youtube': youtube,
         'supportUrl': supportUrl,
+        'latitude': latitude,
+        'longitude': longitude,
       };
 
       await FirebaseFirestore.instance

@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'business detal/business_detail_screen.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 
 class AllEssential extends StatefulWidget {
   const AllEssential({super.key});
@@ -77,7 +78,7 @@ class EventCardWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => BusinessDetailScreen(business: business));
+        Get.to(() => UniversalDetailScreen(item: business.toDetailItem()));
       },
       child: Container(
         height: size.height * 0.15,

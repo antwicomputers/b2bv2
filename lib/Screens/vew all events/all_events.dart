@@ -1,4 +1,5 @@
-import 'package:b2bmobile/Screens/pages/event%20detail%20page/event_details_screen.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:b2bmobile/models/events.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/app_constants.dart';
@@ -33,12 +34,17 @@ class _ViewAllEventsScreenState extends State<AllEvents> {
                 //   'asTimeStamp',
                 //   isGreaterThan: DateTime.now(),
                 // )
-                .where('isVerified')
+                .where('isVerified', isEqualTo: true)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error loading events'),
                 );
               }
               if (snapshot.data?.docs.isEmpty ?? true) {
@@ -51,10 +57,6 @@ class _ViewAllEventsScreenState extends State<AllEvents> {
                 itemBuilder: (context, index) {
                   Events event =
                       Events.fromMap(snapshot.data!.docs[index].data());
-
-                  if (!event.isVerified) {
-                    Container();
-                  }
                   return EventCardWidget(
                     event: event,
                   );
@@ -79,7 +81,7 @@ class EventCardWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => EventDetailsScreen(event: event));
+        Get.to(() => UniversalDetailScreen(item: event.toDetailItem()));
       },
       child: Container(
         height: size.height * 0.15,

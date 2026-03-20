@@ -256,16 +256,22 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     Expanded(
                       child: Text(
                         'Address: ${widget.event.eventAddress}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
                     ),
+                    const SizedBox(width: 8),
                     const Icon(
                       Icons.category,
                       size: 15,
                     ),
-                    const SizedBox(
-                      width: 5,
+                    const SizedBox(width: 5),
+                    Flexible(
+                      child: Text(
+                        widget.event.eventCategory,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    Text(widget.event.eventCategory),
                   ],
                 ),
               ),

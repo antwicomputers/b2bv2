@@ -1,0 +1,30 @@
+Building com.antwicomputers.b2bmobile for simulator (ios)...
+Running Xcode build...                                          
+Xcode build done.                                           14.3s
+Failed to build iOS app
+Error output from Xcode build:
+↳
+    ** BUILD FAILED **
+
+
+Xcode's output:
+↳
+    Writing result bundle at path:
+    	/var/folders/2y/lx3kt25n23x4kqdrt4cply_r0000gn/T/flutter_tools.1eybXW/flutter_ios_build_temp_dir7YvbNx/temporary_xcresult_bundle
+
+    ⚡️ [Anti-Detritus] Scanning Flutter SDK artifacts for detritus...
+    Target debug_unpack_ios failed: Exception: Failed to codesign /Users/antwicomputers/Documents/GitHub/b2bv2/build/ios/Debug-iphonesimulator/Flutter.framework/Flutter with identity -.
+    /Users/antwicomputers/Documents/GitHub/b2bv2/build/ios/Debug-iphonesimulator/Flutter.framework/Flutter: replacing existing signature
+    /Users/antwicomputers/Documents/GitHub/b2bv2/build/ios/Debug-iphonesimulator/Flutter.framework/Flutter: resource fork, Finder information, or similar detritus not allowed
+    Failed to package /Users/antwicomputers/Documents/GitHub/b2bv2.
+    Command PhaseScriptExecution failed with a nonzero exit code
+    note: Run script build phase 'Run Script' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+    note: Run script build phase 'Thin Binary' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+    warning: Run script build phase 'Create Symlinks to Header Folders' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'abseil' from project 'Pods')
+    warning: no rule to process file '/Users/antwicomputers/.pub-cache/hosted/pub.dev/geocoding_ios-3.1.0/ios/geocoding_ios/Sources/geocoding_ios/PrivacyInfo.xcprivacy' of type 'text.xml' for architecture 'arm64' (in target 'geocoding_ios' from project 'Pods')
+    warning: no rule to process file '/Users/antwicomputers/.pub-cache/hosted/pub.dev/geocoding_ios-3.1.0/ios/geocoding_ios/Sources/geocoding_ios/PrivacyInfo.xcprivacy' of type 'text.xml' for architecture 'x86_64' (in target 'geocoding_ios' from project 'Pods')
+    warning: Run script build phase 'Create Symlinks to Header Folders' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'BoringSSL-GRPC' from project 'Pods')
+    warning: Run script build phase 'Create Symlinks to Header Folders' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'gRPC-Core' from project 'Pods')
+    warning: Run script build phase 'Create Symlinks to Header Folders' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'gRPC-C++' from project 'Pods')
+
+Encountered error while building for simulator.

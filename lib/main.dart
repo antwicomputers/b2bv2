@@ -85,6 +85,17 @@ class MyApp extends StatelessWidget {
         title: 'Back2Black Mobile',
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,
+          appBarTheme: const AppBarTheme(
+            // Ensures the back-arrow and all leading/action icons are white
+            iconTheme: IconThemeData(color: Colors.white),
+            actionsIconTheme: IconThemeData(color: Colors.white),
+            foregroundColor: Colors.white, // title + icon colour
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),

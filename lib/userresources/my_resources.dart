@@ -1,4 +1,5 @@
-import 'package:b2bmobile/Screens/pages/support_detail_page/support_detail_screen.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:b2bmobile/models/support.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/app_constants.dart';
@@ -113,7 +114,7 @@ class MyResourceCardWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Get.to(() => SupportDetailScreen(support: support));
+        Get.to(() => UniversalDetailScreen(item: support.toDetailItem()));
       },
       child: Container(
         height: size.height * 0.18,

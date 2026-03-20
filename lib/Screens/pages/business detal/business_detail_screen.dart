@@ -261,16 +261,22 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                   Expanded(
                     child: Text(
                       'Address: ${widget.business.businessAddress}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                   ),
+                  const SizedBox(width: 8),
                   const Icon(
                     Icons.category,
                     size: 15,
                   ),
-                  const SizedBox(
-                    width: 5,
+                  const SizedBox(width: 5),
+                  Flexible(
+                    child: Text(
+                      widget.business.businessCategory,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  Text(widget.business.businessCategory),
                 ],
               ),
             ),

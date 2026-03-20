@@ -4,7 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:b2bmobile/models/business.dart';
-import 'package:b2bmobile/Screens/pages/business detal/business_detail_screen.dart';
+import 'package:b2bmobile/models/events.dart';
+import 'package:b2bmobile/models/support.dart';
+import 'package:b2bmobile/models/detail_item.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,58 +42,87 @@ class _MapsState extends State<Maps> {
       if (newPermissionStatus.isGranted) {
         // Permission granted. Fetch businesses and current location.
         getCurrentLocation();
-        fetchBusinesses();
+        fetchMapItems();
       }
     } else if (permissionStatus.isGranted) {
       // Permission already granted. Fetch businesses and current location.
       getCurrentLocation();
-      fetchBusinesses();
+      fetchMapItems();
     }
   }
 
-  void fetchBusinesses() async {
+  void fetchMapItems() async {
     try {
-      final businessesSnapshot = await FirebaseFirestore.instance
-          .collection('businesses')
-          .where('isVerified', isEqualTo: true)
-          .get();
-
-      setState(() {
-        markers = businessesSnapshot.docs.map((document) {
-          final data = document.data();
-          // Safely deserialize
-          Business business;
+      final collections = [
+        'businesses',
+        'events',
+        'userresourcesupport',
+        'youthresource',
+        'supportbusinesses'
+      ];
+      
+      Set<Marker> newMarkers = {};
+      
+      for (String coll in collections) {
+        final snapshot = await FirebaseFirestore.instance
+            .collection(coll)
+            .where('isVerified', isEqualTo: true)
+            .get();
+            
+        for (var doc in snapshot.docs) {
+          final data = doc.data();
+          DetailItem? item;
           try {
-             business = Business.fromMap(data);
+            if (coll == 'businesses') {
+              item = Business.fromMap(data).toDetailItem();
+            } else if (coll == 'events') {
+              item = Events.fromMap(data).toDetailItem();
+            } else {
+              item = Support.fromMap(data).toDetailItem();
+            }
           } catch (e) {
-             debugPrint("Error parsing business ${document.id}: $e");
-             return null;
+            debugPrint("Error parsing map item ${doc.id} in $coll: $e");
+            continue;
           }
 
-          if (business.latitude != 0.0 && business.longitude != 0.0) {
-            final latLng = LatLng(business.latitude, business.longitude);
+          if (item.latitude != 0.0 && item.longitude != 0.0) {
+            final latLng = LatLng(item.latitude, item.longitude);
+            
+            // Set different marker colours based on type if you wish (Hue)
+            double hue = BitmapDescriptor.hueRed;
+            if (coll == 'events') {
+              hue = BitmapDescriptor.hueBlue;
+            } else if (coll != 'businesses') {
+              hue = BitmapDescriptor.hueGreen;
+            }
 
-            return Marker(
-              markerId: MarkerId(document.id),
+            newMarkers.add(Marker(
+              markerId: MarkerId(doc.id),
               position: latLng,
+              icon: BitmapDescriptor.defaultMarkerWithHue(hue),
               infoWindow: InfoWindow(
-                title: business.businessName,
+                title: item.name,
                 snippet: "Tap for options",
                 onTap: () {
-                  _showBusinessOptions(business);
+                  _showItemOptions(item!);
                 }
               ),
-            );
+            ));
           }
-          return null;
-        }).whereType<Marker>().toSet(); // Filter out nulls
-      });
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          markers = newMarkers;
+        });
+      }
     } catch (e) {
-      debugPrint("Error fetching businesses: $e");
+      debugPrint("Error fetching map items: $e");
     }
   }
 
-  void _showBusinessOptions(Business business) {
+  void _showItemOptions(DetailItem item) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -100,25 +133,31 @@ class _MapsState extends State<Maps> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                business.businessName,
+                item.name,
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 8),
-              Text(business.businessAddress),
+              Text(
+                item.address,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                    ElevatedButton.icon(
                     onPressed: () {
-                      _launchMaps(business.latitude, business.longitude);
+                      _launchMaps(item.latitude, item.longitude);
                     },
                     icon: const Icon(Icons.directions),
                     label: const Text("Navigate"),
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-                       Get.to(() => BusinessDetailScreen(business: business));
+                       Get.to(() => UniversalDetailScreen(item: item));
                     },
                     icon: const Icon(Icons.info),
                     label: const Text("Details"),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:algolia/algolia.dart';
 import 'package:get/get.dart';
-import '../../models/business.dart';
-import 'business detal/business_detail_screen.dart';
+import 'package:b2bmobile/models/business.dart';
+import 'package:b2bmobile/models/detail_item_extensions.dart';
+import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -82,9 +83,7 @@ class _SearchPageState extends State<SearchPage> {
                           return ListTile(
                             title: Text(businessName),
                             onTap: () {
-                              Get.to(() =>
-                                  BusinessDetailScreen(business: business));
-                            },
+                              Get.to(() => UniversalDetailScreen(item: business.toDetailItem()));                            },
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

@@ -154,8 +154,11 @@ class Business {
       'isEsential': isEsential,
       'isFeatured': isFeatured,
       'isSponsored': isSponsored,
-      'isLiked': isLiked,
-      'isFavorite': isFavorite,
+      // Map-style like/favorite tracking (used by queries + detail screen)
+      'likedBy': {},
+      'likeCount': 0,
+      'favoriteBy': {},
+      'favoriteCount': 0,
       'latitude': latitude,
       'longitude': longitude,
     };
@@ -190,6 +193,7 @@ class Business {
       isEsential: map['isEsential'] ?? false,
       isFeatured: map['isFeatured'] ?? false,
       isSponsored: map['isSponsored'] ?? false,
+      // Accept both old array format and new map format gracefully
       isLiked: List<String>.from(map['isLiked'] ?? []),
       isFavorite: List<String>.from(map['isFavorite'] ?? []),
       latitude: map['latitude']?.toDouble() ?? 0.0,

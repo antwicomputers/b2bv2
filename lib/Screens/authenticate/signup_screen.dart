@@ -10,6 +10,7 @@ import 'package:b2bmobile/widgets/text_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
@@ -56,11 +57,7 @@ class _LoginScreenState extends State<SignupScreen> {
   }
 
   void navigateToLogin() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
+    Get.off(() => const LoginScreen());
   }
 
   @override
@@ -192,14 +189,10 @@ class _LoginScreenState extends State<SignupScreen> {
                         showSnackBar(res, context);
                       } else {
                         if (!context.mounted) return;
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const ResponsiveLayout(
-                              mobileScreenLayout: MobileScreenLayout(),
-                              webScreenLayout: WebScreenLayout(),
-                            ),
-                          ),
-                        );
+                        Get.offAll(() => const ResponsiveLayout(
+                          mobileScreenLayout: MobileScreenLayout(),
+                          webScreenLayout: WebScreenLayout(),
+                        ));
                       }
                     } on FirebaseAuthException catch (e) {
                       if (!context.mounted) return;

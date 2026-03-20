@@ -6,6 +6,7 @@ import 'package:b2bmobile/widgets/text_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
@@ -31,11 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void navigateToSignUp() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SignupScreen(),
-      ),
-    );
+    Get.off(() => const SignupScreen());
   }
 
   @override
@@ -90,14 +87,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     if (res == 'success') {
                       // ignore: use_build_context_synchronously
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const ResponsiveLayout(
-                            mobileScreenLayout: MobileScreenLayout(),
-                            webScreenLayout: WebScreenLayout(),
-                          ),
-                        ),
-                      );
+                      Get.offAll(() => const ResponsiveLayout(
+                        mobileScreenLayout: MobileScreenLayout(),
+                        webScreenLayout: WebScreenLayout(),
+                      ));
                     } else {
                       if (!context.mounted) return;
                       showSnackBar(res, context);

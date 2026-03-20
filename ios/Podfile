@@ -42,20 +42,32 @@ post_install do |installer|
       # Force deployment target to 14.0 to match project
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
       
-      # Fix for "DT_TOOLCHAIN_DIR cannot be used to evaluate LIBRARY_SEARCH_PATHS"
-      ['LIBRARY_SEARCH_PATHS', 'OTHER_LDFLAGS', 'OTHER_CFLAGS', 'GCC_PREPROCESSOR_DEFINITIONS', 'SWIFT_INCLUDE_PATHS'].each do |key|
-        if config.build_settings[key]
-          if config.build_settings[key].kind_of?(Array)
-            config.build_settings[key] = config.build_settings[key].map { |path| path.gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR') }
-          elsif config.build_settings[key].kind_of?(String)
-            config.build_settings[key] = config.build_settings[key].gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR')
-          end
+      # Disable code signing for Pods
+      config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+
+      # Fix for Xcode 15 "DT_TOOLCHAIN_DIR cannot be used" error
+      # Only target LIBRARY_SEARCH_PATHS to prevent breaking C/Swift compilation
+      if config.build_settings['LIBRARY_SEARCH_PATHS']
+        if config.build_settings['LIBRARY_SEARCH_PATHS'].kind_of?(Array)
+          config.build_settings['LIBRARY_SEARCH_PATHS'] = config.build_settings['LIBRARY_SEARCH_PATHS'].map { |path| path.gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR') }
+        elsif config.build_settings['LIBRARY_SEARCH_PATHS'].kind_of?(String)
+          config.build_settings['LIBRARY_SEARCH_PATHS'] = config.build_settings['LIBRARY_SEARCH_PATHS'].gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR')
+        end
+      end
+      
+      # Fix for nanopb "Use of undeclared identifier 'STATIC'"
+      if target.name == 'nanopb'
+        gcc_defs = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || '$(inherited)'
+        if gcc_defs.kind_of?(Array)
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = gcc_defs + ['PB_NO_STATIC_ASSERT=1']
+        else
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = gcc_defs + ' PB_NO_STATIC_ASSERT=1'
         end
       end
     end
   end
   
-  # Aggressively modify all .xcconfig files in Pods
+  # Aggressively modify all .xcconfig files in Pods to replace DT_TOOLCHAIN_DIR
   Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', '**', '*.xcconfig')).each do |xcconfig_path|
     if File.exist?(xcconfig_path)
       content = File.read(xcconfig_path)
@@ -63,6 +75,24 @@ post_install do |installer|
         new_content = content.gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR')
         File.open(xcconfig_path, 'w') { |file| file.write(new_content) }
       end
+    end
+  end
+
+  # Strip iCloud Drive detritus (com.apple.FinderInfo, com.apple.fileprovider.fpfs#P)
+  # that causes "resource fork, Finder information, or similar detritus not allowed" CodeSign errors.
+  # This happens because the project is stored in an iCloud-synced folder.
+  puts "Stripping iCloud extended attributes from Pods..."
+  system("find '#{installer.sandbox.root}' -exec xattr -c {} \\; 2>/dev/null")
+
+  # Find the Pods-Runner-frameworks.sh script and patch it
+  frameworks_script = File.join(installer.sandbox.root, 'Target Support Files', 'Pods-Runner', 'Pods-Runner-frameworks.sh')
+  if File.exist?(frameworks_script)
+    content = File.read(frameworks_script)
+    # Insert the xattr strip command right before the codesign command
+    unless content.include?("[Anti-Detritus]")
+      new_content = content.gsub('  /usr/bin/codesign --force --sign', "  echo \"[Anti-Detritus] Stripping xattrs from ${1}\"\n  find \"${1}\" -exec xattr -c {} \\; 2>/dev/null || true\n  /usr/bin/codesign --force --sign")
+      File.open(frameworks_script, 'w') { |file| file.write(new_content) }
+      puts "Successfully patched Pods-Runner-frameworks.sh to strip iCloud detritus before code signing!"
     end
   end
 end

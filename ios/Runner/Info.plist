@@ -44,13 +44,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera Usage</string>
+	<string>This app requires camera access to allow you to take and upload photos of your business or events directly from the app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Need location to show you on map</string>
+	<string>This app needs access to your location to automatically populate the address of your business/event, and to show you relevant resources nearby.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Mic Usage</string>
+	<string>This app requires microphone access if you choose to record or attach video presentations of your business or event.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photo Library Usage</string>
+	<string>This app requires photo library access to allow you to upload existing photos for your business or event registration.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

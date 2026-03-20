@@ -21,6 +21,8 @@ class Resources {
   final String businessUrl;
   final bool isBlackOwned;
   final String youtube;
+  final double latitude;
+  final double longitude;
   final bool womenOriented;
   final bool isVerified;
   final bool isEsential;
@@ -35,6 +37,8 @@ class Resources {
     required this.createdAt,
     required this.phone,
     required this.youtube,
+    this.latitude = 0.0,
+    this.longitude = 0.0,
     required this.isVerified,
     required this.businessId,
     required this.userId,
@@ -64,6 +68,8 @@ class Resources {
     String? phone,
     String? email,
     String? youtube,
+    double? latitude,
+    double? longitude,
     String? website,
     String? twitter,
     String? facebook,
@@ -91,6 +97,8 @@ class Resources {
       isVerified: isVerified ?? this.isVerified,
       phone: phone ?? this.phone,
       youtube: youtube ?? this.youtube,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       businessId: businessId ?? this.businessId,
       email: email ?? this.email,
       website: website ?? this.website,
@@ -124,6 +132,8 @@ class Resources {
       'website': website,
       'userId': userId,
       'youtube': youtube,
+      'latitude': latitude,
+      'longitude': longitude,
       'twitter': twitter,
       'facebook': facebook,
       'linkedIn': linkedIn,
@@ -158,6 +168,8 @@ class Resources {
       twitter: map['twitter'] ?? '',
       facebook: map['facebook'] ?? '',
       youtube: map['youtube'] ?? '',
+      latitude: map['latitude']?.toDouble() ?? 0.0,
+      longitude: map['longitude']?.toDouble() ?? 0.0,
       isVerified: map['isVerified'] ?? false,
       linkedIn: map['linkedIn'] ?? '',
       instagram: map['instagram'] ?? '',

@@ -179,11 +179,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                   await value.signOut();
                   // ignore: use_build_context_synchronously
                   if (!context.mounted) return;
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ),
-                  );
+                  Get.offAll(() => const LoginScreen());
                 },
               ),
             ),

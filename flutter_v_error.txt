@@ -1,0 +1,500 @@
+               "modelCode" : "iPhone17,5",
+               "identifier" : "82A4874F-8FE1-4291-AA50-941268681F9C",
+               "architecture" : "arm64",
+               "modelUTI" : "com.apple.iphone-16-e-1",
+               "modelName" : "iPhone 16e",
+               "name" : "iPhone 16e",
+               "ignored" : false
+             },
+             {
+               "simulator" : true,
+               "operatingSystemVersion" : "26.2 (23C54)",
+               "available" : true,
+               "platform" : "com.apple.platform.iphonesimulator",
+               "modelCode" : "iPhone18,4",
+               "identifier" : "83ED1814-53B6-455D-9972-9393F424409A",
+               "architecture" : "arm64",
+               "modelUTI" : "com.apple.com.apple.iphone-air-1",
+               "modelName" : "iPhone Air",
+               "name" : "iPhone Air",
+               "ignored" : false
+             }
+           ]
+[        ] executing: /usr/bin/arch -arm64e xcrun devicectl list devices --timeout 5 --json-output /var/folders/2y/lx3kt25n23x4kqdrt4cply_r0000gn/T/flutter_tools.F9sTvc/core_devices.VDTDgT/core_device_list.json
+[  +52 ms] Name               Hostname                           Identifier                             State         Model                         
+           ----------------   --------------------------------   ------------------------------------   -----------   ------------------------------
+           Charles’s iPhone   Charless-iPhone.coredevice.local   1C1F8C90-7C08-5BB3-8CF0-C60EB686B80D   unavailable   iPhone 12 Pro Max (iPhone13,4)
+           iPad               iPad.coredevice.local              B61BB7F3-8175-5877-B6EE-4172B08D9608   unavailable   iPad17,2
+[        ] {
+             "info" : {
+               "arguments" : [
+                 "devicectl",
+                 "list",
+                 "devices",
+                 "--timeout",
+                 "5",
+                 "--json-output",
+                 "/var/folders/2y/lx3kt25n23x4kqdrt4cply_r0000gn/T/flutter_tools.F9sTvc/core_devices.8y1nDr/core_device_list.json"
+               ],
+               "commandType" : "devicectl.list.devices",
+               "environment" : {
+                 "TERM" : "xterm-256color"
+               },
+               "jsonVersion" : 3,
+               "outcome" : "success",
+               "version" : "506.7"
+             },
+             "result" : {
+               "devices" : [
+                 {
+                   "capabilities" : [
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.tags",
+                       "name" : "Modify Tags"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.default.user.credentials",
+                       "name" : "Modify credentials for default users for a device"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.unpairdevice",
+                       "name" : "Unpair Device"
+                     }
+                   ],
+                   "connectionProperties" : {
+                     "authenticationType" : "manualPairing",
+                     "isMobileDeviceOnly" : false,
+                     "lastConnectionDate" : "2026-01-26T06:56:00.000Z",
+                     "pairingState" : "paired",
+                     "potentialHostnames" : [
+                       "Charless-iPhone.coredevice.local",
+                       "1C1F8C90-7C08-5BB3-8CF0-C60EB686B80D.coredevice.local",
+                       "00008101-000C44DA1104001E.coredevice.local"
+                     ],
+                     "tunnelState" : "unavailable"
+                   },
+                   "deviceProperties" : {
+                     "bootedFromSnapshot" : true,
+                     "bootedSnapshotName" : "com.apple.os.update-D3AAD2509031F9A2BE37879FC67A841232FC81D6E1B55CA1F2DE7665088B84C4",
+                     "ddiServicesAvailable" : false,
+                     "developerModeStatus" : "enabled",
+                     "hasInternalOSBuild" : false,
+                     "name" : "Charles’s iPhone",
+                     "osBuildUpdate" : "23D125",
+                     "osVersionNumber" : "26.3",
+                     "releaseType" : "Beta",
+                     "rootFileSystemIsWritable" : false,
+                     "supportsCheckedAllocations" : false
+                   },
+                   "hardwareProperties" : {
+                     "cpuType" : {
+                       "name" : "arm64e",
+                       "subType" : 2,
+                       "type" : 16777228
+                     },
+                     "deviceType" : "iPhone",
+                     "ecid" : 3453403099562014,
+                     "hardwareModel" : "D54pAP",
+                     "internalStorageCapacity" : 512000000000,
+                     "isProductionFused" : true,
+                     "marketingName" : "iPhone 12 Pro Max",
+                     "platform" : "iOS",
+                     "productType" : "iPhone13,4",
+                     "reality" : "physical",
+                     "serialNumber" : "F2LDR2560D4R",
+                     "supportedCPUTypes" : [
+                       {
+                         "name" : "arm64e",
+                         "subType" : 2,
+                         "type" : 16777228
+                       },
+                       {
+                         "name" : "arm64",
+                         "subType" : 0,
+                         "type" : 16777228
+                       }
+                     ],
+                     "supportedDeviceFamilies" : [
+                       1
+                     ],
+                     "thinningProductType" : "iPhone13,4",
+                     "udid" : "00008101-000C44DA1104001E"
+                   },
+                   "identifier" : "1C1F8C90-7C08-5BB3-8CF0-C60EB686B80D",
+                   "tags" : [
+
+                   ],
+                   "visibilityClass" : "default"
+                 },
+                 {
+                   "capabilities" : [
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.tags",
+                       "name" : "Modify Tags"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.default.user.credentials",
+                       "name" : "Modify credentials for default users for a device"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.unpairdevice",
+                       "name" : "Unpair Device"
+                     }
+                   ],
+                   "connectionProperties" : {
+                     "authenticationType" : "manualPairing",
+                     "isMobileDeviceOnly" : false,
+                     "pairingState" : "paired",
+                     "potentialHostnames" : [
+                       "iPad.coredevice.local",
+                       "B61BB7F3-8175-5877-B6EE-4172B08D9608.coredevice.local",
+                       "00008142-000C60C8112A401C.coredevice.local"
+                     ],
+                     "tunnelState" : "unavailable"
+                   },
+                   "deviceProperties" : {
+                     "ddiServicesAvailable" : false,
+                     "name" : "iPad",
+                     "osBuildUpdate" : "23C55",
+                     "osVersionNumber" : "26.2"
+                   },
+                   "hardwareProperties" : {
+                     "cpuType" : {
+                       "name" : "arm64e",
+                       "subType" : 2,
+                       "type" : 16777228
+                     },
+                     "deviceType" : "iPad",
+                     "ecid" : 3484112118235164,
+                     "hardwareModel" : "J818AP",
+                     "platform" : "iOS",
+                     "productType" : "iPad17,2",
+                     "supportedCPUTypes" : [
+                       {
+                         "name" : "arm64e",
+                         "subType" : 2,
+                         "type" : 16777228
+                       },
+                       {
+                         "name" : "arm64",
+                         "subType" : 0,
+                         "type" : 16777228
+                       }
+                     ],
+                     "supportedDeviceFamilies" : [
+                       1,
+                       2
+                     ],
+                     "udid" : "00008142-000C60C8112A401C"
+                   },
+                   "identifier" : "B61BB7F3-8175-5877-B6EE-4172B08D9608",
+                   "tags" : [
+
+                   ],
+                   "visibilityClass" : "default"
+                 }
+               ]
+             }
+           }
+
+[   +2 ms] Error: Browsing on the local area network for iPad. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+           The device must be opted into Developer Mode to connect wirelessly. (code -27)
+[   +1 ms] Error: Browsing on the local area network for Charles’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+           The device must be opted into Developer Mode to connect wirelessly. (code -27)
+[        ] Name               Hostname                           Identifier                             State         Model                         
+           ----------------   --------------------------------   ------------------------------------   -----------   ------------------------------
+           Charles’s iPhone   Charless-iPhone.coredevice.local   1C1F8C90-7C08-5BB3-8CF0-C60EB686B80D   unavailable   iPhone 12 Pro Max (iPhone13,4)
+           iPad               iPad.coredevice.local              B61BB7F3-8175-5877-B6EE-4172B08D9608   unavailable   iPad17,2
+[        ] {
+             "info" : {
+               "arguments" : [
+                 "devicectl",
+                 "list",
+                 "devices",
+                 "--timeout",
+                 "5",
+                 "--json-output",
+                 "/var/folders/2y/lx3kt25n23x4kqdrt4cply_r0000gn/T/flutter_tools.F9sTvc/core_devices.VDTDgT/core_device_list.json"
+               ],
+               "commandType" : "devicectl.list.devices",
+               "environment" : {
+                 "TERM" : "xterm-256color"
+               },
+               "jsonVersion" : 3,
+               "outcome" : "success",
+               "version" : "506.7"
+             },
+             "result" : {
+               "devices" : [
+                 {
+                   "capabilities" : [
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.tags",
+                       "name" : "Modify Tags"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.default.user.credentials",
+                       "name" : "Modify credentials for default users for a device"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.unpairdevice",
+                       "name" : "Unpair Device"
+                     }
+                   ],
+                   "connectionProperties" : {
+                     "authenticationType" : "manualPairing",
+                     "isMobileDeviceOnly" : false,
+                     "lastConnectionDate" : "2026-01-26T06:56:00.000Z",
+                     "pairingState" : "paired",
+                     "potentialHostnames" : [
+                       "Charless-iPhone.coredevice.local",
+                       "1C1F8C90-7C08-5BB3-8CF0-C60EB686B80D.coredevice.local",
+                       "00008101-000C44DA1104001E.coredevice.local"
+                     ],
+                     "tunnelState" : "unavailable"
+                   },
+                   "deviceProperties" : {
+                     "bootedFromSnapshot" : true,
+                     "bootedSnapshotName" : "com.apple.os.update-D3AAD2509031F9A2BE37879FC67A841232FC81D6E1B55CA1F2DE7665088B84C4",
+                     "ddiServicesAvailable" : false,
+                     "developerModeStatus" : "enabled",
+                     "hasInternalOSBuild" : false,
+                     "name" : "Charles’s iPhone",
+                     "osBuildUpdate" : "23D125",
+                     "osVersionNumber" : "26.3",
+                     "releaseType" : "Beta",
+                     "rootFileSystemIsWritable" : false,
+                     "supportsCheckedAllocations" : false
+                   },
+                   "hardwareProperties" : {
+                     "cpuType" : {
+                       "name" : "arm64e",
+                       "subType" : 2,
+                       "type" : 16777228
+                     },
+                     "deviceType" : "iPhone",
+                     "ecid" : 3453403099562014,
+                     "hardwareModel" : "D54pAP",
+                     "internalStorageCapacity" : 512000000000,
+                     "isProductionFused" : true,
+                     "marketingName" : "iPhone 12 Pro Max",
+                     "platform" : "iOS",
+                     "productType" : "iPhone13,4",
+                     "reality" : "physical",
+                     "serialNumber" : "F2LDR2560D4R",
+                     "supportedCPUTypes" : [
+                       {
+                         "name" : "arm64e",
+                         "subType" : 2,
+                         "type" : 16777228
+                       },
+                       {
+                         "name" : "arm64",
+                         "subType" : 0,
+                         "type" : 16777228
+                       }
+                     ],
+                     "supportedDeviceFamilies" : [
+                       1
+                     ],
+                     "thinningProductType" : "iPhone13,4",
+                     "udid" : "00008101-000C44DA1104001E"
+                   },
+                   "identifier" : "1C1F8C90-7C08-5BB3-8CF0-C60EB686B80D",
+                   "tags" : [
+
+                   ],
+                   "visibilityClass" : "default"
+                 },
+                 {
+                   "capabilities" : [
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.tags",
+                       "name" : "Modify Tags"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.default.user.credentials",
+                       "name" : "Modify credentials for default users for a device"
+                     },
+                     {
+                       "featureIdentifier" : "com.apple.coredevice.feature.unpairdevice",
+                       "name" : "Unpair Device"
+                     }
+                   ],
+                   "connectionProperties" : {
+                     "authenticationType" : "manualPairing",
+                     "isMobileDeviceOnly" : false,
+                     "pairingState" : "paired",
+                     "potentialHostnames" : [
+                       "iPad.coredevice.local",
+                       "B61BB7F3-8175-5877-B6EE-4172B08D9608.coredevice.local",
+                       "00008142-000C60C8112A401C.coredevice.local"
+                     ],
+                     "tunnelState" : "unavailable"
+                   },
+                   "deviceProperties" : {
+                     "ddiServicesAvailable" : false,
+                     "name" : "iPad",
+                     "osBuildUpdate" : "23C55",
+                     "osVersionNumber" : "26.2"
+                   },
+                   "hardwareProperties" : {
+                     "cpuType" : {
+                       "name" : "arm64e",
+                       "subType" : 2,
+                       "type" : 16777228
+                     },
+                     "deviceType" : "iPad",
+                     "ecid" : 3484112118235164,
+                     "hardwareModel" : "J818AP",
+                     "platform" : "iOS",
+                     "productType" : "iPad17,2",
+                     "supportedCPUTypes" : [
+                       {
+                         "name" : "arm64e",
+                         "subType" : 2,
+                         "type" : 16777228
+                       },
+                       {
+                         "name" : "arm64",
+                         "subType" : 0,
+                         "type" : 16777228
+                       }
+                     ],
+                     "supportedDeviceFamilies" : [
+                       1,
+                       2
+                     ],
+                     "udid" : "00008142-000C60C8112A401C"
+                   },
+                   "identifier" : "B61BB7F3-8175-5877-B6EE-4172B08D9608",
+                   "tags" : [
+
+                   ],
+                   "visibilityClass" : "default"
+                 }
+               ]
+             }
+           }
+
+[        ] Error: Browsing on the local area network for iPad. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+           The device must be opted into Developer Mode to connect wirelessly. (code -27)
+[        ] Error: Browsing on the local area network for Charles’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+           The device must be opted into Developer Mode to connect wirelessly. (code -27)
+[ +723 ms] > Task :app:compileFlutterBuildDebug FAILED
+[        ] Caching disabled for task ':app:compileFlutterBuildDebug' because:
+[        ]   Build cache is disabled
+[        ]   Caching has not been enabled for the task
+[        ] Task ':app:compileFlutterBuildDebug' is not up-to-date because:
+[        ]   Value of input property 'verbose' has changed for task ':app:compileFlutterBuildDebug'
+[        ] Starting process 'command '/Users/antwicomputers/development/flutter/bin/flutter''. Working directory: /Users/antwicomputers/Documents/GitHub/b2bv2 Command: /Users/antwicomputers/development/flutter/bin/flutter --verbose assemble --no-version-check --depfile /Users/antwicomputers/Documents/GitHub/b2bv2/build/app/intermediates/flutter/debug/flutter_build.d --output /Users/antwicomputers/Documents/GitHub/b2bv2/build/app/intermediates/flutter/debug -dTargetFile=/Users/antwicomputers/Documents/GitHub/b2bv2/lib/main.dart -dTargetPlatform=android -dBuildMode=debug -dTrackWidgetCreation=true --DartDefines=RkxVVFRFUl9WRVJTSU9OPTMuMzguNQ==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049ZjZmZjE1MjlmZA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049MTUyN2FlMGVjNQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMC40 -dFlavor= -dAndroidArchs=android-arm64 -dMinSdkVersion=24 debug_android_application
+[        ] Successfully started process 'command '/Users/antwicomputers/development/flutter/bin/flutter''
+[        ] [  +12 ms] executing: sysctl hw.optional.arm64
+[        ] [   +5 ms] Exit code 0 from: sysctl hw.optional.arm64
+[        ] [        ] hw.optional.arm64: 1
+[        ] [   +3 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[        ] [   +4 ms] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] [  +25 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[        ] [  +18 ms] Initializing file store
+[        ] [  +14 ms] Done initializing file store
+[        ] [  +31 ms] Skipping target: dart_build
+[        ] [        ] Skipping target: gen_dart_plugin_registrant
+[        ] [        ] Skipping target: install_code_assets
+[        ] [        ] Skipping target: gen_localizations
+[        ] [ +487 ms] kernel_snapshot_program: Starting due to {InvalidatedReasonKind.inputChanged: The following inputs have updated contents: /Users/antwicomputers/Documents/GitHub/b2bv2/lib/Screens/pages/universal_detail_screen.dart}
+[        ] [   +6 ms] /Users/antwicomputers/development/flutter/bin/cache/dart-sdk/bin/dartaotruntime /Users/antwicomputers/development/flutter/bin/cache/dart-sdk/bin/snapshots/frontend_server_aot.dart.snapshot --sdk-root /Users/antwicomputers/development/flutter/bin/cache/artifacts/engine/common/flutter_patched_sdk/ --target=flutter --no-print-incremental-dependencies -DFLUTTER_VERSION=3.38.5 -DFLUTTER_CHANNEL=stable -DFLUTTER_GIT_URL=https://github.com/flutter/flutter.git -DFLUTTER_FRAMEWORK_REVISION=f6ff1529fd -DFLUTTER_ENGINE_REVISION=1527ae0ec5 -DFLUTTER_DART_VERSION=3.10.4 -DFLUTTER_APP_FLAVOR= -Ddart.vm.profile=false -Ddart.vm.product=false --enable-asserts --track-widget-creation --no-link-platform --packages /Users/antwicomputers/Documents/GitHub/b2bv2/.dart_tool/package_config.json --output-dill /Users/antwicomputers/Documents/GitHub/b2bv2/.dart_tool/flutter_build/264bbc4197407556f4593571ed0a4112/app.dill --depfile /Users/antwicomputers/Documents/GitHub/b2bv2/.dart_tool/flutter_build/264bbc4197407556f4593571ed0a4112/kernel_snapshot_program.d --incremental --initialize-from-dill /Users/antwicomputers/Documents/GitHub/b2bv2/.dart_tool/flutter_build/264bbc4197407556f4593571ed0a4112/app.dill --source file:///Users/antwicomputers/Documents/GitHub/b2bv2/.dart_tool/flutter_build/dart_plugin_registrant.dart --source package:flutter/src/dart_plugin_registrant.dart -Dflutter.dart_plugin_registrant=file:///Users/antwicomputers/Documents/GitHub/b2bv2/.dart_tool/flutter_build/dart_plugin_registrant.dart --verbosity=error package:b2bmobile/main.dart
+[        ] [ +157 ms] Persisting file store
+[        ] [   +5 ms] Done persisting file store
+[        ] [   +3 ms] "flutter assemble" took 1,429ms.
+[        ] [   +2 ms] executing: sw_vers -productName
+[        ] [  +10 ms] Exit code 0 from: sw_vers -productName
+[        ] [        ] macOS
+[        ] [        ] executing: sw_vers -productVersion
+[        ] [   +9 ms] Exit code 0 from: sw_vers -productVersion
+[        ] [        ] 26.3.1
+[        ] [        ] executing: sw_vers -buildVersion
+[        ] [   +8 ms] Exit code 0 from: sw_vers -buildVersion
+[        ] [        ] 25D2128
+[        ] [        ] executing: uname -m
+[        ] [   +3 ms] Exit code 0 from: uname -m
+[        ] [        ] arm64
+[        ] [        ] Running 1 shutdown hook
+[        ] [        ] Shutdown hooks complete
+[        ] [  +76 ms] exiting with code 1
+[        ] Could not execute [report metric STATISTICS_COLLECT_METRICS_OVERHEAD]
+[        ] Could not execute [report metric STATISTICS_COLLECT_METRICS_OVERHEAD]
+[        ] 8 actionable tasks: 4 executed, 4 up-to-date
+[        ] Watched directory hierarchies: [/Users/antwicomputers/development/flutter/packages/flutter_tools/gradle, /Users/antwicomputers/Documents/GitHub/b2bv2/android]
+[  +13 ms] Running Gradle task 'assembleDebug'... (completed in 2,950ms)
+[        ] "flutter run" took 4,118ms.
+[   +2 ms] executing: sw_vers -productName
+[  +13 ms] Exit code 0 from: sw_vers -productName
+[        ] macOS
+[        ] executing: sw_vers -productVersion
+[   +8 ms] Exit code 0 from: sw_vers -productVersion
+[        ] 26.3.1
+[        ] executing: sw_vers -buildVersion
+[   +8 ms] Exit code 0 from: sw_vers -buildVersion
+[        ] 25D2128
+[        ] executing: uname -m
+[   +3 ms] Exit code 0 from: uname -m
+[        ] arm64
+[        ] Running 3 shutdown hooks
+[   +1 ms] Shutdown hooks complete
+[  +71 ms] exiting with code 1
