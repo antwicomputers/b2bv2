@@ -43,7 +43,7 @@ class _TrainingRegistrationFormState extends State<TrainingRegistrationForm> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: dropdownValue,
+                  initialValue: dropdownValue,
                   onChanged: (String? newValue) {
                     setState(() {
                       dropdownValue = newValue!;

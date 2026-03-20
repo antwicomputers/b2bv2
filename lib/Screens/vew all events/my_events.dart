@@ -7,7 +7,7 @@ import 'package:b2bmobile/utils/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart'; // removed unused import
 import 'package:provider/provider.dart';
 import 'package:b2bmobile/Screens/drawer/edit_event_screen.dart';
 import 'package:b2bmobile/resources/storage_methods.dart';
@@ -123,7 +123,7 @@ class EventCardWidget extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withValues(alpha: 0.5),
               spreadRadius: 3,
               blurRadius: 10,
               offset: const Offset(0, 3),

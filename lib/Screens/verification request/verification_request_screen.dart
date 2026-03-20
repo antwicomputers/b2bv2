@@ -101,7 +101,7 @@ class VerificationScreen extends StatelessWidget {
                           style: TextStyle(
                               color: Colors.green, fontWeight: FontWeight.bold),
                         ),
-                        activeColor: Colors.green,
+                        activeThumbColor: Colors.green,
                       ),
                       SwitchListTile(
                         value: business.isBlackOwned,

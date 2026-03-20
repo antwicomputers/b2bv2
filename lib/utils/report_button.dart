@@ -48,7 +48,7 @@ class _DropDownTextFieldScreenState extends State<DropDownTextFieldScreen> {
         child: Column(
           children: [
             DropdownButtonFormField<String>(
-              value: selectedOption,
+              initialValue: selectedOption,
               onChanged: (String? newValue) {
                 setState(() {
                   selectedOption = newValue;

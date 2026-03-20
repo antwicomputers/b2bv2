@@ -1,5 +1,5 @@
 import 'package:b2bmobile/providers/user_provider.dart';
-import 'package:b2bmobile/utils/colors.dart';
+// import 'package:b2bmobile/utils/colors.dart'; // removed unused import
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/address_autocomplete_field.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' 
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
-const _silverDark = Color(0xFF8E8E93);
+// const _silverDark = Color(0xFF8E8E93); // removed unused element
 const _cardBg = Color(0xFF141414);
 const _inputBg = Color(0xFF1E1E1E);
 const _borderColor = Color(0xFF2A2A2A);
@@ -334,13 +334,13 @@ class _FormCard extends StatelessWidget {
 }
 
 class _StyledField extends StatelessWidget {
-  const _StyledField({required this.controller, required this.label, required this.icon, this.prefix, this.keyboardType = TextInputType.text, this.inputFormatters, this.required = false, this.isFa = false});
+  const _StyledField({required this.controller, required this.label, required this.icon, this.prefix, this.required = false, this.isFa = false});
   final TextEditingController controller;
   final String label;
   final IconData icon;
   final String? prefix;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
+  // final TextInputType keyboardType; // removed unused parameter
+  // final List<TextInputFormatter>? inputFormatters; // removed unused parameter
   final bool required;
   final bool isFa;
 
@@ -348,8 +348,8 @@ class _StyledField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
+//      keyboardType: keyboardType, // removed unused parameter
+//      inputFormatters: inputFormatters, // removed unused parameter
       style: const TextStyle(color: Colors.white, fontSize: 14),
       validator: required ? (v) => (v == null || v.isEmpty) ? '$label is required' : null : null,
       decoration: InputDecoration(
@@ -412,7 +412,7 @@ class _StyledSwitch extends StatelessWidget {
       title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 14)),
       value: value,
       onChanged: onChanged,
-      activeColor: _silver,
+      activeThumbColor: _silver,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
   }

@@ -404,7 +404,7 @@ class _PendingCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12)),
             value: isVerified,
             onChanged: (_) => _toggle('isVerified', isVerified),
-            activeColor: Colors.green,
+            activeThumbColor: Colors.green,
             inactiveThumbColor: Colors.red,
             title: Text(
               isVerified ? '✅  APPROVED — visible in app' : '⏳  Awaiting Approval',
@@ -425,7 +425,7 @@ class _PendingCard extends StatelessWidget {
           dense: true,
           value: value,
           onChanged: (_) => _toggle(field, value),
-          activeColor: activeColor,
+          activeThumbColor: activeColor,
           title: Text(
             label,
             style: const TextStyle(color: Colors.white70, fontSize: 13),

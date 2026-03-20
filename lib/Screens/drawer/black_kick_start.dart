@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
 const _silverDark = Color(0xFF8E8E93);
-const _cardBg = Color(0xFF141414);
-const _borderColor = Color(0xFF2A2A2A);
+// const _cardBg = Color(0xFF141414); // removed unused element
+// const _borderColor = Color(0xFF2A2A2A); // removed unused element
 
 class BlackKickStart extends StatefulWidget {
   const BlackKickStart({super.key});

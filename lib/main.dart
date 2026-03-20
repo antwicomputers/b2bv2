@@ -1,8 +1,8 @@
-import 'package:b2bmobile/Screens/splash%20screen/splash_screen.dart';
+// import 'package:b2bmobile/Screens/splash%20screen/splash_screen.dart'; // removed unused import
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart'; // removed unused import
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:b2bmobile/utils/colors.dart';
@@ -15,12 +15,12 @@ import 'package:b2bmobile/responsive/responsive_layout_screen.dart';
 import 'package:b2bmobile/responsive/mobile_screen_layout.dart';
 import 'package:b2bmobile/responsive/web_screen_layout.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  debugPrint('Handling a background message ${message.messageId}');
-}
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   debugPrint('Handling a background message ${message.messageId}');
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

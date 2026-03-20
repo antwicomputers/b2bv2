@@ -1,5 +1,5 @@
 import 'package:b2bmobile/providers/user_provider.dart';
-import 'package:b2bmobile/utils/colors.dart';
+// import 'package:b2bmobile/utils/colors.dart'; // removed unused import
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/address_autocomplete_field.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ import 'package:b2bmobile/models/events.dart' as model;
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
-const _silverDark = Color(0xFF8E8E93);
+// const _silverDark = Color(0xFF8E8E93); // removed unused element
 const _cardBg = Color(0xFF141414);
 const _inputBg = Color(0xFF1E1E1E);
 const _borderColor = Color(0xFF2A2A2A);
@@ -435,7 +435,7 @@ class _StyledSwitch extends StatelessWidget {
       title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 14)),
       value: value,
       onChanged: onChanged,
-      activeColor: _silver,
+      activeThumbColor: _silver,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
   }
