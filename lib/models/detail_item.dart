@@ -32,6 +32,15 @@ class DetailItem {
   /// Optional — only Events have a date
   final DateTime? eventDate;
 
+  /// Multiple images for gallery
+  final List<String> galleryImages;
+
+  // Collection-specific flags
+  final bool isVerified;
+  final bool isSponsored;
+  final bool womenOriented;
+  final bool isBlackOwned;
+
   const DetailItem({
     required this.id,
     required this.name,
@@ -54,5 +63,10 @@ class DetailItem {
     this.youtube = '',
     this.podcast = '',
     this.eventDate,
+    this.galleryImages = const [],
+    this.isVerified = false,
+    this.isSponsored = false,
+    this.womenOriented = false,
+    this.isBlackOwned = false,
   });
 }

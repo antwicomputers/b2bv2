@@ -48,18 +48,27 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Consumer<UserProvider>(
-          builder: (context, value, child) => InkWell(
-            child: const Text('Back2Black Mobile'),
-            onLongPress: () {
-              if (value.userModel!.email == 'info@antwicomputers.com') {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AdminPanel(),
-                  ),
-                );
-              }
-            },
-          ),
+          builder: (context, value, child) {
+            final user = value.userModel;
+            return GestureDetector(
+              onLongPress: () {
+                if (user != null && user.email == 'info@antwicomputers.com') {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AdminPanel(),
+                    ),
+                  );
+                } else {
+                  debugPrint("Admin access check: User is ${user?.email}");
+                }
+              },
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: const Text('Back2Black Mobile'),
+              ),
+            );
+          },
         ),
         centerTitle: true,
       ),

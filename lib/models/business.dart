@@ -19,6 +19,7 @@ class Business {
   final String twitch;
   final String podcast;
   final String businessUrl;
+  final List<String> imageUrls;
   final bool isBlackOwned;
   final String youtube;
   final bool womenOriented;
@@ -50,6 +51,7 @@ class Business {
     required this.twitch,
     required this.podcast,
     required this.businessUrl,
+    this.imageUrls = const [],
     required this.isBlackOwned,
     required this.youtube,
     required this.womenOriented,
@@ -82,6 +84,7 @@ class Business {
     String? twitch,
     String? podcast,
     String? businessUrl,
+    List<String>? imageUrls,
     bool? isBlackOwned,
     bool? isVerified,
     bool? womenOriented,
@@ -115,6 +118,7 @@ class Business {
       twitch: twitch ?? this.twitch,
       podcast: podcast ?? this.podcast,
       businessUrl: businessUrl ?? this.businessUrl,
+      imageUrls: imageUrls ?? this.imageUrls,
       isBlackOwned: isBlackOwned ?? this.isBlackOwned,
       womenOriented: womenOriented ?? this.womenOriented,
       isEsential: isEsential ?? this.isEsential,
@@ -149,6 +153,7 @@ class Business {
       'businessId': businessId,
       'podcast': podcast,
       'businessUrl': businessUrl,
+      'imageUrls': imageUrls,
       'isBlackOwned': isBlackOwned,
       'womenOriented': womenOriented,
       'isEsential': isEsential,
@@ -188,6 +193,7 @@ class Business {
       twitch: map['twitch'] ?? '',
       podcast: map['podcast'] ?? '',
       businessUrl: map['businessUrl'] ?? '',
+      imageUrls: List<String>.from(map['imageUrls'] ?? []),
       isBlackOwned: map['isBlackOwned'] ?? false,
       womenOriented: map['womenOriented'] ?? false,
       isEsential: map['isEsential'] ?? false,

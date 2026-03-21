@@ -99,8 +99,7 @@ class _ViewAllEventsScreenState extends State<ViewAllEventsScreen> with SingleTi
             children: [
               _buildEventList(FirebaseFirestore.instance
                   .collection('events')
-                  .where('userId', isEqualTo: value.getUser?.uid ?? '')
-                  .where('isVerified', isEqualTo: true)),
+                  .where('userId', isEqualTo: value.getUser?.uid ?? '')),
               _buildEventList(FirebaseFirestore.instance
                   .collection('events')
                   .where('asTimeStamp', isGreaterThan: DateTime.now())

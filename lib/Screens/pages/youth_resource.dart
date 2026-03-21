@@ -11,6 +11,7 @@ import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import 'package:b2bmobile/utils/categories.dart';
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
@@ -162,7 +163,13 @@ class _YouthResourceState extends State<YouthResource> {
                         _divider(),
                         _StyledMultilineField(controller: _businessDescription, label: 'Description', icon: Icons.description, required: true),
                         _divider(),
-                        _StyledField(controller: _businessCategory, label: 'Category', icon: Icons.category, required: true),
+                        CategoryDropdown(
+                          selectedCategory: _businessCategory.text,
+                          onChanged: (val) {
+                            if (val != null) setState(() => _businessCategory.text = val);
+                          },
+                          icon: Icons.category,
+                        ),
                       ],
                     ),
 

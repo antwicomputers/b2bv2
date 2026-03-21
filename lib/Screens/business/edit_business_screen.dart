@@ -11,6 +11,7 @@ import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import 'package:b2bmobile/utils/categories.dart';
 import 'package:b2bmobile/models/business.dart' as model;
 
 // ── Design constants ──────────────────────────────────────────────────────────
@@ -176,18 +177,6 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const _SectionHeader(icon: Icons.verified_user_outlined, title: 'Status & Tags'),
-                    const SizedBox(height: 12),
-                    _FormCard(
-                      children: [
-                        _StyledSwitch(title: 'Black Owned Business?', value: isBlack, onChanged: (val) => setState(() => isBlack = val)),
-                        _divider(),
-                        _StyledSwitch(title: 'Essential Service?', value: isEssential, onChanged: (val) => setState(() => isEssential = val)),
-                        _divider(),
-                        _StyledSwitch(title: 'Women Owned?', value: isWomen, onChanged: (val) => setState(() => isWomen = val)),
-                      ],
-                    ),
 
                     const SizedBox(height: 24),
                     const _SectionHeader(icon: Icons.info_outline, title: 'Basic Information'),
@@ -198,7 +187,13 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
                         _divider(),
                         _StyledMultilineField(controller: _businessDescription, label: 'Description', icon: Icons.description, required: true),
                         _divider(),
-                        _StyledField(controller: _businessCategory, label: 'Category', icon: Icons.category, required: true),
+                        CategoryDropdown(
+                          selectedCategory: _businessCategory.text,
+                          onChanged: (val) {
+                            if (val != null) setState(() => _businessCategory.text = val);
+                          },
+                          icon: Icons.category,
+                        ),
                       ],
                     ),
 

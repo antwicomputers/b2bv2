@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:b2bmobile/utils/images.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
@@ -168,9 +169,37 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      // --- Status Badges ---
+                      Row(
+                        children: [
+                          if (item.isVerified)
+                            _StatusBadge(
+                              label: 'Verified',
+                              icon: Icons.verified,
+                              color: Colors.blueAccent,
+                            ),
+                          if (item.isSponsored)
+                            _StatusBadge(
+                              label: 'Sponsor',
+                              icon: Icons.stars,
+                              color: Colors.amberAccent,
+                            ),
+                          if (item.womenOriented)
+                            _StatusBadge(
+                              label: 'Women Owned',
+                              icon: Icons.female,
+                              color: Colors.pinkAccent,
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
                       Text(
                         item.name,
-                        style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: -0.5),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.5),
                       ),
                       const SizedBox(height: 24),
 
@@ -204,6 +233,70 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                         item.description,
                         style: const TextStyle(color: Colors.white70, fontSize: 16, height: 1.6),
                       ),
+
+                      if (item.galleryImages.isNotEmpty) ...[
+                        const SizedBox(height: 40),
+                        const Text(
+                          "GALLERY",
+                          style: TextStyle(color: _silverDark, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          height: 180,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: item.galleryImages.length,
+                            itemBuilder: (context, index) => Container(
+                              width: 260,
+                              margin: const EdgeInsets.only(right: 16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Colors.white10),
+                                image: DecorationImage(
+                                  image: NetworkImage(item.galleryImages[index]),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+
+                      if (item.isBlackOwned) ...[
+                        const SizedBox(height: 40),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Colors.blueAccent.withValues(alpha: 0.1), Colors.transparent],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.2)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.verified, color: Colors.blueAccent, size: 20),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "VERIFIED PREMIUM",
+                                    style: GoogleFonts.bebasNeue(color: Colors.blueAccent, fontSize: 18, letterSpacing: 1.2),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "As a verified partner, this business or resource has been vetted by our team. Premium features like exclusive rewards and real-time shop updates coming soon.",
+                                style: GoogleFonts.outfit(color: Colors.white70, fontSize: 13, height: 1.5),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
 
                       const SizedBox(height: 40),
                       const Text(
@@ -310,6 +403,33 @@ class _InfoRow extends StatelessWidget {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.label, required this.icon, required this.color});
+  final String label;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 14),
+          const SizedBox(width: 6),
+          Text(label, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.bold)),
         ],
       ),
     );

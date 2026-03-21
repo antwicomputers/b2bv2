@@ -22,8 +22,6 @@ class VerificationScreen extends StatelessWidget {
         child: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('businesses')
-              .where('isVerified', isEqualTo: false)
-              // .orderBy('businessName')
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

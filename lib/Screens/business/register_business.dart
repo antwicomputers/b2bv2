@@ -1,20 +1,17 @@
 import 'package:b2bmobile/providers/user_provider.dart';
-// import 'package:b2bmobile/utils/colors.dart'; // removed unused import
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/address_autocomplete_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import '../../responsive/mobile_screen_layout.dart';
-import '../../responsive/responsive_layout_screen.dart';
-import '../../responsive/web_screen_layout.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import '../pages/verification_screen.dart';
+import 'package:b2bmobile/utils/categories.dart';
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
-// const _silverDark = Color(0xFF8E8E93); // removed unused element
 const _cardBg = Color(0xFF141414);
 const _inputBg = Color(0xFF1E1E1E);
 const _borderColor = Color(0xFF2A2A2A);
@@ -42,7 +39,8 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   final TextEditingController _twitch = TextEditingController();
   final TextEditingController _youtube = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
-  Uint8List? _image;
+  
+  final List<Uint8List> _images = [];
   bool isBlack = false;
   bool isEssential = false;
   bool isWomen = false;
@@ -65,15 +63,18 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     _twitch.dispose();
     _youtube.dispose();
     _podcast.dispose();
-
     super.dispose();
   }
 
-  Future<void> selectImage() async {
+  Future<void> _pickGalleryImage() async {
+    if (_images.length >= 3) {
+      showSnackBar('Maximum 3 images allowed', context);
+      return;
+    }
     Uint8List? im = await pickImage(ImageSource.gallery);
     if (im != null) {
       setState(() {
-        _image = im;
+        _images.add(im);
       });
     }
   }
@@ -86,7 +87,6 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
       backgroundColor: Colors.black,
       body: CustomScrollView(
         slivers: [
-          // ── Gradient hero app bar ─────────────────────────────────────────
           SliverAppBar(
             expandedHeight: 180,
             pinned: true,
@@ -122,7 +122,6 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
             ),
           ),
 
-          // ── Form body ─────────────────────────────────────────────────────
           SliverToBoxAdapter(
             child: Form(
               key: _formsKey,
@@ -131,96 +130,63 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Photo picker ─────────────────────────────────────────
                     const SizedBox(height: 24),
-                    Center(
-                      child: GestureDetector(
-                        onTap: selectImage,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          width: 140,
-                          height: 140,
-                          decoration: BoxDecoration(
-                            color: _inputBg,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                                color: _image != null ? _silver : _borderColor,
-                                width: 2.5),
-                            boxShadow: _image != null
-                                ? [
-                                    BoxShadow(
-                                      color: _silver.withValues(alpha: 0.2),
-                                      blurRadius: 20,
-                                      spreadRadius: 2,
-                                    )
-                                  ]
-                                : [],
-                            image: _image != null
-                                ? DecorationImage(
-                                    image: MemoryImage(_image!),
-                                    fit: BoxFit.cover)
-                                : null,
-                          ),
-                          child: _image == null
-                              ? const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add_a_photo,
-                                        color: _silver, size: 36),
-                                    SizedBox(height: 6),
-                                    Text(
-                                      'Add Photo',
-                                      style: TextStyle(
-                                          color: Colors.white54,
-                                          fontSize: 12),
-                                    ),
-                                  ],
-                                )
-                              : null,
-                        ),
-                      ),
-                    ),
-                    if (_image != null)
-                      Center(
-                        child: TextButton.icon(
-                          onPressed: selectImage,
-                          icon: const Icon(Icons.edit, size: 14, color: _silver),
-                          label: const Text('Change Photo',
-                              style: TextStyle(color: _silver, fontSize: 12)),
-                        ),
-                      ),
-
-                    // ── Section: Ownership (Switches) ───────────────────────────────────
-                    const SizedBox(height: 20),
-                    const _SectionHeader(
-                        icon: Icons.verified_user_outlined, title: 'Ownership & Tags'),
+                    const _SectionHeader(icon: Icons.photo_library_outlined, title: 'Business Gallery (Max 3)'),
                     const SizedBox(height: 12),
-                    _FormCard(
-                      children: [
-                        _StyledSwitch(
-                          title: 'Black Owned Business?',
-                          value: isBlack,
-                          onChanged: (val) => setState(() => isBlack = val),
-                        ),
-                        _divider(),
-                        _StyledSwitch(
-                          title: 'Essential Service?',
-                          value: isEssential,
-                          onChanged: (val) => setState(() => isEssential = val),
-                        ),
-                        _divider(),
-                        _StyledSwitch(
-                          title: 'Women Owned?',
-                          value: isWomen,
-                          onChanged: (val) => setState(() => isWomen = val),
-                        ),
-                      ],
+                    SizedBox(
+                      height: 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _images.length < 3 ? _images.length + 1 : 3,
+                        itemBuilder: (context, index) {
+                          if (index == _images.length && _images.length < 3) {
+                            return GestureDetector(
+                              onTap: _pickGalleryImage,
+                              child: Container(
+                                width: 120,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  color: _inputBg,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: _borderColor, width: 2),
+                                ),
+                                child: const Icon(Icons.add_a_photo, color: Colors.white24, size: 30),
+                              ),
+                            );
+                          }
+                          return Stack(
+                            children: [
+                              Container(
+                                width: 120,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  image: DecorationImage(
+                                    image: MemoryImage(_images[index]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 4,
+                                right: 16,
+                                child: GestureDetector(
+                                  onTap: () => setState(() => _images.removeAt(index)),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
+                                    child: const Icon(Icons.close, color: Colors.white, size: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
 
-                    // ── Section: Basic Info ───────────────────────────────────
                     const SizedBox(height: 24),
-                    const _SectionHeader(
-                        icon: Icons.info_outline, title: 'Basic Information'),
+                    const _SectionHeader(icon: Icons.info_outline, title: 'Basic Information'),
                     const SizedBox(height: 12),
                     _FormCard(
                       children: [
@@ -238,19 +204,18 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                           required: true,
                         ),
                         _divider(),
-                        _StyledField(
-                          controller: _businessCategory,
-                          label: 'Category',
+                        CategoryDropdown(
+                          selectedCategory: _businessCategory.text,
+                          onChanged: (val) {
+                            if (val != null) setState(() => _businessCategory.text = val);
+                          },
                           icon: Icons.category,
-                          required: true,
                         ),
                       ],
                     ),
 
-                    // ── Section: Location ────────────────────────────────────
                     const SizedBox(height: 24),
-                    const _SectionHeader(
-                        icon: Icons.location_on_outlined, title: 'Location'),
+                    const _SectionHeader(icon: Icons.location_on_outlined, title: 'Location'),
                     const SizedBox(height: 12),
                     _FormCard(
                       children: [
@@ -262,10 +227,8 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                       ],
                     ),
 
-                    // ── Section: Contact ─────────────────────────────────────
                     const SizedBox(height: 24),
-                    const _SectionHeader(
-                        icon: Icons.contact_phone_outlined, title: 'Contact'),
+                    const _SectionHeader(icon: Icons.contact_phone_outlined, title: 'Contact'),
                     const SizedBox(height: 12),
                     _FormCard(
                       children: [
@@ -274,9 +237,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                           label: 'Phone Number',
                           icon: Icons.phone,
                           keyboardType: TextInputType.phone,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         ),
                         _divider(),
                         _StyledField(
@@ -295,171 +256,90 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                       ],
                     ),
 
-                    // ── Section: Social Media ────────────────────────────────
                     const SizedBox(height: 24),
-                    const _SectionHeader(
-                        icon: Icons.share_outlined, title: 'Social Media'),
+                    const _SectionHeader(icon: Icons.share_outlined, title: 'Social Media'),
                     const SizedBox(height: 12),
                     _FormCard(
                       children: [
-                        _StyledField(
-                          controller: _twitter,
-                          label: 'Twitter / X',
-                          icon: FontAwesomeIcons.twitter,
-                          prefix: 'twitter.com/',
-                          isFa: true,
-                        ),
+                        _StyledField(controller: _twitter, label: 'Twitter / X', icon: FontAwesomeIcons.twitter, prefix: 'twitter.com/', isFa: true),
                         _divider(),
-                        _StyledField(
-                          controller: _facebook,
-                          label: 'Facebook',
-                          icon: FontAwesomeIcons.facebook,
-                          prefix: 'facebook.com/',
-                          isFa: true,
-                        ),
+                        _StyledField(controller: _facebook, label: 'Facebook', icon: FontAwesomeIcons.facebook, prefix: 'facebook.com/', isFa: true),
                         _divider(),
-                        _StyledField(
-                          controller: _instagram,
-                          label: 'Instagram',
-                          icon: FontAwesomeIcons.instagram,
-                          prefix: 'instagram.com/',
-                          isFa: true,
-                        ),
+                        _StyledField(controller: _instagram, label: 'Instagram', icon: FontAwesomeIcons.instagram, prefix: 'instagram.com/', isFa: true),
                         _divider(),
-                        _StyledField(
-                          controller: _tiktok,
-                          label: 'TikTok',
-                          icon: Icons.tiktok,
-                          prefix: 'tiktok.com/',
-                        ),
+                        _StyledField(controller: _tiktok, label: 'TikTok', icon: Icons.tiktok, prefix: 'tiktok.com/'),
                         _divider(),
-                        _StyledField(
-                          controller: _linkedIn,
-                          label: 'LinkedIn',
-                          icon: FontAwesomeIcons.linkedin,
-                          prefix: 'linkedin.com/in/',
-                          isFa: true,
-                        ),
+                        _StyledField(controller: _linkedIn, label: 'LinkedIn', icon: FontAwesomeIcons.linkedin, prefix: 'linkedin.com/in/', isFa: true),
                         _divider(),
-                        _StyledField(
-                          controller: _youtube,
-                          label: 'YouTube',
-                          icon: FontAwesomeIcons.youtube,
-                          isFa: true,
-                        ),
+                        _StyledField(controller: _youtube, label: 'YouTube', icon: FontAwesomeIcons.youtube, isFa: true),
                         _divider(),
-                        _StyledField(
-                          controller: _twitch,
-                          label: 'Twitch',
-                          icon: FontAwesomeIcons.twitch,
-                          prefix: 'twitch.tv/',
-                          isFa: true,
-                        ),
+                        _StyledField(controller: _twitch, label: 'Twitch', icon: FontAwesomeIcons.twitch, prefix: 'twitch.tv/', isFa: true),
                         _divider(),
-                        _StyledField(
-                          controller: _podcast,
-                          label: 'Podcast URL',
-                          icon: FontAwesomeIcons.podcast,
-                          isFa: true,
-                        ),
+                        _StyledField(controller: _podcast, label: 'Podcast URL', icon: FontAwesomeIcons.podcast, isFa: true),
                       ],
                     ),
 
-                    // ── Submit button ────────────────────────────────────────
                     const SizedBox(height: 32),
-                    Consumer<UserProvider>(
-                      builder: (context, value, child) => GestureDetector(
-                        onTap: _isLoading
-                            ? null
-                            : () async {
-                                if (_image == null) {
-                                  showSnackBar('Please add a business photo', context);
-                                  return;
-                                }
-                                if (!_formsKey.currentState!.validate()) {
-                                  showSnackBar('Please fill all required fields', context);
-                                  return;
-                                }
-                                setState(() => _isLoading = true);
-                                String message = await value.registerBusiness(
-                                  businessName: _businessName.text,
-                                  businessDescription: _businessDescription.text,
-                                  businessAddress: _businessAddress.text,
-                                  businessCategory: _businessCategory.text,
-                                  phone: _phone.text,
-                                  isBlackOwned: isBlack,
-                                  isEsential: isEssential,
-                                  womenOriented: isWomen,
-                                  youtube: _youtube.text,
-                                  email: _email.text,
-                                  website: _website.text,
-                                  twitter: _twitter.text,
-                                  facebook: _facebook.text,
-                                  linkedIn: _linkedIn.text,
-                                  instagram: _instagram.text,
-                                  tiktok: _tiktok.text,
-                                  twitch: _twitch.text,
-                                  podcast: _podcast.text,
-                                  businessFile: _image!,
-                                );
-                                setState(() => _isLoading = false);
-                                if (message == 'success') {
-                                  if (!context.mounted) return;
-                                  Get.offAll(() => const ResponsiveLayout(
-                                        mobileScreenLayout: MobileScreenLayout(),
-                                        webScreenLayout: WebScreenLayout(),
-                                      ));
-                                } else {
-                                  if (!context.mounted) return;
-                                  showSnackBar(message, context);
-                                }
-                              },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          height: 56,
-                          decoration: BoxDecoration(
-                            gradient: _isLoading
-                                ? const LinearGradient(
-                                    colors: [Color(0xFF555555), Color(0xFF333333)],
-                                  )
-                                : const LinearGradient(
-                                    colors: [
-                                      Color(0xFFFFFFFF),
-                                      Color(0xFFC0C0C0),
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: _isLoading
-                                ? []
-                                : [
-                                    BoxShadow(
-                                      color: Colors.white.withValues(alpha: 0.15),
-                                      blurRadius: 16,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
+                    GestureDetector(
+                      onTap: () {
+                        if (_images.isEmpty) {
+                          showSnackBar('Please add at least one business photo', context);
+                          return;
+                        }
+                        if (!_formsKey.currentState!.validate()) {
+                          showSnackBar('Please fill all required fields', context);
+                          return;
+                        }
+                        
+                        // Navigate to Verification Screen instead of uploading directly
+                        Get.to(() => VerificationScreen(
+                          data: {
+                            'businessName': _businessName.text,
+                            'businessDescription': _businessDescription.text,
+                            'businessAddress': _businessAddress.text,
+                            'businessCategory': _businessCategory.text,
+                            'phone': _phone.text,
+                            'email': _email.text,
+                            'website': _website.text,
+                            'twitter': _twitter.text,
+                            'facebook': _facebook.text,
+                            'instagram': _instagram.text,
+                            'tiktok': _tiktok.text,
+                            'linkedIn': _linkedIn.text,
+                            'youtube': _youtube.text,
+                            'twitch': _twitch.text,
+                            'podcast': _podcast.text,
+                          },
+                          images: _images,
+                          type: 'business',
+                        ));
+                      },
+                      child: Container(
+                        height: 56,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFFFFFFF), Color(0xFFC0C0C0)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          child: Center(
-                            child: _isLoading
-                                ? const SizedBox(
-                                    height: 22,
-                                    width: 22,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: Colors.black,
-                                    ),
-                                  )
-                                : const Text(
-                                    'Register Business',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.15),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Review & Confirm',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              letterSpacing: 0.5,
+                            ),
                           ),
                         ),
                       ),
@@ -480,13 +360,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
 // Reusable design components
 // ─────────────────────────────────────────────────────────────────────────────
 
-Widget _divider() => const Divider(
-      height: 1,
-      thickness: 1,
-      color: _borderColor,
-      indent: 16,
-      endIndent: 16,
-    );
+Widget _divider() => const Divider(height: 1, thickness: 1, color: _borderColor, indent: 16, endIndent: 16);
 
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({required this.icon, required this.title});
@@ -499,22 +373,11 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: _silver.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
+          decoration: BoxDecoration(color: _silver.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
           child: Icon(icon, color: _silver, size: 16),
         ),
         const SizedBox(width: 10),
-        Text(
-          title.toUpperCase(),
-          style: const TextStyle(
-            color: _silver,
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.4,
-          ),
-        ),
+        Text(title.toUpperCase(), style: const TextStyle(color: _silver, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
       ],
     );
   }
@@ -531,34 +394,15 @@ class _FormCard extends StatelessWidget {
         color: _cardBg,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _borderColor),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 12, offset: const Offset(0, 4))],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: children,
-      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
     );
   }
 }
 
 class _StyledField extends StatelessWidget {
-  const _StyledField({
-    required this.controller,
-    required this.label,
-    required this.icon,
-    this.prefix,
-    this.keyboardType = TextInputType.text,
-    this.inputFormatters,
-    this.required = false,
-    this.isFa = false,
-  });
-
+  const _StyledField({required this.controller, required this.label, required this.icon, this.prefix, this.keyboardType = TextInputType.text, this.inputFormatters, this.required = false, this.isFa = false});
   final TextEditingController controller;
   final String label;
   final IconData icon;
@@ -575,34 +419,17 @@ class _StyledField extends StatelessWidget {
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
       style: const TextStyle(color: Colors.white, fontSize: 14),
-      validator: required
-          ? (v) =>
-              (v == null || v.isEmpty) ? '$label is required' : null
-          : null,
+      validator: required ? (v) => (v == null || v.isEmpty) ? '$label is required' : null : null,
       decoration: InputDecoration(
         labelText: label + (required ? ' *' : ''),
         labelStyle: const TextStyle(color: Colors.white38, fontSize: 13),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(12),
-          child: isFa
-              ? FaIcon(icon, color: Colors.white30, size: 16)
-              : Icon(icon, color: Colors.white30, size: 18),
-        ),
-        prefix: prefix != null
-            ? Text(prefix!,
-                style: const TextStyle(
-                    color: Colors.white30, fontSize: 13))
-            : null,
+        prefixIcon: Padding(padding: const EdgeInsets.all(12), child: isFa ? FaIcon(icon, color: Colors.white30, size: 16) : Icon(icon, color: Colors.white30, size: 18)),
+        prefix: prefix != null ? Text(prefix!, style: const TextStyle(color: Colors.white30, fontSize: 13)) : null,
         filled: true,
         fillColor: Colors.transparent,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: InputBorder.none,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(0),
-          borderSide:
-              const BorderSide(color: _silver, width: 0.5),
-        ),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: _silver, width: 0.5)),
         errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
       ),
     );
@@ -610,13 +437,7 @@ class _StyledField extends StatelessWidget {
 }
 
 class _StyledMultilineField extends StatelessWidget {
-  const _StyledMultilineField({
-    required this.controller,
-    required this.label,
-    required this.icon,
-    this.required = false,
-  });
-
+  const _StyledMultilineField({required this.controller, required this.label, required this.icon, this.required = false});
   final TextEditingController controller;
   final String label;
   final IconData icon;
@@ -630,63 +451,25 @@ class _StyledMultilineField extends StatelessWidget {
       maxLines: 4,
       minLines: 2,
       style: const TextStyle(color: Colors.white, fontSize: 14),
-      validator: required
-          ? (v) =>
-              (v == null || v.isEmpty) ? '$label is required' : null
-          : null,
+      validator: required ? (v) => (v == null || v.isEmpty) ? '$label is required' : null : null,
       decoration: InputDecoration(
         labelText: label + (required ? ' *' : ''),
         alignLabelWithHint: true,
         labelStyle: const TextStyle(color: Colors.white38, fontSize: 13),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: 12, top: 14, right: 0),
-          child: Icon(icon, color: Colors.white30, size: 18),
-        ),
+        prefixIcon: Padding(padding: const EdgeInsets.only(left: 12, top: 14, right: 0), child: Icon(icon, color: Colors.white30, size: 18)),
         filled: true,
         fillColor: Colors.transparent,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: InputBorder.none,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(0),
-          borderSide:
-              const BorderSide(color: _silver, width: 0.5),
-        ),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: _silver, width: 0.5)),
         errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
       ),
     );
   }
 }
 
-class _StyledSwitch extends StatelessWidget {
-  const _StyledSwitch({
-    required this.title,
-    required this.value,
-    required this.onChanged,
-  });
-  final String title;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return SwitchListTile(
-      title: Text(title,
-          style: const TextStyle(color: Colors.white, fontSize: 14)),
-      value: value,
-      onChanged: onChanged,
-      activeThumbColor: _silver,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-    );
-  }
-}
-
 class _AdaptedAutocomplete extends StatelessWidget {
-  const _AdaptedAutocomplete({
-    required this.controller,
-    required this.label,
-    required this.icon,
-  });
+  const _AdaptedAutocomplete({required this.controller, required this.label, required this.icon});
   final TextEditingController controller;
   final String label;
   final IconData icon;
@@ -694,19 +477,8 @@ class _AdaptedAutocomplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: Theme.of(context).copyWith(
-        inputDecorationTheme: const InputDecorationTheme(
-          labelStyle: TextStyle(color: Colors.white38, fontSize: 13),
-          border: InputBorder.none,
-          filled: true,
-          fillColor: Colors.transparent,
-        ),
-      ),
-      child: AddressAutocompleteField(
-        controller: controller,
-        label: label,
-        prefixIcon: icon,
-      ),
+      data: Theme.of(context).copyWith(inputDecorationTheme: const InputDecorationTheme(labelStyle: TextStyle(color: Colors.white38, fontSize: 13), border: InputBorder.none, filled: true, fillColor: Colors.transparent)),
+      child: AddressAutocompleteField(controller: controller, label: label, prefixIcon: icon),
     );
   }
 }

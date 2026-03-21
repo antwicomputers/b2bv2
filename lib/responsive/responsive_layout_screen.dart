@@ -78,13 +78,27 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
   }
 
   void getToken() async {
-    await FirebaseMessaging.instance.getToken().then((token) {
-      setState(() {
-        mtoken = token;
-        debugPrint('My token is $mtoken');
+    try {
+      // On iOS, we must ensure APNs token is available before getting FCM token.
+      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken != null) {
+        debugPrint('APNs token received: \$apnsToken');
+      } else {
+        debugPrint('APNs token is null or not set yet.');
+      }
+
+      await FirebaseMessaging.instance.getToken().then((token) {
+        if (token != null) {
+          setState(() {
+            mtoken = token;
+            debugPrint('FCM token is \$mtoken');
+          });
+          saveToken(token);
+        }
       });
-      saveToken(token!);
-    });
+    } catch (e) {
+      debugPrint('Failed to get FCM token: \$e');
+    }
   }
 
   void saveToken(String token) async {

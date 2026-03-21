@@ -16,10 +16,11 @@ import '../responsive/web_screen_layout.dart';
 
 class UserProvider with ChangeNotifier {
   UserProvider() {
-    Timer(
-      const Duration(seconds: 2),
-      () async {
-        try {
+    init();
+  }
+
+  Future<void> init() async {
+    try {
           _user = _auth.currentUser;
           if (_user != null) {
             bool userExists = false;
@@ -41,13 +42,11 @@ class UserProvider with ChangeNotifier {
           } else {
             Get.offAll(() => const LoginScreen());
           }
-        } catch (e) {
-           debugPrint("Critical UserProvider Error: $e");
-           await _auth.signOut();
-           Get.offAll(() => const LoginScreen());
-        }
-      },
-    );
+    } catch (e) {
+      debugPrint("Critical UserProvider Error: $e");
+      await _auth.signOut();
+      Get.offAll(() => const LoginScreen());
+    }
   }
   Future<bool> getUserData(User firebaseUser) async {
     final document = await FirebaseFirestore.instance
@@ -216,83 +215,90 @@ class UserProvider with ChangeNotifier {
     return res;
   }
 
-  //resgister business
-  Future<String> registerBusiness(
-      {required String businessName,
-      required String businessDescription,
-      required String businessAddress,
-      required String businessCategory,
-      bool isBlackOwned = false,
-      bool isEsential = false,
-      bool womenOriented = false,
-      required String phone,
-      required String email,
-      required String website,
-      required String twitter,
-      required String facebook,
-      required String linkedIn,
-      required String instagram,
-      required String tiktok,
-      required String twitch,
-      required String podcast,
-      required String youtube,
-      required Uint8List businessFile}) async {
+  // register business
+  Future<String> registerBusiness({
+    required String businessName,
+    required String businessDescription,
+    required String businessAddress,
+    required String businessCategory,
+    bool isBlackOwned = false,
+    bool isEsential = false,
+    bool womenOriented = false,
+    required String phone,
+    required String email,
+    required String website,
+    required String twitter,
+    required String facebook,
+    required String linkedIn,
+    required String instagram,
+    required String tiktok,
+    required String twitch,
+    required String podcast,
+    required String youtube,
+    required List<Uint8List> images,
+  }) async {
     String message = 'some error occured';
-    
-    // 1. Generate ID first
-    final ref = FirebaseFirestore.instance.collection('businesses').doc().id;
-    
-    // 2. Upload Image using that ID
-    String businessUrl = await StorageMethods()
-        .uploadImageToStorage('businesses', businessFile, false, customId: ref);
-        
-    // 3. Geocode Address
-    double latitude = 0.0;
-    double longitude = 0.0;
+
     try {
-      List<Location> locations = await locationFromAddress(businessAddress);
-      if (locations.isNotEmpty) {
-        latitude = locations.first.latitude;
-        longitude = locations.first.longitude;
+      // 1. Generate ID first
+      final ref = FirebaseFirestore.instance.collection('businesses').doc().id;
+
+      // 2. Upload Images
+      List<String> imageUrls = [];
+      for (int i = 0; i < images.length; i++) {
+        String url = await StorageMethods().uploadImageToStorage(
+            'businesses', images[i], false,
+            customId: '${ref}_$i');
+        imageUrls.add(url);
       }
-    } catch (e) {
-      debugPrint("Geocoding Error: $e");
-    }
 
-    // 4. Create Model
-    model.Business business = model.Business(
-      businessName: businessName,
-      businessId: ref,
-      latitude: latitude,
-      longitude: longitude,
-      businessDescription: businessDescription,
-      businessAddress: businessAddress,
-      isVerified: false,
-      userId: _auth.currentUser!.uid,
-      businessCategory: businessCategory,
-      createdAt: DateTime.now(),
-      phone: phone,
-      youtube: youtube,
-      isBlackOwned: isBlackOwned,
-      isEsential: isEsential,
-      isFeatured: false,
-      isSponsored: false,
-      womenOriented: womenOriented,
-      email: email,
-      website: website,
-      twitter: twitter,
-      facebook: facebook,
-      linkedIn: linkedIn,
-      instagram: instagram,
-      tiktok: tiktok,
-      twitch: twitch,
-      podcast: podcast,
-      businessUrl: businessUrl,
-      isLiked: [],
-      isFavorite: [],
-    );
+      // 3. Geocode Address
+      double latitude = 0.0;
+      double longitude = 0.0;
+      try {
+        List<Location> locations = await locationFromAddress(businessAddress);
+        if (locations.isNotEmpty) {
+          latitude = locations.first.latitude;
+          longitude = locations.first.longitude;
+        }
+      } catch (e) {
+        debugPrint("Geocoding Error: $e");
+      }
 
-    try {
+      // 4. Create Model
+      model.Business business = model.Business(
+        businessName: businessName,
+        businessId: ref,
+        latitude: latitude,
+        longitude: longitude,
+        businessDescription: businessDescription,
+        businessAddress: businessAddress,
+        isVerified: false,
+        userId: _auth.currentUser!.uid,
+        businessCategory: businessCategory,
+        createdAt: DateTime.now(),
+        phone: phone,
+        youtube: youtube,
+        isBlackOwned: isBlackOwned,
+        isEsential: isEsential,
+        isFeatured: false,
+        isSponsored: false,
+        womenOriented: womenOriented,
+        email: email,
+        website: website,
+        twitter: twitter,
+        facebook: facebook,
+        linkedIn: linkedIn,
+        instagram: instagram,
+        tiktok: tiktok,
+        twitch: twitch,
+        podcast: podcast,
+        businessUrl: imageUrls.isNotEmpty ? imageUrls.first : '',
+        imageUrls: imageUrls,
+        isLiked: [],
+        isFavorite: [],
+      );
+
       await FirebaseFirestore.instance.collection('businesses').doc(ref).set(
             business.toMap(),
           );

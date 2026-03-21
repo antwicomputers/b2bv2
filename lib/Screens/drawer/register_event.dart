@@ -13,6 +13,7 @@ import '../../responsive/web_screen_layout.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as picker;
+import 'package:b2bmobile/utils/categories.dart';
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
@@ -166,7 +167,13 @@ class _RegisterEventState extends State<RegisterEvent> {
                         _divider(),
                         _StyledMultilineField(controller: _eventDescription, label: 'Description', icon: Icons.description, required: true),
                         _divider(),
-                        _StyledField(controller: _eventCategory, label: 'Category', icon: Icons.category, required: true),
+                        CategoryDropdown(
+                          selectedCategory: _eventCategory.text,
+                          onChanged: (val) {
+                            if (val != null) setState(() => _eventCategory.text = val);
+                          },
+                          icon: Icons.category,
+                        ),
                         _divider(),
                         _DatePickerTile(
                           selectedDate: _selectedDate,

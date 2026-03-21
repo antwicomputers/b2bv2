@@ -25,7 +25,11 @@ extension BusinessDetail on Business {
         twitch: twitch,
         linkedIn: linkedIn,
         youtube: youtube,
-        podcast: podcast,
+        isVerified: isVerified,
+        isSponsored: isSponsored,
+        womenOriented: womenOriented,
+        isBlackOwned: isBlackOwned,
+        galleryImages: imageUrls,
       );
 }
 
@@ -51,6 +55,11 @@ extension ResourcesDetail on Resources {
         linkedIn: linkedIn,
         youtube: youtube,
         podcast: podcast,
+        isVerified: isVerified,
+        isSponsored: isSponsored,
+        womenOriented: womenOriented,
+        isBlackOwned: isBlackOwned,
+        galleryImages: const [],
       );
 }
 
@@ -62,7 +71,7 @@ extension SupportDetail on Support {
         address: supportAddress,
         category: supportCategory,
         imageUrl: supportUrl,
-        firestoreCollection: 'userresourcesupport',
+        firestoreCollection: 'usersupport',
         latitude: latitude,
         longitude: longitude,
         phone: phone,
@@ -76,6 +85,11 @@ extension SupportDetail on Support {
         linkedIn: linkedIn,
         youtube: youtube,
         podcast: podcast,
+        isVerified: isVerified,
+        isSponsored: isSponsored,
+        womenOriented: womenOriented,
+        isBlackOwned: isBlackOwned,
+        galleryImages: const [],
       );
 }
 
@@ -101,6 +115,11 @@ extension EventsDetail on Events {
         linkedIn: linkedIn,
         youtube: youtube,
         podcast: podcast,
+        isVerified: isVerified,
+        isSponsored: isSponsered,
+        womenOriented: isWomenOriented,
+        isBlackOwned: false,
         eventDate: eventDate,
+        galleryImages: const [],
       );
 }
