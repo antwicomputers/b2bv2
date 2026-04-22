@@ -45,3 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 node_modules
+
+# Local backups and logs
+ios_broken_final/
+ios_old/
+*.txt
+*.py

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
+import '../services/config_service.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({super.key});
@@ -24,9 +25,15 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   Future<List<String>> _getAddressPredictions(String input) async {
-    const apiKey = 'AIzaSyCMyizsGhZlbTpns3G5vRlTEZkYvgkXK-w';
+    final apiKey = await ConfigService().getSecretKey('google_maps_key');
     const endpoint =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+    
+    if (apiKey.isEmpty) {
+      debugPrint('Google Maps API key missing');
+      return [];
+    }
+    
     final requestUrl = '$endpoint?input=$input&key=$apiKey';
 
     final response = await http.get(Uri.parse(requestUrl));

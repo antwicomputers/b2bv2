@@ -81,7 +81,7 @@ class TheCreatorScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    "Innovator & Developer",
+                    "AI Architect & Founder",
                     style: TextStyle(
                       color: _silverDark,
                       fontSize: 18,
@@ -90,16 +90,62 @@ class TheCreatorScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   
-                  _SectionHeader(title: "ABOUT ME"),
+                  _SectionHeader(title: "THE VISION"),
                   const SizedBox(height: 16),
                   const Text(
-                    "I created Back2Black Mobile with a clear purpose: to bridge the gap between shoppers and Black-owned businesses. My mission is to empower our community by making it effortless to locate, support, and generate revenue for Black entrepreneurs.",
+                    "Hi, I'm Charles Antwi — creator and founder of Antwi Computers.",
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, height: 1.4),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "Welcome to Back2Black Mobile, an AI-powered B2B ecosystem designed to engineer the ultimate networking experience for Black excellence. My mission is to build a modern-day Digital Black Wall Street where intelligent matchmaking and personalized discovery circulate capital and professional resources back into our community.",
                     style: TextStyle(color: Colors.white70, fontSize: 16, height: 1.6),
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    "Whether you're looking for a service, an event, or professional support, this app is designed to be your primary hub for growth and connection within the community.",
+                    "Whether you're looking for verified professional services, growth capital, or a personalized 'handpicked' journey, this ecosystem is designed to be your primary hub for exponential growth.",
                     style: TextStyle(color: Colors.white70, fontSize: 16, height: 1.6),
+                  ),
+                  
+                  const SizedBox(height: 40),
+                  
+                  _SectionHeader(title: "ECOSYSTEM FEATURES"),
+                  const SizedBox(height: 16),
+                  
+                  const _FeatureItem(
+                    icon: Icons.auto_awesome,
+                    title: "Intelligent AI Matchmaking",
+                    description: "Our 'Handpicked for You' engine leverages behavioral AI and user interests to dynamically match you with the most relevant businesses and resources in real-time.",
+                  ),
+                  const _FeatureItem(
+                    icon: Icons.security_rounded,
+                    title: "AI Review Integrity System",
+                    description: "An automated trust layer for the marketplace. Every review is AI-analyzed for authenticity and cross-verified against your behavioral history to eliminate fraud and spam.",
+                  ),
+                  const _FeatureItem(
+                    icon: Icons.map_rounded,
+                    title: "The Interactive Map",
+                    description: "Discover Black-owned businesses securely mapped around you. The map is dynamically filtered, pulling verified venues directly to your fingertips.",
+                  ),
+                  const _FeatureItem(
+                    icon: Icons.verified_rounded,
+                    title: "Verified Community Reviews",
+                    description: "A centralized trust hub. Share your experiences and see verified reviews from real community members. Quality and trust are the foundation of our network.",
+                  ),
+                  const _FeatureItem(
+                    icon: Icons.swap_horiz_rounded,
+                    title: "B2B RFP Service Board",
+                    description: "Forcing the dollar to circulate. If you need a lawyer, accountant, or designer for your startup, post an RFP and let verified services pitch to you.",
+                  ),
+                  const _FeatureItem(
+                    icon: Icons.rocket_launch_rounded,
+                    title: "The Black KickStart (BKS)",
+                    description: "More than a directory, this is an actionable incubator. We've introduced Mentorship Pledges where seasoned business owners pledge tangible mentor hours.",
+                  ),
+                  const _FeatureItem(
+                    icon: Icons.play_circle_filled_rounded,
+                    title: "The Pulse Discovery Feed",
+                    description: "A dynamic, full-screen scrolling experience designed to visually highlight and discover premium verified Black businesses locally and globally.",
                   ),
                   
                   const SizedBox(height: 40),
@@ -238,6 +284,46 @@ class _ContactTile extends StatelessWidget {
             const Icon(Icons.open_in_new_rounded, color: Colors.white24, size: 18),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FeatureItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+
+  const _FeatureItem({required this.icon, required this.title, required this.description});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white12),
+            ),
+            child: Icon(icon, color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text(description, style: const TextStyle(color: Colors.white54, fontSize: 14, height: 1.5)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

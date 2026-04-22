@@ -1,23 +1,22 @@
 import 'package:b2bmobile/Screens/admin_panel/admin.dart';
-import 'package:b2bmobile/Screens/business/register_business.dart';
-import 'package:b2bmobile/Screens/drawer/about_us.dart';
 import 'package:b2bmobile/Screens/drawer/alerts.dart';
-import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
+import 'package:b2bmobile/Screens/drawer/loyalty_card.dart';
 import 'package:b2bmobile/Screens/drawer/help_us.dart';
-import 'package:b2bmobile/Screens/drawer/mental_health.dart';
-import 'package:b2bmobile/Screens/drawer/women.dart';
 import 'package:b2bmobile/Screens/pages/favorites.dart';
 import 'package:b2bmobile/Screens/pages/home.dart';
 import 'package:b2bmobile/Screens/pages/maps.dart';
 import 'package:b2bmobile/Screens/pages/categories.dart';
-import 'package:b2bmobile/Screens/vew%20all%20events/view_all_events_screen.dart';
+import 'package:b2bmobile/Screens/pages/pulse_feed.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
-import '../Screens/authenticate/login_screen.dart';
-import 'package:b2bmobile/Screens/drawer/register_event.dart';
+import 'package:b2bmobile/Screens/authenticate/login_screen.dart';
+import 'package:b2bmobile/Screens/drawer/legal_screen.dart';
+import 'package:b2bmobile/Screens/drawer/account_settings_screen.dart';
+import 'package:b2bmobile/Screens/pages/ai_concierge_screen.dart';
+import 'package:b2bmobile/services/ai_service.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -38,6 +37,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   final List<Widget> _pages = [
     const HomePage(),
     const Maps(),
+    const PulseFeed(),
     const Favorites(),
     const Categories(),
   ];
@@ -71,125 +71,107 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           },
         ),
         centerTitle: true,
+        actions: [
+          Consumer<UserProvider>(
+            builder: (context, value, child) {
+              final user = value.userModel;
+              if (user != null && user.isBlack) {
+                return IconButton(
+                  icon: const Icon(Icons.rocket_launch, color: Colors.blueAccent),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const AIConciergeScreen()),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        backgroundColor: Colors.black,
+        child: Column(
           children: [
             _buildHeader(),
-            _buildItem(
-              icon: Icons.woman_rounded,
-              title: 'B2B Women Empowerment',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const WomenBusiness()),
-                );
-              },
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                children: [
+                  const SizedBox(height: 10),
+                  Consumer<UserProvider>(
+                    builder: (context, value, child) {
+                      final user = value.userModel;
+                      if (user != null && user.isBlack) {
+                        return _buildItem(
+                          icon: Icons.chat_bubble_outline_rounded,
+                          title: 'AI Concierge',
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => const AIConciergeScreen());
+                          },
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                  _buildItem(
+                    icon: Icons.credit_card_rounded,
+                    title: 'B2B Black Card',
+                    onTap: () {
+                      Get.back();
+                      Get.to(() => const DigitalBlackCardScreen());
+                    },
+                  ),
+                  _buildItem(
+                    icon: Icons.notifications_none_rounded,
+                    title: 'Alerts',
+                    onTap: () {
+                      Get.back();
+                      Get.to(() => const Alerts());
+                    },
+                  ),
+                  const Divider(color: Colors.white10, height: 32),
+                  _buildItem(
+                    icon: Icons.info_outline_rounded,
+                    title: 'Feedback',
+                    onTap: () {
+                      Get.back();
+                      Get.to(() => const SupportUs());
+                    },
+                  ),
+                  _buildItem(
+                    icon: Icons.security_rounded,
+                    title: 'Legal & Privacy',
+                    onTap: () {
+                      Get.back();
+                      Get.to(() => const LegalScreen());
+                    },
+                  ),
+                  _buildItem(
+                    icon: Icons.manage_accounts_outlined,
+                    title: 'Account Settings',
+                    onTap: () {
+                      Get.back();
+                      Get.to(() => const AccountSettingsScreen());
+                    },
+                  ),
+                ],
+              ),
             ),
-            _buildItem(
-              icon: Icons.emergency,
-              title: 'B2B Essential Services',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MentalHealth()),
-                );
-              },
-            ),
-            _buildItem(
-              icon: Icons.start,
-              title: 'B2B The Black KickStart',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const BlackKickStart()),
-                );
-              },
-            ),
-            _buildItem(
-              icon: Icons.loyalty,
-              title: 'B2B Loyalty Card',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const WomenBusiness()),
-                );
-              },
-            ),
-            _buildItem(
-              icon: Icons.monetization_on_rounded,
-              title: 'Register Business',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const RegisterBusiness()),
-                );
-              },
-            ),
-            _buildItem(
-              icon: Icons.calendar_month,
-              title: 'Register An Event',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const RegisterEvent()),
-                );
-              },
-            ),
-            _buildItem(
-              icon: Icons.calendar_today,
-              title: 'View All Events',
-              onTap: () {
-                Get.back();
-                Get.to(() => const ViewAllEventsScreen());
-              },
-            ),
-            _buildItem(
-              icon: Icons.notifications,
-              title: 'Alerts',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Alerts()),
-                );
-              },
-            ),
-            _buildItem(
-              icon: Icons.info_rounded,
-              title: 'About',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const AboutUs()),
-                );
-              },
-            ),
-            _buildItem(
-              icon: Icons.info_rounded,
-              title: 'Feedback & Suggestions',
-              onTap: () {
-                Get.back();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SupportUs()),
-                );
-              },
-            ),
-            Consumer<UserProvider>(
-              builder: (context, value, child) => _buildItem(
-                icon: Icons.logout,
-                title: 'Logout',
-                onTap: () async {
-                  await value.signOut();
-                  // ignore: use_build_context_synchronously
-                  if (!context.mounted) return;
-                  Get.offAll(() => const LoginScreen());
-                },
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Consumer<UserProvider>(
+                builder: (context, value, child) => _buildItem(
+                  icon: Icons.logout_rounded,
+                  title: 'Logout',
+                  color: Colors.redAccent,
+                  onTap: () async {
+                    await value.signOut();
+                    if (!context.mounted) return;
+                    Get.offAll(() => const LoginScreen());
+                  },
+                ),
               ),
             ),
           ],
@@ -199,25 +181,30 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GNav(
-          tabBackgroundColor: Colors.grey.shade800,
+          tabBackgroundColor: Colors.grey.shade900,
+          activeColor: Colors.blueAccent,
           gap: 8,
           onTabChange: navigateBottomBar,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           tabs: const [
             GButton(
-              icon: Icons.home,
+              icon: Icons.home_rounded,
               text: 'Home',
             ),
             GButton(
-              icon: Icons.map,
-              text: 'MAP',
+              icon: Icons.map_rounded,
+              text: 'Map',
             ),
             GButton(
-              icon: Icons.favorite,
-              text: 'FAVS',
+              icon: Icons.play_circle_outline_rounded,
+              text: 'Pulse',
             ),
             GButton(
-              icon: Icons.more_horiz_outlined,
+              icon: Icons.favorite_border_rounded,
+              text: 'Favs',
+            ),
+            GButton(
+              icon: Icons.more_horiz_rounded,
               text: 'More',
             ),
           ],
@@ -230,44 +217,101 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     return Consumer<UserProvider>(
       builder: (context, value, child) {
         final user = value.userModel;
-        if (user == null) {
-          return const UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: Colors.black),
-            accountName: Text("Loading..."),
-            accountEmail: Text(""),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.grey,
-              child: CircularProgressIndicator(color: Colors.white),
-            ),
-          );
-        }
-        return UserAccountsDrawerHeader(
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(top: 60, bottom: 24, left: 24, right: 24),
           decoration: const BoxDecoration(
-            color: Colors.black,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.black, Colors.black], // Can add subtle color if needed
+            ),
           ),
-          accountName: Text(
-            user.fullname,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          accountEmail: Text(user.email),
-          currentAccountPicture: CircleAvatar(
-            backgroundImage: NetworkImage(user.photoUrl),
-            backgroundColor: Colors.grey.shade800, // Fallback color
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 35,
+                backgroundImage: user != null ? NetworkImage(user.photoUrl) : null,
+                backgroundColor: Colors.grey.shade900,
+                child: user == null
+                    ? const CircularProgressIndicator(color: Colors.blueAccent)
+                    : null,
+              ),
+              const SizedBox(height: 16),
+              if (user != null) ...[
+                Row(
+                  children: [
+                    Text(
+                      user.fullname,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (user.points >= 500) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: (user.points >= 5000 ? Colors.amber : (user.points >= 1500 ? const Color(0xFFD4AF37) : const Color(0xFFC0C0C0))).withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: (user.points >= 5000 ? Colors.amber : (user.points >= 1500 ? const Color(0xFFD4AF37) : const Color(0xFFC0C0C0))).withValues(alpha: 0.4)),
+                        ),
+                        child: Text(
+                          user.tier,
+                          style: TextStyle(
+                            color: user.points >= 5000 ? Colors.amber : (user.points >= 1500 ? const Color(0xFFD4AF37) : const Color(0xFFC0C0C0)),
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                Text(
+                  user.email,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ],
+            ],
           ),
         );
       },
     );
   }
 
-  Widget _buildItem(
-      {required IconData icon,
-      required String title,
-      required GestureTapCallback onTap}) {
-    return ListTile(
-      leading: Icon(icon),
-      minLeadingWidth: 5,
-      title: Text(title),
-      onTap: onTap,
+  Widget _buildItem({
+    required IconData icon,
+    required String title,
+    required GestureTapCallback onTap,
+    Color? color,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: color?.withValues(alpha: 0.05) ?? Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        onTap: onTap,
+        dense: true,
+        leading: Icon(icon, color: color ?? Colors.blueAccent, size: 22),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: color ?? Colors.white.withValues(alpha: 0.9),
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
     );
   }
 }

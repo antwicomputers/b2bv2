@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.b2bmobile"
+    namespace "com.back2black.app"
     compileSdk 34
 
     sourceSets {
@@ -32,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.b2bmobile"
+        applicationId "com.back2black.app"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()

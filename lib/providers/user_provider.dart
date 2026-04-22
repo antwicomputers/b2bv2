@@ -16,37 +16,18 @@ import '../responsive/web_screen_layout.dart';
 
 class UserProvider with ChangeNotifier {
   UserProvider() {
-    init();
-  }
-
-  Future<void> init() async {
-    try {
-          _user = _auth.currentUser;
-          if (_user != null) {
-            bool userExists = false;
-            try {
-              userExists = await getUserData(_user!);
-            } catch (e) {
-              debugPrint("Error fetching user data: $e");
-              userExists = false; // Treat error as missing user
-            }
-
-            if (userExists) {
-              userDataStream(_user!);
-              navigateToTabsPage(_user);
-            } else {
-              debugPrint("User missing or error. Signing out.");
-              await _auth.signOut();
-              Get.offAll(() => const LoginScreen());
-            }
-          } else {
-            Get.offAll(() => const LoginScreen());
-          }
-    } catch (e) {
-      debugPrint("Critical UserProvider Error: $e");
-      await _auth.signOut();
-      Get.offAll(() => const LoginScreen());
-    }
+    _auth.authStateChanges().listen((user) {
+      if (user != null) {
+        _user = user;
+        notifyListeners();
+        getUserData(user);
+        userDataStream(user);
+      } else {
+        _user = null;
+        userModel = null;
+        notifyListeners();
+      }
+    });
   }
   Future<bool> getUserData(User firebaseUser) async {
     final document = await FirebaseFirestore.instance
@@ -55,9 +36,11 @@ class UserProvider with ChangeNotifier {
         .get();
     if (document.exists) {
       userModel = UserModel.fromMap(document.data()!);
+      notifyListeners();
       return true;
     }
     userModel = null;
+    notifyListeners();
     return false;
   }
 
@@ -195,6 +178,37 @@ class UserProvider with ChangeNotifier {
     return res;
   }
 
+  // sign in as guest
+  Future<String> signInAsGuest() async {
+    String res = 'Some error occurred';
+    try {
+      UserCredential cred = await _auth.signInAnonymously();
+      
+      UserModel user = UserModel(
+        username: "Guest_${cred.user!.uid.substring(0, 5)}",
+        uid: cred.user!.uid,
+        email: "guest@b2b.app",
+        fullname: "Guest User",
+        photoUrl: "",
+        isGuest: true,
+      );
+
+      await _firestore
+          .collection('users')
+          .doc(cred.user!.uid)
+          .set(user.toMap());
+          
+      _user = cred.user;
+      userModel = user;
+      notifyListeners();
+      
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
   //login user
   Future<String> loginUser({
     required String email,
@@ -236,6 +250,12 @@ class UserProvider with ChangeNotifier {
     required String podcast,
     required String youtube,
     required List<Uint8List> images,
+    String operatingModel = 'physical',
+    bool isGlobal = false,
+    bool offersRewards = false,
+    String silverReward = '',
+    String goldReward = '',
+    String eliteReward = '',
   }) async {
     String message = 'some error occured';
 
@@ -297,6 +317,12 @@ class UserProvider with ChangeNotifier {
         imageUrls: imageUrls,
         isLiked: [],
         isFavorite: [],
+        operatingModel: operatingModel,
+        isGlobal: isGlobal,
+        offersRewards: offersRewards,
+        silverReward: silverReward,
+        goldReward: goldReward,
+        eliteReward: eliteReward,
       );
 
       await FirebaseFirestore.instance.collection('businesses').doc(ref).set(
@@ -332,6 +358,8 @@ class UserProvider with ChangeNotifier {
     required String youtube,
     required String currentBusinessUrl,
     Uint8List? businessFile,
+    String? operatingModel,
+    bool? isGlobal,
   }) async {
     String message = 'some error occurred';
 
@@ -385,6 +413,8 @@ class UserProvider with ChangeNotifier {
         'womenOriented': womenOriented,
         'latitude': latitude,
         'longitude': longitude,
+        if (operatingModel != null) 'operatingModel': operatingModel,
+        if (isGlobal != null) 'isGlobal': isGlobal,
       };
 
       await FirebaseFirestore.instance

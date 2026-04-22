@@ -30,7 +30,6 @@ class VerificationScreen extends StatelessWidget {
               );
             }
             if (kDebugMode) {
-              print(snapshot.data?.docs.length ?? 'noe');
             }
             if (snapshot.data?.docs.isEmpty ?? true) {
               return const Center(

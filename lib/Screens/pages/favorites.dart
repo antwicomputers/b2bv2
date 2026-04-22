@@ -8,6 +8,7 @@ import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:b2bmobile/widgets/premium_business_card.dart';
 import 'package:get/get.dart';
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -128,113 +129,16 @@ class _FavoritesState extends State<Favorites> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
-                childAspectRatio: 0.78,
+                childAspectRatio: 0.95,
               ),
               padding: const EdgeInsets.all(12),
               itemCount: _items.length,
-              itemBuilder: (context, i) => _FavCard(item: _items[i]),
-            ),
-    );
-  }
-}
-
-// ── Favorite card ─────────────────────────────────────────────────────────────
-
-class _FavCard extends StatelessWidget {
-  const _FavCard({required this.item});
-  final _FavItem item;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Get.to(() => UniversalDetailScreen(item: item.detailItem)),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1A1A),
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.redAccent.withValues(alpha: 0.12),
-              blurRadius: 8,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(14)),
-              child: Image.network(
-                item.imageUrl,
-                height: 120,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  height: 120,
-                  color: const Color(0xFF2A2A2A),
-                  child: const Icon(Icons.image_not_supported,
-                      color: Colors.white24),
-                ),
+              itemBuilder: (context, i) => PremiumBusinessCard(
+                item: _items[i].detailItem,
+                size: MediaQuery.of(context).size,
+                isGrid: true,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.name,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  _TypeChip(type: item.type),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TypeChip extends StatelessWidget {
-  const _TypeChip({required this.type});
-  final _ItemType type;
-
-  @override
-  Widget build(BuildContext context) {
-    String label;
-    Color color;
-    if (type == _ItemType.business) {
-      label = 'Business';
-      color = Colors.white70;
-    } else if (type == _ItemType.event) {
-      label = 'Event';
-      color = Colors.blueAccent;
-    } else {
-      label = 'Resource';
-      color = Colors.greenAccent;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-            color: color, fontSize: 10, fontWeight: FontWeight.w600),
-      ),
     );
   }
 }

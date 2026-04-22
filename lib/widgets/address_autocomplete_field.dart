@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../services/config_service.dart';
 
 /// Drop-in replacement for an address TextFormField.
 /// Shows Google Places autocomplete suggestions as an overlay
@@ -33,8 +34,6 @@ class AddressAutocompleteField extends StatefulWidget {
 }
 
 class _AddressAutocompleteFieldState extends State<AddressAutocompleteField> {
-  // Use the same key registered in AppDelegate.swift / AndroidManifest.xml
-  static const _apiKey = 'AIzaSyCMyizsGhZlbTpns3G5vRlTEZkYvgkXK-w';
   static const _endpoint =
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 
@@ -69,8 +68,11 @@ class _AddressAutocompleteFieldState extends State<AddressAutocompleteField> {
 
   Future<void> _fetchPredictions(String input) async {
     try {
+      final apiKey = await ConfigService().getSecretKey('google_maps_key');
+      if (apiKey.isEmpty) return;
+
       final url = Uri.parse(
-          '$_endpoint?input=${Uri.encodeComponent(input)}&key=$_apiKey');
+          '$_endpoint?input=${Uri.encodeComponent(input)}&key=$apiKey');
       final resp = await http.get(url);
       if (resp.statusCode == 200 && mounted) {
         final data = json.decode(resp.body) as Map<String, dynamic>;

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:b2bmobile/models/business.dart';
 import 'package:b2bmobile/models/detail_item_extensions.dart';
 import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
+import 'package:b2bmobile/resources/algolia_application.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -13,21 +14,25 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  Algolia algolia = const Algolia.init(
-    applicationId: '7ID12WNW47',
-    apiKey: 'a505630b1ad41820d77a530672338433',
-  );
-
   final TextEditingController _searchController = TextEditingController();
   List<AlgoliaObjectSnapshot> _results = [];
   bool _isSearching = false;
 
   void _performSearch(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _isSearching = false;
+        _results.clear();
+      });
+      return;
+    }
+
     setState(() {
       _isSearching = true;
       _results.clear();
     });
 
+    final algolia = await AlgoliaApplication.instance();
     AlgoliaQuery searchQuery =
         algolia.instance.index('b2b_businesses').query(query);
     AlgoliaQuerySnapshot querySnapshot = await searchQuery.getObjects();

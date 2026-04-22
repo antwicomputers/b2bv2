@@ -31,3 +31,31 @@ void showSnackBar(String content, BuildContext context) {
     ),
   );
 }
+
+bool checkGuestAccess(BuildContext context, bool isGuest) {
+  if (isGuest) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF141414),
+        title: const Text('Account Required', style: TextStyle(color: Colors.white)),
+        content: const Text('You must create an account or sign in to perform this action.', style: TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Usually we would redirect to login screen here or clear state
+            },
+            child: const Text('Understood', style: TextStyle(color: Colors.amber)),
+          ),
+        ],
+      ),
+    );
+    return true;
+  }
+  return false;
+}

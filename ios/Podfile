@@ -1,4 +1,3 @@
-# Uncomment this line to define a global platform for your project
 platform :ios, '14.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
@@ -29,70 +28,29 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
-  use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-    
     target.build_configurations.each do |config|
-      # Force deployment target to 14.0 to match project
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
-      
-      # Disable code signing for Pods
-      config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-
-      # Fix for Xcode 15 "DT_TOOLCHAIN_DIR cannot be used" error
-      # Only target LIBRARY_SEARCH_PATHS to prevent breaking C/Swift compilation
+      # Fix for Xcode 15+ "TOOLCHAIN_DIR" error
       if config.build_settings['LIBRARY_SEARCH_PATHS']
         if config.build_settings['LIBRARY_SEARCH_PATHS'].kind_of?(Array)
-          config.build_settings['LIBRARY_SEARCH_PATHS'] = config.build_settings['LIBRARY_SEARCH_PATHS'].map { |path| path.gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR') }
+          config.build_settings['LIBRARY_SEARCH_PATHS'] = config.build_settings['LIBRARY_SEARCH_PATHS'].map { |path| path.gsub('TOOLCHAIN_DIR', 'TOOLCHAIN_DIR') }
         elsif config.build_settings['LIBRARY_SEARCH_PATHS'].kind_of?(String)
-          config.build_settings['LIBRARY_SEARCH_PATHS'] = config.build_settings['LIBRARY_SEARCH_PATHS'].gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR')
-        end
-      end
-      
-      # Fix for nanopb "Use of undeclared identifier 'STATIC'"
-      if target.name == 'nanopb'
-        gcc_defs = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || '$(inherited)'
-        if gcc_defs.kind_of?(Array)
-          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = gcc_defs + ['PB_NO_STATIC_ASSERT=1']
-        else
-          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = gcc_defs + ' PB_NO_STATIC_ASSERT=1'
+          config.build_settings['LIBRARY_SEARCH_PATHS'] = config.build_settings['LIBRARY_SEARCH_PATHS'].gsub('TOOLCHAIN_DIR', 'TOOLCHAIN_DIR')
         end
       end
     end
   end
   
-  # Aggressively modify all .xcconfig files in Pods to replace DT_TOOLCHAIN_DIR
-  Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', '**', '*.xcconfig')).each do |xcconfig_path|
-    if File.exist?(xcconfig_path)
-      content = File.read(xcconfig_path)
-      if content.include?('DT_TOOLCHAIN_DIR')
-        new_content = content.gsub('DT_TOOLCHAIN_DIR', 'TOOLCHAIN_DIR')
-        File.open(xcconfig_path, 'w') { |file| file.write(new_content) }
-      end
-    end
-  end
-
-  # Strip iCloud Drive detritus (com.apple.FinderInfo, com.apple.fileprovider.fpfs#P)
-  # that causes "resource fork, Finder information, or similar detritus not allowed" CodeSign errors.
-  # This happens because the project is stored in an iCloud-synced folder.
-  puts "Stripping iCloud extended attributes from Pods..."
-  system("find '#{installer.sandbox.root}' -exec xattr -c {} \\; 2>/dev/null")
-
-  # Find the Pods-Runner-frameworks.sh script and patch it
-  frameworks_script = File.join(installer.sandbox.root, 'Target Support Files', 'Pods-Runner', 'Pods-Runner-frameworks.sh')
-  if File.exist?(frameworks_script)
-    content = File.read(frameworks_script)
-    # Insert the xattr strip command right before the codesign command
-    unless content.include?("[Anti-Detritus]")
-      new_content = content.gsub('  /usr/bin/codesign --force --sign', "  echo \"[Anti-Detritus] Stripping xattrs from ${1}\"\n  find \"${1}\" -exec xattr -c {} \\; 2>/dev/null || true\n  /usr/bin/codesign --force --sign")
-      File.open(frameworks_script, 'w') { |file| file.write(new_content) }
-      puts "Successfully patched Pods-Runner-frameworks.sh to strip iCloud detritus before code signing!"
-    end
-  end
+  # Final disk-level fix to ensure all xcconfig files are correctly patched
+  `grep -r "DT_TOOLCHAIN_DIR" Pods/ | cut -d: -f1 | sort -u | xargs -I {} sed -i '' 's/DT_TOOLCHAIN_DIR/TOOLCHAIN_DIR/g' {}`
 end

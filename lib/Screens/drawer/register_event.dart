@@ -167,11 +167,8 @@ class _RegisterEventState extends State<RegisterEvent> {
                         _divider(),
                         _StyledMultilineField(controller: _eventDescription, label: 'Description', icon: Icons.description, required: true),
                         _divider(),
-                        CategoryDropdown(
-                          selectedCategory: _eventCategory.text,
-                          onChanged: (val) {
-                            if (val != null) setState(() => _eventCategory.text = val);
-                          },
+                        SearchableCategoryField(
+                          controller: _eventCategory,
                           icon: Icons.category,
                         ),
                         _divider(),

@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/utils.dart';
+import 'package:b2bmobile/services/ai_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';
@@ -27,6 +29,30 @@ class VerificationScreen extends StatefulWidget {
 
 class _VerificationScreenState extends State<VerificationScreen> {
   bool _isLoading = false;
+  String? _aiReview;
+  bool _isAnalyzing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _runAIReview();
+  }
+
+  Future<void> _runAIReview() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.userModel == null || !userProvider.userModel!.isBlack) {
+      return;
+    }
+
+    setState(() => _isAnalyzing = true);
+    final review = await AIService().reviewBusinessSubmission(widget.data);
+    if (mounted) {
+      setState(() {
+        _aiReview = review;
+        _isAnalyzing = false;
+      });
+    }
+  }
 
   Future<void> _submit() async {
     setState(() => _isLoading = true);
@@ -55,6 +81,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
         isBlackOwned: false, // Will be set by Admin
         isEsential: false,
         womenOriented: false,
+        operatingModel: widget.data['operatingModel'] ?? 'physical',
+        isGlobal: widget.data['isGlobal'] ?? false,
+        offersRewards: widget.data['offersRewards'] ?? false,
+        silverReward: widget.data['silverReward'] ?? '',
+        goldReward: widget.data['goldReward'] ?? '',
+        eliteReward: widget.data['eliteReward'] ?? '',
       );
     }
     // Handle other types later if needed
@@ -62,13 +94,19 @@ class _VerificationScreenState extends State<VerificationScreen> {
     setState(() => _isLoading = false);
     
     if (message == 'success') {
+      try {
+        await FirebaseFirestore.instance.collection('users').doc(userProvider.userModel?.uid).set({
+          'points': FieldValue.increment(50),
+        }, SetOptions(merge: true));
+      } catch (_) {}
+
       Get.offAll(() => const ResponsiveLayout(
         mobileScreenLayout: MobileScreenLayout(),
         webScreenLayout: WebScreenLayout(),
       ));
-      showSnackBar('Listing submitted for review!', context);
+      if (mounted) showSnackBar('Listing submitted for review!', context);
     } else {
-      showSnackBar(message, context);
+      if (mounted) showSnackBar(message, context);
     }
   }
 
@@ -91,6 +129,23 @@ class _VerificationScreenState extends State<VerificationScreen> {
               style: GoogleFonts.outfit(color: Colors.white60, fontSize: 13),
             ),
             const SizedBox(height: 32),
+            if (_isAnalyzing || _aiReview != null) ...[
+              Text('AI REVIEWER ANALYSIS', style: GoogleFonts.bebasNeue(color: Colors.white, letterSpacing: 1.2)),
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: _isAnalyzing 
+                  ? const Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white60)))
+                  : Text(_aiReview ?? "No review available.", style: GoogleFonts.outfit(color: Colors.white70, fontSize: 13, height: 1.5)),
+              ),
+              const SizedBox(height: 32),
+            ],
             
             // Image Preview
             Text('GALLERY', style: GoogleFonts.bebasNeue(color: Colors.white38, letterSpacing: 1.2)),

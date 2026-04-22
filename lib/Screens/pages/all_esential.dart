@@ -1,14 +1,8 @@
 import 'package:b2bmobile/models/business.dart';
-import 'package:b2bmobile/providers/user_provider.dart';
-import 'package:b2bmobile/utils/app_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:b2bmobile/models/detail_item_extensions.dart';
-import 'package:b2bmobile/Screens/pages/universal_detail_screen.dart';
 
 import 'package:b2bmobile/widgets/business_list_tile.dart';
 
@@ -48,7 +42,7 @@ class _AllEssentialState extends State<AllEssential> {
             itemCount: docs.length,
             padding: const EdgeInsets.only(top: 10, bottom: 40),
             itemBuilder: (context, index) {
-              final business = Business.fromMap(docs[index].data() as Map<String, dynamic>);
+              final business = Business.fromMap(docs[index].data());
               return BusinessListTile(business: business);
             },
           );

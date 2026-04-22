@@ -37,4 +37,6 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_macos_build_settings(target)
   end
+  # Absolute fix for DT_TOOLCHAIN_DIR by patching all generated files
+  system("find . -type f \\( -name '*.xcconfig' -o -name '*.pbxproj' -o -name '*.sh' \\) -print0 | xargs -0 sed -i '' 's/DT_TOOLCHAIN_DIR/TOOLCHAIN_DIR/g'")
 end

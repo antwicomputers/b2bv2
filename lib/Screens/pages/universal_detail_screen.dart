@@ -2,12 +2,18 @@ import 'package:b2bmobile/models/detail_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:b2bmobile/widgets/review_list_widget.dart';
+import 'package:b2bmobile/widgets/pledge_tracker_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:b2bmobile/utils/images.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:b2bmobile/services/matchmaking_service.dart';
+import 'package:provider/provider.dart';
+import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:b2bmobile/utils/utils.dart';
 
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
@@ -30,7 +36,18 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
 
   String get _uid => FirebaseAuth.instance.currentUser?.uid ?? '';
 
+  @override
+  void initState() {
+    super.initState();
+    // Behavioral AI: Track that the user viewed this business
+    if (_uid.isNotEmpty && widget.item.firestoreCollection == 'businesses') {
+      MatchmakingService().trackBusinessView(_uid, widget.item.id);
+    }
+  }
+
   Future<void> _toggleLike() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (checkGuestAccess(context, userProvider.userModel?.isGuest ?? true)) return;
     if (_uid.isEmpty) return;
     await FirebaseFirestore.instance.runTransaction((tx) async {
       final snap = await tx.get(_docRef);
@@ -46,6 +63,8 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
   }
 
   Future<void> _toggleFavorite() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (checkGuestAccess(context, userProvider.userModel?.isGuest ?? true)) return;
     if (_uid.isEmpty) return;
     await FirebaseFirestore.instance.runTransaction((tx) async {
       final snap = await tx.get(_docRef);
@@ -83,11 +102,13 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
           int likeCount = 0;
           bool isFavorite = false;
           int favoriteCount = 0;
+          String? ownerId;
 
           if (snapshot.hasData && snapshot.data!.exists) {
             final data = snapshot.data!.data() as Map<String, dynamic>;
             likeCount = (data['likeCount'] as int?) ?? 0;
             favoriteCount = (data['favoriteCount'] as int?) ?? 0;
+            ownerId = data['userId'] as String?;
             if (_uid.isNotEmpty) {
               isLiked = (data['likedBy'] as Map<String, dynamic>?)?[_uid] ?? false;
               isFavorite = (data['favoriteBy'] as Map<String, dynamic>?)?[_uid] ?? false;
@@ -114,7 +135,18 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                   background: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.network(item.imageUrl, fit: BoxFit.cover),
+                      // Blurred Background (for aesthetic color bleed)
+                      Opacity(
+                        opacity: 0.3,
+                        child: Image.network(item.imageUrl, fit: BoxFit.cover),
+                      ),
+                      // Main Contained Image
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 24.0),
+                        child: Center(
+                          child: Image.network(item.imageUrl, fit: BoxFit.contain),
+                        ),
+                      ),
                       Container(
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
@@ -133,7 +165,7 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                           children: [
                             _InteractionBadge(
                               icon: isLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined,
-                              color: isLiked ? Colors.blueAccent : Colors.white,
+                              color: isLiked ? Colors.white : Colors.white54,
                               count: likeCount,
                               onTap: _toggleLike,
                             ),
@@ -170,25 +202,44 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                       ),
                       const SizedBox(height: 16),
                       // --- Status Badges ---
-                      Row(
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 10,
                         children: [
                           if (item.isVerified)
-                            _StatusBadge(
+                            const _StatusBadge(
                               label: 'Verified',
                               icon: Icons.verified,
-                              color: Colors.blueAccent,
+                              color: Colors.white,
                             ),
                           if (item.isSponsored)
-                            _StatusBadge(
+                            const _StatusBadge(
                               label: 'Sponsor',
                               icon: Icons.stars,
                               color: Colors.amberAccent,
                             ),
                           if (item.womenOriented)
-                            _StatusBadge(
+                            const _StatusBadge(
                               label: 'Women Owned',
                               icon: Icons.female,
                               color: Colors.pinkAccent,
+                            ),
+                          if (ownerId != null)
+                            FutureBuilder<DocumentSnapshot>(
+                              future: FirebaseFirestore.instance.collection('users').doc(ownerId).get(),
+                              builder: (context, userSnap) {
+                                if (!userSnap.hasData || !userSnap.data!.exists) return const SizedBox.shrink();
+                                final userData = userSnap.data!.data() as Map<String, dynamic>?;
+                                final int pts = userData?['points'] ?? 0;
+                                if (pts >= 100) {
+                                  return _StatusBadge(
+                                    label: pts >= 500 ? 'Elite Contributor' : 'Gold Contributor',
+                                    icon: Icons.workspace_premium,
+                                    color: const Color(0xFFFFD700),
+                                  );
+                                }
+                                return const SizedBox.shrink();
+                              },
                             ),
                         ],
                       ),
@@ -268,23 +319,23 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.blueAccent.withValues(alpha: 0.1), Colors.transparent],
+                              colors: [Colors.white.withValues(alpha: 0.1), Colors.transparent],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.2)),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  const Icon(Icons.verified, color: Colors.blueAccent, size: 20),
+                                  const Icon(Icons.verified, color: Colors.white, size: 20),
                                   const SizedBox(width: 8),
                                   Text(
                                     "VERIFIED PREMIUM",
-                                    style: GoogleFonts.bebasNeue(color: Colors.blueAccent, fontSize: 18, letterSpacing: 1.2),
+                                    style: GoogleFonts.bebasNeue(color: Colors.white, fontSize: 18, letterSpacing: 1.2),
                                   ),
                                 ],
                               ),
@@ -296,6 +347,11 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                             ],
                           ),
                         ),
+                      ],
+
+                      if (item.firestoreCollection == 'supportbusinesses' || item.firestoreCollection == 'youthresource') ...[
+                        const SizedBox(height: 40),
+                        PledgeTrackerWidget(targetId: item.id),
                       ],
 
                       const SizedBox(height: 40),
@@ -334,6 +390,8 @@ class _UniversalDetailScreenState extends State<UniversalDetailScreen> {
                         ],
                       ),
                       const SizedBox(height: 60),
+                      ReviewListWidget(targetId: item.id),
+                      const SizedBox(height: 100),
                     ],
                   ),
                 ),

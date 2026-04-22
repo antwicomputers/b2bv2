@@ -31,6 +31,12 @@ class Business {
   final List<String> isFavorite;
   final double latitude;
   final double longitude;
+  final String operatingModel; // 'physical', 'online', 'hybrid'
+  final bool isGlobal;
+  final String silverReward;
+  final String goldReward;
+  final String eliteReward;
+  final bool offersRewards;
 
   const Business({
     required this.businessName,
@@ -63,6 +69,12 @@ class Business {
     required this.isFavorite,
     required this.latitude,
     required this.longitude,
+    this.operatingModel = 'online',
+    this.isGlobal = false,
+    this.silverReward = '',
+    this.goldReward = '',
+    this.eliteReward = '',
+    this.offersRewards = false,
   });
 
   Business copyWith({
@@ -96,6 +108,12 @@ class Business {
     List<String>? isFavorite,
     double? latitude,
     double? longitude,
+    String? operatingModel,
+    bool? isGlobal,
+    String? silverReward,
+    String? goldReward,
+    String? eliteReward,
+    bool? offersRewards,
   }) {
     return Business(
       businessName: businessName ?? this.businessName,
@@ -128,6 +146,12 @@ class Business {
       isFavorite: isFavorite ?? this.isFavorite,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      operatingModel: operatingModel ?? this.operatingModel,
+      isGlobal: isGlobal ?? this.isGlobal,
+      silverReward: silverReward ?? this.silverReward,
+      goldReward: goldReward ?? this.goldReward,
+      eliteReward: eliteReward ?? this.eliteReward,
+      offersRewards: offersRewards ?? this.offersRewards,
     );
   }
 
@@ -166,6 +190,12 @@ class Business {
       'favoriteCount': 0,
       'latitude': latitude,
       'longitude': longitude,
+      'operatingModel': operatingModel,
+      'isGlobal': isGlobal,
+      'silverReward': silverReward,
+      'goldReward': goldReward,
+      'eliteReward': eliteReward,
+      'offersRewards': offersRewards,
     };
   }
 
@@ -204,17 +234,32 @@ class Business {
       isFavorite: List<String>.from(map['isFavorite'] ?? []),
       latitude: map['latitude']?.toDouble() ?? 0.0,
       longitude: map['longitude']?.toDouble() ?? 0.0,
+      operatingModel: map['operatingModel'] ?? 'online',
+      isGlobal: map['isGlobal'] ?? false,
+      silverReward: map['silverReward'] ?? '',
+      goldReward: map['goldReward'] ?? '',
+      eliteReward: map['eliteReward'] ?? '',
+      offersRewards: map['offersRewards'] ?? false,
     );
   }
 
   String toJson() => json.encode(toMap());
+
+  String toAIContext() {
+    return "Business Name: $businessName\n"
+        "Category: $businessCategory\n"
+        "Description: $businessDescription\n"
+        "Address: $businessAddress\n"
+        "Contact: $phone, $email\n"
+        "Website: $website";
+  }
 
   factory Business.fromJson(String source) =>
       Business.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Business(businessName: $businessName, youtube: $youtube,businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored, isLiked: $isLiked, isFavorite: $isFavorite, latitude: $latitude, longitude: $longitude)';
+    return 'Business(businessName: $businessName, operatingModel: $operatingModel, isGlobal: $isGlobal, youtube: $youtube,businessDescription: $businessDescription, businessAddress: $businessAddress, businessCategory: $businessCategory, createdAt: $createdAt, phone: $phone, email: $email, website: $website, twitter: $twitter, facebook: $facebook, linkedIn: $linkedIn, instagram: $instagram, tiktok: $tiktok, twitch: $twitch, podcast: $podcast, businessUrl: $businessUrl, isBlackOwned: $isBlackOwned, womenOriented: $womenOriented, isEsential: $isEsential, isFeatured: $isFeatured, isSponsored: $isSponsored, isLiked: $isLiked, isFavorite: $isFavorite, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -251,7 +296,9 @@ class Business {
         other.isLiked == isLiked &&
         other.isFavorite == isFavorite &&
         other.latitude == latitude &&
-        other.longitude == longitude;
+        other.longitude == longitude &&
+        other.operatingModel == operatingModel &&
+        other.isGlobal == isGlobal;
   }
 
   @override

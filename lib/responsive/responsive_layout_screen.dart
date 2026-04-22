@@ -2,6 +2,8 @@ import 'package:b2bmobile/utils/dimensions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ResponsiveLayout extends StatefulWidget {
@@ -135,6 +137,21 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
 
   @override
   Widget build(BuildContext context) {
+    // Listen to UserProvider
+    final userProvider = Provider.of<UserProvider>(context);
+
+    // If user is authenticated but our data isn't loaded yet, show a spinner. 
+    // This prevents null pointer crashes in the mobile/web layouts.
+    if (userProvider.getUser != null && userProvider.userModel == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > webScreenSize) {

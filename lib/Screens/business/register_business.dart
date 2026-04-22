@@ -1,10 +1,8 @@
-import 'package:b2bmobile/providers/user_provider.dart';
 import 'package:b2bmobile/utils/utils.dart';
 import 'package:b2bmobile/widgets/address_autocomplete_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import '../pages/verification_screen.dart';
@@ -40,11 +38,18 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   final TextEditingController _youtube = TextEditingController();
   final TextEditingController _podcast = TextEditingController();
   
+  // Rewards
+  bool _offersRewards = false;
+  final TextEditingController _silverReward = TextEditingController();
+  final TextEditingController _goldReward = TextEditingController();
+  final TextEditingController _eliteReward = TextEditingController();
+  
   final List<Uint8List> _images = [];
   bool isBlack = false;
   bool isEssential = false;
   bool isWomen = false;
-  bool _isLoading = false;
+  String _operatingModel = 'physical';
+  bool _isGlobal = false;
 
   @override
   void dispose() {
@@ -63,6 +68,9 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     _twitch.dispose();
     _youtube.dispose();
     _podcast.dispose();
+    _silverReward.dispose();
+    _goldReward.dispose();
+    _eliteReward.dispose();
     super.dispose();
   }
 
@@ -204,11 +212,8 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                           required: true,
                         ),
                         _divider(),
-                        CategoryDropdown(
-                          selectedCategory: _businessCategory.text,
-                          onChanged: (val) {
-                            if (val != null) setState(() => _businessCategory.text = val);
-                          },
+                        SearchableCategoryField(
+                          controller: _businessCategory,
                           icon: Icons.category,
                         ),
                       ],
@@ -223,6 +228,64 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                           controller: _businessAddress,
                           label: 'Business Address',
                           icon: Icons.location_city,
+                        ),
+                        _divider(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'OPERATING MODEL',
+                                style: TextStyle(
+                                  color: Colors.white38,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  _buildChoiceChip('physical', Icons.storefront),
+                                  const SizedBox(width: 8),
+                                  _buildChoiceChip('online', Icons.language),
+                                  const SizedBox(width: 8),
+                                  _buildChoiceChip('hybrid', Icons.dynamic_feed),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Global Business',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      const Text(
+                                        'Available to everyone worldwide',
+                                        style: TextStyle(color: Colors.white38, fontSize: 11),
+                                      ),
+                                    ],
+                                  ),
+                                  Switch.adaptive(
+                                    value: _isGlobal,
+                                    onChanged: (val) => setState(() => _isGlobal = val),
+                                    activeColor: Colors.white,
+                                    activeTrackColor: Colors.blueAccent,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -279,6 +342,59 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                       ],
                     ),
 
+                    const SizedBox(height: 24),
+                    const _SectionHeader(icon: Icons.card_giftcard_rounded, title: 'B2B Black Card Rewards'),
+                    const SizedBox(height: 12),
+                    _FormCard(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Offer Community Rewards', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                    Text('Attract B2B Black Card holders with exclusive perks.', style: TextStyle(color: Colors.white38, fontSize: 11)),
+                                  ],
+                                ),
+                              ),
+                              Switch.adaptive(
+                                value: _offersRewards,
+                                onChanged: (val) => setState(() => _offersRewards = val),
+                                activeColor: Colors.blueAccent,
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (_offersRewards) ...[
+                          _divider(),
+                          _StyledField(
+                            controller: _silverReward,
+                            label: 'Silver Tier Reward (500+ pts)',
+                            icon: Icons.military_tech,
+                            prefix: 'e.g. 5% Off',
+                          ),
+                          _divider(),
+                          _StyledField(
+                            controller: _goldReward,
+                            label: 'Gold Tier Reward (1500+ pts)',
+                            icon: Icons.stars,
+                            prefix: 'e.g. 10% Off',
+                          ),
+                          _divider(),
+                          _StyledField(
+                            controller: _eliteReward,
+                            label: 'Elite Tier Reward (5000+ pts)',
+                            icon: Icons.workspace_premium,
+                            prefix: 'e.g. Free Gift',
+                          ),
+                        ]
+                      ],
+                    ),
+
                     const SizedBox(height: 32),
                     GestureDetector(
                       onTap: () {
@@ -309,6 +425,12 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                             'youtube': _youtube.text,
                             'twitch': _twitch.text,
                             'podcast': _podcast.text,
+                            'operatingModel': _operatingModel,
+                            'isGlobal': _isGlobal,
+                            'offersRewards': _offersRewards,
+                            'silverReward': _silverReward.text,
+                            'goldReward': _goldReward.text,
+                            'eliteReward': _eliteReward.text,
                           },
                           images: _images,
                           type: 'business',
@@ -351,6 +473,38 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildChoiceChip(String value, IconData icon) {
+    bool isSelected = _operatingModel == value;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => _operatingModel = value),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: isSelected ? Colors.white : _borderColor),
+          ),
+          child: Column(
+            children: [
+              Icon(icon, color: isSelected ? Colors.black : Colors.white38, size: 18),
+              const SizedBox(height: 4),
+              Text(
+                value.capitalizeFirst!,
+                style: TextStyle(
+                  color: isSelected ? Colors.black : Colors.white38,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

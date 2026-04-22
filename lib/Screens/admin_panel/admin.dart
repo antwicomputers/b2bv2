@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:b2bmobile/Screens/admin_panel/all_feedback.dart';
 import 'package:b2bmobile/Screens/admin_panel/event%20request%20/event_request_screen.dart';
 import 'package:b2bmobile/Screens/admin_panel/pending_registrations.dart';
@@ -127,11 +128,16 @@ class AdminPanel extends StatelessWidget {
 
 // ── Pending banner with live Firestore count badge ────────────────────────────
 
-class _PendingBanner extends StatelessWidget {
+class _PendingBanner extends StatefulWidget {
   const _PendingBanner();
 
+  @override
+  State<_PendingBanner> createState() => _PendingBannerState();
+}
+
+class _PendingBannerState extends State<_PendingBanner> {
   /// Collections to count unverified items from.
-  static const _pending = [
+  static const _pendingCollections = [
     'businesses',
     'events',
     'supportbusinesses',
@@ -139,95 +145,125 @@ class _PendingBanner extends StatelessWidget {
     'youthresource',
   ];
 
+  final Map<String, int> _counts = {};
+  final List<StreamSubscription> _subscriptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initStreams();
+  }
+
+  void _initStreams() {
+    for (var collection in _pendingCollections) {
+      final sub = FirebaseFirestore.instance
+          .collection(collection)
+          .where('isVerified', isEqualTo: false)
+          .snapshots()
+          .listen((snapshot) {
+        if (!mounted) return;
+        setState(() {
+          _counts[collection] = snapshot.docs.length;
+        });
+      });
+      _subscriptions.add(sub);
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var sub in _subscriptions) {
+      sub.cancel();
+    }
+    super.dispose();
+  }
+
+  int get _total => _counts.values.fold(0, (sum, count) => sum + count);
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<QuerySnapshot>>(
-      stream: Stream.fromFuture(Future.wait(
-        _pending.map((c) => FirebaseFirestore.instance
-            .collection(c)
-            .where('isVerified', isEqualTo: false)
-            .get()),
-      )),
-      builder: (context, snapshot) {
-        final total = snapshot.data?.fold<int>(0, (s, q) => s + q.docs.length) ?? 0;
+    final total = _total;
 
-        return GestureDetector(
-          onTap: () => Get.to(() => const PendingRegistrationsScreen()),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: total > 0
-                    ? [
-                        const Color(0xFFFF6B35),
-                        const Color(0xFFCC3300),
-                      ]
-                    : [
-                        const Color(0xFF2E7D32),
-                        const Color(0xFF1B5E20),
-                      ],
-              ),
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: [
-                BoxShadow(
-                  color: (total > 0 ? Colors.redAccent : Colors.green)
-                      .withValues(alpha: 0.4),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    total > 0 ? Icons.pending_actions : Icons.check_circle,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        total > 0
-                            ? '$total Pending Registration${total == 1 ? '' : 's'}'
-                            : 'All Clear!',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        total > 0
-                            ? 'Tap to review and approve submissions'
-                            : 'No pending submissions right now',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(Icons.chevron_right, color: Colors.white70),
-              ],
-            ),
+    return GestureDetector(
+      onTap: () => Get.to(() => const PendingRegistrationsScreen()),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: total > 0
+                ? [
+                    const Color(0xFFFF6B35),
+                    const Color(0xFFCC3300),
+                  ]
+                : [
+                    const Color(0xFF2E7D32),
+                    const Color(0xFF1B5E20),
+                  ],
           ),
-        );
-      },
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: (total > 0 ? Colors.redAccent : Colors.green)
+                  .withValues(alpha: 0.3),
+              blurRadius: 15,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: Icon(
+                  total > 0 ? Icons.pending_actions : Icons.check_circle,
+                  key: ValueKey(total > 0),
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    total > 0
+                        ? '$total Pending Registration${total == 1 ? '' : 's'}'
+                        : 'All Clear!',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    total > 0
+                        ? 'Tap to review and approve submissions'
+                        : 'No pending submissions right now',
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.white70),
+          ],
+        ),
+      ),
     );
   }
 }

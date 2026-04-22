@@ -3,13 +3,16 @@ import 'package:b2bmobile/userresources/user_resources_landing.dart';
 import 'package:b2bmobile/youthresource/youth_resource_landing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:b2bmobile/Screens/pages/leaderboard_screen.dart';
 import 'package:b2bmobile/Screens/business/register_business.dart';
 import 'package:b2bmobile/Screens/drawer/black_kick_start.dart';
 import 'package:b2bmobile/Screens/drawer/mental_health.dart';
 import 'package:b2bmobile/Screens/drawer/new_events.dart';
 import 'package:b2bmobile/Screens/drawer/women.dart';
 import 'package:b2bmobile/Screens/business/my_businesses.dart';
-
+import 'package:provider/provider.dart';
+import 'package:b2bmobile/providers/user_provider.dart';
+import 'package:b2bmobile/utils/utils.dart';
 // ── Design constants ──────────────────────────────────────────────────────────
 const _silver = Color(0xFFF5F5F7);
 const _silverDark = Color(0xFF8E8E93);
@@ -26,6 +29,7 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.black,
       body: CustomScrollView(
@@ -64,13 +68,19 @@ class _CategoriesState extends State<Categories> {
                   image: 'assets/register.jpg',
                   title: 'Register Business',
                   icon: Icons.add_business_rounded,
-                  onTap: () => Get.to(() => const RegisterBusiness()),
+                  onTap: () {
+                    if (checkGuestAccess(context, userProvider.userModel?.isGuest ?? true)) return;
+                    Get.to(() => const RegisterBusiness());
+                  },
                 ),
                 _CategoryCard(
                   image: 'assets/register.jpg',
                   title: 'My Businesses',
                   icon: Icons.business_center_rounded,
-                  onTap: () => Get.to(() => const MyBusinesses()),
+                  onTap: () {
+                    if (checkGuestAccess(context, userProvider.userModel?.isGuest ?? true)) return;
+                    Get.to(() => const MyBusinesses());
+                  },
                 ),
                 _CategoryCard(
                   image: 'assets/womentile.jpeg',
@@ -108,6 +118,12 @@ class _CategoriesState extends State<Categories> {
                   title: 'Youth Empowerment',
                   icon: Icons.school_rounded,
                   onTap: () => Get.to(() => const YouthResourceLanding()),
+                ),
+                _CategoryCard(
+                  image: 'assets/womentile.jpeg', // Fallback high-quality image
+                  title: 'Community Leaderboard',
+                  icon: Icons.emoji_events_rounded,
+                  onTap: () => Get.to(() => const LeaderboardScreen()),
                 ),
                 _CategoryCard(
                   image: 'assets/creator.jpg',
@@ -151,16 +167,18 @@ class _CategoryCard extends StatelessWidget {
             children: [
               // Background Image with Overlay
               Positioned.fill(
-                child: Opacity(
-                  opacity: 0.2,
-                  child: Image.asset(image, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: _borderColor)),
+                child: Image.asset(
+                  image, 
+                  fit: BoxFit.cover, 
+                  errorBuilder: (_, __, ___) => Container(color: _borderColor)
                 ),
               ),
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.black.withValues(alpha: 0.2), Colors.black.withValues(alpha: 0.9)],
+                      colors: [Colors.transparent, Colors.black.withValues(alpha: 0.9)],
+                      stops: const [0.3, 1.0],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),

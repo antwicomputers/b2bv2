@@ -40,7 +40,7 @@ class _AllFeaturedState extends State<AllFeatured> {
             itemCount: docs.length,
             padding: const EdgeInsets.only(top: 10, bottom: 40),
             itemBuilder: (context, index) {
-              final business = Business.fromMap(docs[index].data() as Map<String, dynamic>);
+              final business = Business.fromMap(docs[index].data());
               return BusinessListTile(business: business);
             },
           );

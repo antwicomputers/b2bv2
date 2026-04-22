@@ -40,11 +40,25 @@ class BusinessListTile extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.05),
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: Image.network(
-                  business.businessUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.business, color: Colors.white24, size: 32),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(6),
+                  child: Image.network(
+                    business.businessUrl,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.business, color: Colors.black26, size: 32),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -68,18 +82,30 @@ class BusinessListTile extends StatelessWidget {
                           ),
                         ),
                         if (business.isVerified)
-                          const Icon(Icons.verified, color: Colors.blueAccent, size: 14),
+                          const Icon(Icons.verified, color: Colors.white, size: 14),
                       ],
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      business.businessCategory.toUpperCase(),
-                      style: GoogleFonts.outfit(
-                        color: Colors.blueAccent,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          business.businessCategory.toUpperCase(),
+                          style: GoogleFonts.outfit(
+                            color: Colors.white70,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        if (business.isBlackOwned) ...[
+                          const SizedBox(width: 8),
+                          _badge('BLACK-OWNED', const Color(0xFFFFD700), Icons.workspace_premium),
+                        ],
+                        if (business.isSponsored) ...[
+                          const SizedBox(width: 8),
+                          _badge('SPONSOR', Colors.orangeAccent, Icons.star),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -98,6 +124,33 @@ class BusinessListTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _badge(String label, Color color, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 8),
+          const SizedBox(width: 2),
+          Text(
+            label,
+            style: GoogleFonts.outfit(
+              color: color,
+              fontSize: 8,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
       ),
     );
   }

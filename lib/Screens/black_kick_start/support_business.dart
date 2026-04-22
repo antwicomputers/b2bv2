@@ -163,11 +163,8 @@ class _SupportBusinessState extends State<SupportBusiness> {
                         _divider(),
                         _StyledMultilineField(controller: _businessDescription, label: 'Detailed Description', icon: Icons.description, required: true),
                         _divider(),
-                        CategoryDropdown(
-                          selectedCategory: _businessCategory.text,
-                          onChanged: (val) {
-                            if (val != null) setState(() => _businessCategory.text = val);
-                          },
+                        SearchableCategoryField(
+                          controller: _businessCategory,
                           icon: Icons.category,
                         ),
                       ],

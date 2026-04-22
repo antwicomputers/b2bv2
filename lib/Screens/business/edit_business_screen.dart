@@ -187,11 +187,8 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
                         _divider(),
                         _StyledMultilineField(controller: _businessDescription, label: 'Description', icon: Icons.description, required: true),
                         _divider(),
-                        CategoryDropdown(
-                          selectedCategory: _businessCategory.text,
-                          onChanged: (val) {
-                            if (val != null) setState(() => _businessCategory.text = val);
-                          },
+                        SearchableCategoryField(
+                          controller: _businessCategory,
                           icon: Icons.category,
                         ),
                       ],
@@ -417,23 +414,6 @@ class _StyledMultilineField extends StatelessWidget {
   }
 }
 
-class _StyledSwitch extends StatelessWidget {
-  const _StyledSwitch({required this.title, required this.value, required this.onChanged});
-  final String title;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return SwitchListTile(
-      title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 14)),
-      value: value,
-      onChanged: onChanged,
-      activeThumbColor: _silver,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-    );
-  }
-}
 
 class _AdaptedAutocomplete extends StatelessWidget {
   const _AdaptedAutocomplete({required this.controller, required this.label, required this.icon});
